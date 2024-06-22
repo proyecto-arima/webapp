@@ -33,7 +33,9 @@
     "sourceType": "module"
   },
   "plugins": ["@typescript-eslint", "react", "prettier"], // prettier
-  "rules": {},
+  "rules": {
+    "react/react-in-jsx-scope": "off"
+  },
   "settings": {
     "import/resolver": {
       "typescript": {}

@@ -1,6 +1,6 @@
 name: CI/CD
 
-on: [push, pull_request]
+on: [push]
 
 jobs:
   ci:
@@ -60,9 +60,9 @@ jobs:
       with:
         key: ${{ secrets.SSH_PRIVATE_KEY }}
         host: ${{ secrets.REMOTE_HOST }}
-        username: root
+        username: ${{ secrets.REMOTE_USER }}
         port: 22
         script: |
-          cd /root/deployment
+          cd ${{ secrets.REMOTE_PATH }}
           docker compose pull
           docker compose up -d --build

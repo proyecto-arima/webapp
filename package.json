@@ -1,6 +1,6 @@
 {
   "name": "adaptaria-webapp",
-  "version": "0.2.0",
+  "version": "0.0.2",
   "private": true,
   "dependencies": {
     "@types/node": "^20.14.8",

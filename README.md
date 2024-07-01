@@ -1,46 +1,68 @@
-# Getting Started with Create React App
+# ADAPTAR-IA WEBAPP
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## Description
 
-## Available Scripts
+...
 
-In the project directory, you can run:
+## Usage
 
-### `npm start`
+### 1. Installation
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+To install the project dependencies, run the following command:
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+```bash
+npm install
+```
 
-### `npm test`
+### 2. Execution
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+To run the project, execute the following command:
 
-### `npm run build`
+```bash
+npm start
+```
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+### 3. Enter the application
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+To enter the application, open the following URL in your browser:
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+```bash
+http://localhost:3000
+```
 
-### `npm run eject`
+### 4. Lint & Prettier
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+To check the code style, run the following command:
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+```bash
+npm run lint
+```
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+To fix the code style, run the following command:
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+```bash
+npm run lint:fix
+```
 
-## Learn More
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+## Deploy
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+To deploy the project you have to use the Github Workflow.
+It will be triggered when you push a new tag to the repository.
+For example:
+
+```bash
+git tag -a v1.0.0 -m "First version"
+git push origin v1.0.0
+```
+
+Please, make sure that the tag follows the [Semantic Versioning](https://semver.org/) rules, it starts with the letter 'v', and keep it synchronized with the [package.json](package.json) version.
+
+It will create a Docker image based in [Dockerfile](Dockerfile) and push it to the Github Container Registry.
+Then, it will deploy the image in the VM by using the [Deployment](https://github.com/proyecto-arima/deployment) repository.
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+```
+

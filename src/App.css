@@ -24,11 +24,98 @@
   color: white;
 }
 
+.btn-purple-1 {
+  background-color: #6650a4;
+  color: #fff;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 0.25rem;
+  cursor: pointer;
+}
+
+.btn-purple-1:hover {
+  background-color: #4d3a8e;
+}
+
 @keyframes App-logo-spin {
   from {
     transform: rotate(0deg);
   }
+
   to {
     transform: rotate(360deg);
   }
+}
+
+
+/* Sidebar */
+
+.sidebar {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  background: #f7f2fa;
+  width: 27rem;
+  box-shadow: 0 3px 10px rgb(0 0 0 / 0.2);
+  z-index: 100;
+  border-radius: 0 25px 25px 0;
+}
+
+.sidebar-header {
+  width: 70%;
+  margin: 2rem auto;
+  display: block;
+}
+
+
+.sidebar-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5rem;
+  margin: 0.5rem;
+}
+
+.sidebar-section-title {
+  font-size: 0.8rem;
+  font-weight: bold;
+  color: #49454f;
+  align-self: flex-start;
+  padding-left: 1rem;
+}
+
+.sidebar-navlink-active {
+  padding-left: 2rem;
+  text-decoration: none;
+  box-shadow: 0 5px 10px rgb(0 0 0 / 0.2);
+  color: #000;
+  width: 100%;
+  height: 3rem;
+  border-radius: 25px;
+  vertical-align: middle;
+  display: flex;
+  align-items: center;
+  background-color: #e8ddf8;
+
+}
+
+.sidebar-navlink-inactive {
+  padding-left: 2rem;
+  text-decoration: none;
+  color: #000;
+  width: 100%;
+  height: 3rem;
+  vertical-align: middle;
+  display: flex;
+  align-items: center;
+}
+
+.sidebar-navlink-item {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.8rem;
 }

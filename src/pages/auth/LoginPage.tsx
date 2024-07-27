@@ -1,14 +1,19 @@
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { Card } from "reactstrap";
 import logo from '../../assets/logo_black.png';
 import LoginForm from "../../components/LoginForm";
 import { API_URL } from "../../config";
+import { login } from "../../redux/slices/auth";
+import { RootState } from "../../redux/store";
 
 const Login = () => {
 
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const isAuthenticated = useSelector((state: RootState) => state.auth.isAuthenticated);
 
-  const login = async (email: string, password: string) => {
+  const signin = async (email: string, password: string) => {
     const res = await fetch(`${API_URL}/auth`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -17,8 +22,13 @@ const Login = () => {
     });
 
     if (res.ok) {
+      dispatch(login());
       navigate('/students/new');
     }
+  }
+
+  if(isAuthenticated) {
+    navigate('/students/new');
   }
 
   return (
@@ -37,7 +47,7 @@ const Login = () => {
         <div className="text-center">
           <img src={logo} alt="Proyecto Arima" style={{ height: '10rem' }} />
         </div>
-        <LoginForm login={login}/>
+        <LoginForm login={signin}/>
 
       </Card>
     </div>

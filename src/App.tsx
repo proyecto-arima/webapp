@@ -1,54 +1,45 @@
-import { faCircle } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { BrowserRouter, NavLink, Route, Routes } from 'react-router-dom';
-import { Nav, NavItem } from 'reactstrap';
+import { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import './App.css';
-import logo from './assets/horizontal_black.png';
+import Sidebar from './components/Sidebar';
+import { API_URL } from './config';
+
 import AuthRouter from './pages/auth/AuthRouter';
 import UserRouter from './pages/students/StudentRouter';
+import { login } from './redux/slices/auth';
+import { RootState } from './redux/store';
+import ProtectedRoute from './utils/ProtectedRoute';
 
 function App() {
+  const isAuthenticated = useSelector((state: RootState) => state.auth.isAuthenticated);
+  const dispatch = useDispatch();
 
-  const links = [
-    { to: '/students/new', label: 'Crear Estudiante' },
-    { to: '/students', label: 'Ver Estudiantes' },
-  ];
+  console.log(isAuthenticated);
+
+  useEffect(() => {
+    if (!isAuthenticated) {
+      fetch(`${API_URL}/auth`, {
+        method: 'GET',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
+      }).then(res => {
+        if (res.ok) {
+          dispatch(login());
+        }
+      })
+    }
+  }, [isAuthenticated])
 
   return (
     <BrowserRouter>
-      <AuthRouter />
-      {/* <LoggedInRouter /> */}
-      <div style={{
-        display: 'flex',
-        flexDirection: 'row',
-        justifyContent: 'center',
-        height: '100vh',
-        width: '100vw',
-        background: '#f7f2fa',
-      }}>
-        <Nav vertical className='sidebar'>
-          <img src={logo} alt="Proyecto Arima" className='sidebar-header'/>
-          <div className='sidebar-container'>
-            <span className='sidebar-section-title'>Gestión de Estudiantes</span>
+      <div className='main-content'>
 
-            {links.map((link) => (
-              <NavLink end to={link.to} key={link.to} className={({ isActive }) => isActive ? 'sidebar-navlink-active' : 'sidebar-navlink-inactive'}>
-                <NavItem className='sidebar-navlink-item'>
-                  <FontAwesomeIcon icon={faCircle} style={{
-                    width: '0.6rem',
-                    color: '#49454f',
-                  }} />
-                  <span>{link.label}</span>
-                </NavItem>
-              </NavLink>
-            ))}
-
-          </div>
-
-        </Nav>
-
+        {isAuthenticated && <Sidebar />}
+        <AuthRouter />
+        
         <Routes>
-          <Route path="/students/*" element={<UserRouter />} />
+          <Route path='/students/*' element={<ProtectedRoute><UserRouter /></ProtectedRoute>} />
         </Routes>
       </div>
 

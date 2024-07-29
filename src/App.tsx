@@ -18,6 +18,7 @@ import SidebarCourses from './pages/courses/SidebarCourses';
 import { StudentCreationPage } from './pages/students/StudentCreationPage';
 import { CourseCreationPage } from './pages/courses/CourseCreationPage';
 import { CourseDashboardPage } from './pages/courses/CourseDashboardPage';
+import { CourseProvider } from './pages/courses/contexts/CourseContext';
 
 function App() {
   const isAuthenticated = useSelector((state: RootState) => state.auth.isAuthenticated);
@@ -43,7 +44,8 @@ function App() {
   }, [isAuthenticated])
 
   return (
-    <div className='main-content'>
+    <CourseProvider>
+      <div className='main-content'>
       {/* {isAuthenticated} */}
       <Routes>
         {/* Not protected routes */}
@@ -60,6 +62,8 @@ function App() {
         <Route path="/courses/dashboard" element={<CourseDashboardPage />} />
       </Routes>
     </div>
+    </CourseProvider>
+   
   );
 }
 

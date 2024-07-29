@@ -1,14 +1,10 @@
-import { Table } from 'reactstrap';
+// src/pages/courses/CourseDashboardPage.tsx
+import React from 'react';
+import { useCourseContext } from './contexts/CourseContext';
 import SidebarCourses from './SidebarCourses';
 
-interface ICourseCreationFormValues {
-  title?: string;
-  description?: string;
-  imageUrl?: string;
-  students?: { value: string; label: string }[];
-}
-
 export const CourseDashboardPage = () => {
+  const { courses } = useCourseContext();
 
   return (
     <div
@@ -22,27 +18,25 @@ export const CourseDashboardPage = () => {
       }}
     >
       <SidebarCourses />
-      <Table>
-        <thead>
-          <tr>
-            <th>Curso</th>
-            <th>Descripción</th>
-            <th>Imagen</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>Curso 1</td>
-            <td>Descripción 1</td>
-            <td>Imagen 1</td>
-          </tr>
-          <tr>
-            <td>Curso 2</td>
-            <td>Descripción 2</td>
-            <td>Imagen 2</td>
-          </tr>
-        </tbody>
-      </Table>
+      <div className="container">
+        <div className="row">
+          {courses.map((course, index) => (
+            <div className="col-md-4 p-2" key={index}>
+              <div className="card">
+                <img src={course.imageUrl} className="card-img-top" alt={course.title} />
+                <div className="card-body">
+                  <h5 className="card-title">{course.title}</h5>
+                  <p className="card-text">{course.description}</p>
+                </div>
+                <div className="card-footer">
+                  <button className="btn btn-danger" onClick={() => console.log(`Eliminar curso ${course.title}`)}>Eliminar</button>
+                  <button className="btn btn-primary m-1" onClick={() => console.log(`Editar curso ${course.title}`)}>Editar</button>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
     </div>
   );
 };

@@ -1,7 +1,8 @@
+// src/pages/courses/CourseCreationPage.tsx
 import React, { useState } from 'react';
 import ReactSelect from 'react-select';
 import { Card, Input } from 'reactstrap';
-import { API_URL } from '../../config';
+import { useCourseContext } from './contexts/CourseContext';
 import SidebarCourses from './SidebarCourses';
 
 interface ICourseCreationFormValues {
@@ -13,6 +14,7 @@ interface ICourseCreationFormValues {
 
 export const CourseCreationPage = () => {
   const [formValues, setFormValues] = useState<ICourseCreationFormValues>({ students: [] });
+  const { addCourse } = useCourseContext();
 
   const handleFormChange = (label: keyof ICourseCreationFormValues) => (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormValues({
@@ -29,15 +31,12 @@ export const CourseCreationPage = () => {
   };
 
   const createCourse = async () => {
-    const res = await fetch(`${API_URL}/courses`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(formValues),
+    addCourse({
+      title: formValues.title!,
+      description: formValues.description!,
+      imageUrl: formValues.imageUrl!,
     });
-
-    if (res.ok) {
-      console.log('Course created');
-    }
+    console.log('Course created');
   };
 
   return (

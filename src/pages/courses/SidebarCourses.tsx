@@ -3,16 +3,16 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useDispatch } from "react-redux";
 import { NavLink, useNavigate } from "react-router-dom";
 import { Nav, NavItem } from "reactstrap";
-import logo from '../assets/horizontal_black.png';
-import { API_URL } from "../config";
-import { logout } from "../redux/slices/auth";
+import logo from '../../assets/horizontal_black.png';
+import { API_URL } from "../../config";
+import { logout } from "../../redux/slices/auth";
 
 const links = [
-  { to: '/students/new', label: 'Crear Estudiante' },
-  { to: '/students', label: 'Ver Estudiantes' },
+  { to: '/courses/new', label: 'Crear curso' },
+  { to: '/courses/dashboard', label: 'Ver Cursos' },
 ];
 
-export default function Sidebar() {
+export default function SidebarCourses() {
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -33,7 +33,7 @@ export default function Sidebar() {
       <img src={logo} alt="Proyecto Arima" className='sidebar-header' />
       <div className='sidebar-container'>
         <div className="w-100">
-          <span className='sidebar-section-title'>Gestión de Estudiantes</span>
+          <span className='sidebar-section-title'>Gestión de Cursos</span>
 
           {links.map((link) => (
             <NavLink end to={link.to} key={link.to} className={({ isActive }) => isActive ? 'sidebar-navlink-active' : 'sidebar-navlink-inactive'}>
@@ -47,6 +47,7 @@ export default function Sidebar() {
             </NavLink>
           ))}
         </div>
+
         <div className="w-100">
           <span className='sidebar-section-title'>Opciones</span>
           <NavLink to={'/login'} end className={({ isActive }) => isActive ? 'sidebar-navlink-active' : 'sidebar-navlink-inactive'}>

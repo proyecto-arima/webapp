@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import ReactSelect from 'react-select';
 import { Card, Input } from 'reactstrap';
 import { API_URL } from '../../config';
+import SidebarCourses from './SidebarCourses';
 
 interface ICourseCreationFormValues {
   title?: string;
@@ -50,6 +51,7 @@ export const CourseCreationPage = () => {
         width: '100vw',
       }}
     >
+      <SidebarCourses />
       <Card style={{ width: '30rem', paddingInline: '2rem', paddingBlock: '1rem' }}>
         <h2 className="text-center mb-3">Crear Curso</h2>
         <Input name="title" type="text" placeholder="Título del curso" className="mb-3" onChange={handleFormChange('title')} />

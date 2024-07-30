@@ -4,6 +4,8 @@ import ReactSelect from 'react-select';
 import { Card, Input } from 'reactstrap';
 import { useCourseContext } from './contexts/CourseContext';
 import SidebarCourses from './SidebarCourses';
+import { useParams } from 'react-router-dom';
+
 
 interface ICourseCreationFormValues {
   title?: string;
@@ -13,6 +15,7 @@ interface ICourseCreationFormValues {
 }
 
 export const CourseCreationPage = () => {
+
   const [formValues, setFormValues] = useState<ICourseCreationFormValues>({ students: [] });
   const { addCourse } = useCourseContext();
 

@@ -1,10 +1,18 @@
-// src/pages/courses/CourseDashboardPage.tsx
 import React from 'react';
 import { useCourseContext } from './contexts/CourseContext';
+import { Card, CardBody, CardText, CardTitle, Button } from 'reactstrap';
+import {useNavigate, useParams} from 'react-router-dom';
 import SidebarCourses from './SidebarCourses';
+import './CourseDashboardPage.css';
 
 export const CourseDashboardPage = () => {
   const { courses } = useCourseContext();
+  const history = useNavigate();
+
+  const handleViewCourse = (courseId: string) => {
+    history(`/courses/${courseId}`);
+  };
+  
     return (
       <div
         style={{
@@ -17,25 +25,22 @@ export const CourseDashboardPage = () => {
         }}
       >
         <SidebarCourses />
-        <div className="container">
-          <div className="row">
-            {courses.map((course, index) => (
-              <div className="col-md-4 p-2" key={index}>
-                <div className="card">
-                  <img src={course.imageUrl} className="card-img-top" alt={course.title} />
-                  <div className="card-body">
-                    <h5 className="card-title">{course.title}</h5>
-                    <p className="card-text">{course.description}</p>
-                  </div>
-                  <div className="card-footer">
-                    <button className="btn btn-danger" onClick={() => console.log(`Eliminar curso ${course.title}`)}>Eliminar</button>
-                    <button className="btn btn-primary m-1" onClick={() => console.log(`Editar curso ${course.title}`)}>Editar</button>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
+      <div className="course-dashboard">
+      <div className="course-list">
+        {courses.map(course => (
+          <Card key={course.title} className="course-card">
+            <img src={course.imageUrl} alt={course.title} className="course-image" />
+            <CardBody>
+              <CardTitle tag="h5">{course.title}</CardTitle>
+              <CardText>{course.description}</CardText>
+              <Button color="primary" onClick={() => handleViewCourse(course.title)}>Ver Curso</Button>
+            </CardBody>
+          </Card>
+        ))}
       </div>
+    </div>
+    </div>
+
+    
     );
 };

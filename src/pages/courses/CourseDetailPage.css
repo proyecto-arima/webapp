@@ -1,0 +1,32 @@
+.course-detail {
+    padding: 2rem;
+    background-color: #f6effa;
+    min-height: 100vh;
+  }
+  
+  .course-detail h1 {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+  }
+  
+  .sections {
+    margin-top: 2rem;
+  }
+  
+  .section {
+    background-color: #fff;
+    border: 1px solid #ddd;
+    padding: 1rem;
+    margin-bottom: 1rem;
+    border-radius: 0.25rem;
+  }
+  
+  .section h2 {
+    font-size: 1.5rem;
+    margin-bottom: 0.5rem;
+  }
+  
+  .section p {
+    margin: 0;
+  }
+  

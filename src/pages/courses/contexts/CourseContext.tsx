@@ -1,5 +1,6 @@
 import React, { createContext, useState, useContext, ReactNode } from 'react';
 import { API_URL } from '../../../config';
+import { useEffect } from 'react';
 
 interface ICourse {
   title: string;
@@ -36,6 +37,25 @@ const getCoursesFromTeacher = async () => {
 };
 
 export const CourseProvider = ({ children }: { children: ReactNode }) => {
+  const [courses, setCourses] = useState<ICourse[]>([]);
+
+  useEffect(() => {
+    const fetchCourses = async () => {
+      try {
+        const response = await fetch('/courses');
+        if (!response.ok) {
+          throw new Error('Error fetching courses');
+        }
+        const data = await response.json();
+        setCourses(data);
+      } catch (error) {
+        console.error('Error fetching courses:', error);
+      }
+    };
+
+    fetchCourses();
+  }, []);
+  /*
   const [courses, setCourses] = useState<ICourse[]>([
     // TODO: fetch courses from the API
     // {
@@ -48,7 +68,8 @@ export const CourseProvider = ({ children }: { children: ReactNode }) => {
       description: 'Aprende a crear aplicaciones con Angular',
       imageUrl: 'https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.freecodecamp.org%2Fnews%2Fangular-course%2F&psig=AOvVaw3P0Qa6v4Zj4Jc7WZKQVw0z&ust=1634321612100000&source=images&cd=vfe&ved=0CAsQjRxqFwoTCJj8l9zvzvMCFQAAAAAdAAAAABAD',
     }
-  ]);
+  ])
+    */;
 
   const addCourse = (course: ICourse) => {
     setCourses([...courses, course]);

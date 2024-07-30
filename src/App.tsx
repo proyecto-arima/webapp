@@ -1,5 +1,6 @@
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { BrowserRouter as Router} from 'react-router-dom';
 import { Route, Routes } from 'react-router-dom';
 
 import { API_URL } from './config';
@@ -17,9 +18,12 @@ import Login from './pages/auth/LoginPage';
 import { StudentCreationPage } from './pages/students/StudentCreationPage';
 import { CourseCreationPage } from './pages/courses/CourseCreationPage';
 import { CourseDashboardPage } from './pages/courses/CourseDashboardPage';
+import SectionCreationPage from './pages/courses/SectionCreationPage';
+import { CourseProvider } from './pages/courses/contexts/CourseContext';
 
 import CourseRoutes from './routes/CourseRouter';
 import StudentRouter from './routes/StudentRouter';
+import { SectionProvider } from './pages/courses/contexts/SectionContext';
 
 function App() {
   const isAuthenticated = useSelector((state: RootState) => state.auth.isAuthenticated);
@@ -50,6 +54,8 @@ function App() {
   return (
     <div className='main-content'>
       {/* {isAuthenticated} */}
+      <CourseProvider>
+        <SectionProvider>
       <Routes>
         {/* Not protected routes */}
         <Route path="/" element={<NotImplemented />} />
@@ -58,10 +64,15 @@ function App() {
         {/* Protected routes */}
         {/* <Route path='/students/*' element={<ProtectedRoute>{<StudentCreationPage /> && <SidebarStudents />}</ProtectedRoute>} /> */}
 
+    
         {/* Testing routes with not auth. DEBUG ONLY */}
         <Route path='/students/*' element={<StudentRouter />} />
         <Route path="/courses/*" element={<CourseRoutes />} />
+        <Route path="/courses/:courseId/sections/new" element={<SectionCreationPage />} />
+        
       </Routes>
+      </SectionProvider>
+      </CourseProvider>
     </div>
 
   );

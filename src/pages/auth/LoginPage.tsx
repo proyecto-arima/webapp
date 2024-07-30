@@ -16,26 +16,27 @@ const Login = () => {
   const isAuthenticated = useSelector((state: RootState) => state.auth.isAuthenticated);
 
   const signin = async (email: string, password: string) => {
-    // if (!email || !password) {
-    //   console.log('email or password missing');
-    //   return;
-    // }
-
-    const res = await fetch(`${API_URL}/auth`, {
+    if (!email || !password) {
+      return;
+    }
+    await fetch(`${API_URL}/auth`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ email, password }),
       credentials: 'include',
+    }).then(res => {
+      if (res.ok) {
+        console.log('signin OK');
+        dispatch(login());
+      } else {
+        console.log('signin FAIL');
+      }
+  
+      // TODO: Redirect to the dashboard based on the user role
+      // navigate('/courses/dashboard'); // teacher
+      // navigate('/me/dashboard');      // student
+      navigate('/courses/dashboard');
     });
-
-    if (res.ok) {
-      console.log('signin OK');
-      // dispatch(login());
-    } else {
-      console.log('signin FAIL');
-    }
-
-    navigate('/courses');
   };
 
   return (

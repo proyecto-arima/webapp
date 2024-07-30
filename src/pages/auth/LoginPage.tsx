@@ -1,9 +1,11 @@
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { Card } from "reactstrap";
-import logo from '../../assets/logo_black.png';
+
+import logo from '../../assets/images/logo_black_only.png';
 import LoginForm from "../../components/LoginForm";
 import { API_URL } from "../../config";
+
 import { login } from "../../redux/slices/auth";
 import { RootState } from "../../redux/store";
 

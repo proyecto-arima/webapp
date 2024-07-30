@@ -3,13 +3,14 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useDispatch } from "react-redux";
 import { NavLink, useNavigate } from "react-router-dom";
 import { Nav, NavItem } from "reactstrap";
-import logo from '../assets/horizontal_black.png';
-import { API_URL } from "../config";
-import { logout } from "../redux/slices/auth";
+
+import logo from '../../assets/images/horizontal_black.png';
+import { API_URL } from "../../config";
+import { logout } from "../../redux/slices/auth";
 
 const links = [
   { to: '/students/new', label: 'Crear Estudiante' },
-  { to: '/students', label: 'Ver Estudiantes' },
+  { to: '/students/dashboard', label: 'Ver Estudiantes' },
 ];
 
 export default function SidebarStudents() {

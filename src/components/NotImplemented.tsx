@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router-dom';
 import { Card } from 'reactstrap';
-import logo_black_only from '../assets/logo_black_only.png';
+import logo_black_only from '../assets/images/logo_black_only.png';
 
 export default function NotImplemented() {
 

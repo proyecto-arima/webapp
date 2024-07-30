@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Input, Label } from "reactstrap";
-import './login-form.css';
+import '../assets/styles/login-form.css';
 
 interface ILoginFormProps {
   login: (email: string, password: string) => Promise<void>;

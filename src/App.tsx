@@ -14,6 +14,8 @@ import { RootState } from './redux/store';
 import ProtectedRoute from './utils/ProtectedRoute';
 
 import Login from './pages/auth/LoginPage';
+import RecoverPasswordPage from './pages/auth/RecoverPasswordPage';
+
 import { StudentCreationPage } from './pages/students/StudentCreationPage';
 import { CourseCreationPage } from './pages/courses/CourseCreationPage';
 import { CourseDashboardPage } from './pages/courses/CourseDashboardPage';
@@ -54,6 +56,7 @@ function App() {
         {/* Not protected routes */}
         <Route path="/" element={<NotImplemented />} />
         <Route path="/login" element={<Login />} />
+        <Route path="/forgotPassword" element={<RecoverPasswordPage />} />
 
         {/* Protected routes */}
         {/* <Route path='/students/*' element={<ProtectedRoute>{<StudentCreationPage /> && <SidebarStudents />}</ProtectedRoute>} /> */}

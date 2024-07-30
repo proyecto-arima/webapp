@@ -1,49 +1,69 @@
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { BrowserRouter, Route, Routes } from 'react-router-dom';
-import './App.css';
-import Sidebar from './components/Sidebar';
-import { API_URL } from './config';
+import { Route, Routes } from 'react-router-dom';
 
-import AuthRouter from './pages/auth/AuthRouter';
-import UserRouter from './pages/students/StudentRouter';
+import { API_URL } from './config';
+import './App.css';
+
+
+import NotImplemented from './components/NotImplemented';
+
 import { login } from './redux/slices/auth';
 import { RootState } from './redux/store';
+
 import ProtectedRoute from './utils/ProtectedRoute';
+
+import Login from './pages/auth/LoginPage';
+import { StudentCreationPage } from './pages/students/StudentCreationPage';
+import { CourseCreationPage } from './pages/courses/CourseCreationPage';
+import { CourseDashboardPage } from './pages/courses/CourseDashboardPage';
+
+import CourseRoutes from './routes/CourseRouter';
+import StudentRouter from './routes/StudentRouter';
 
 function App() {
   const isAuthenticated = useSelector((state: RootState) => state.auth.isAuthenticated);
   const dispatch = useDispatch();
 
-  console.log(isAuthenticated);
-
   useEffect(() => {
-    if (!isAuthenticated) {
-      fetch(`${API_URL}/auth`, {
-        method: 'GET',
-        headers: { 'Content-Type': 'application/json' },
-        credentials: 'include',
-      }).then(res => {
+    fetch(`${API_URL}/auth`, {
+      method: 'GET',
+      headers: { 'Content-Type': 'application/json' },
+      credentials: 'include',
+    }).then(res => {
+      console.log(isAuthenticated);
+      if (!isAuthenticated) {
         if (res.ok) {
-          dispatch(login());
+          console.log('User is authenticated');
+          // dispatch(login());
+          // TODO: ask for the role an redirect to the correct page for the role
+        } else {
+          console.warn('User is not authenticated');
         }
-      })
-    }
-  }, [isAuthenticated])
+      }
+    }).catch(err => {
+      console.error('An unexpected error occurred while checking the authentication status');
+      console.error(err);
+    });
+  }, [isAuthenticated]);
 
   return (
-    <BrowserRouter>
-      <div className='main-content'>
+    <div className='main-content'>
+      {/* {isAuthenticated} */}
+      <Routes>
+        {/* Not protected routes */}
+        <Route path="/" element={<NotImplemented />} />
+        <Route path="/login" element={<Login />} />
 
-        {isAuthenticated && <Sidebar />}
-        <AuthRouter />
-        
-        <Routes>
-          <Route path='/students/*' element={<ProtectedRoute><UserRouter /></ProtectedRoute>} />
-        </Routes>
-      </div>
+        {/* Protected routes */}
+        {/* <Route path='/students/*' element={<ProtectedRoute>{<StudentCreationPage /> && <SidebarStudents />}</ProtectedRoute>} /> */}
 
-    </BrowserRouter>
+        {/* Testing routes with not auth. DEBUG ONLY */}
+        <Route path='/students/*' element={<StudentRouter />} />
+        <Route path="/courses/*" element={<CourseRoutes />} />
+      </Routes>
+    </div>
+
   );
 }
 

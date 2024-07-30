@@ -2,6 +2,7 @@ import { useState } from "react";
 import ReactSelect from "react-select";
 import { Card, Input } from "reactstrap";
 import { API_URL } from "../../config";
+import SidebarStudents from "./SidebarStudents";
 
 
 interface IDocument {
@@ -70,8 +71,8 @@ export const StudentCreationPage = () => {
         width: '100vw',
       }}
     >
+      <SidebarStudents />
       <Card style={{ width: '30rem', paddingInline: '2rem', paddingBlock: '1rem' }}>
-
         <h2 className="text-center mb-3">Crear Estudiante</h2>
         <Input name="firstName" type="text" placeholder="Nombre" className="mb-3" onChange={handleFormChange('firstName')} />
         <Input name="lastName" type="text" placeholder="Apellido" className="mb-3" onChange={handleFormChange('lastName')} />

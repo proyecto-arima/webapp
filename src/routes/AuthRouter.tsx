@@ -1,5 +1,5 @@
 import { Route, Routes } from 'react-router-dom';
-import Login from './LoginPage';
+import Login from '../pages/auth/LoginPage';
 
 export default function AuthRouter() {
   return (

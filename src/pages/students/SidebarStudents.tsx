@@ -3,16 +3,17 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useDispatch } from "react-redux";
 import { NavLink, useNavigate } from "react-router-dom";
 import { Nav, NavItem } from "reactstrap";
-import logo from '../assets/horizontal_black.png';
-import { API_URL } from "../config";
-import { logout } from "../redux/slices/auth";
+
+import logo from '../../assets/images/horizontal_black.png';
+import { API_URL } from "../../config";
+import { logout } from "../../redux/slices/auth";
 
 const links = [
   { to: '/students/new', label: 'Crear Estudiante' },
-  { to: '/students', label: 'Ver Estudiantes' },
+  { to: '/students/dashboard', label: 'Ver Estudiantes' },
 ];
 
-export default function Sidebar() {
+export default function SidebarStudents() {
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -47,6 +48,7 @@ export default function Sidebar() {
             </NavLink>
           ))}
         </div>
+
         <div className="w-100">
           <span className='sidebar-section-title'>Opciones</span>
           <NavLink to={'/login'} end className={({ isActive }) => isActive ? 'sidebar-navlink-active' : 'sidebar-navlink-inactive'}>

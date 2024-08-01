@@ -3,6 +3,7 @@ import { API_URL } from '../../../config';
 import { useEffect } from 'react';
 
 interface ICourse {
+  id: string;
   title: string;
   description: string;
   imageUrl: string;

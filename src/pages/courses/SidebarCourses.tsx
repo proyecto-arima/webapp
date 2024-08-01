@@ -8,7 +8,7 @@ import { API_URL } from "../../config";
 import { logout } from "../../redux/slices/auth";
 
 const links = [
-  { to: '/courses/new', label: 'Crear curso' },
+  { to: '/courses/create', label: 'Crear curso' },
   { to: '/courses/dashboard', label: 'Ver Cursos' },
 ];
 

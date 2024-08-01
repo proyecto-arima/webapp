@@ -2,10 +2,10 @@ import React, { createContext, useState, useContext, ReactNode, useEffect } from
 import { API_URL } from '../../../config';
 
 interface ISection {
+  id: string;
   title: string;
   description: string;
   visible: boolean;
-  courseId: string;
 }
 
 interface ISectionContext {

@@ -21,7 +21,7 @@ const SectionCreationPage = () => {
   };
 
   const createSection = async () => {
-    const newSection = { ...formValues, courseId: courseId || '' };
+    const newSection = { id: '', ...formValues, courseId: courseId };
     const response = await fetch(`${API_URL}/courses/${courseId}/sections`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },

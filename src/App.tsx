@@ -54,8 +54,7 @@ function App() {
   return (
     <div className='main-content'>
       {/* {isAuthenticated} */}
-      <CourseProvider>
-        <SectionProvider>
+
       <Routes>
         {/* Not protected routes */}
         <Route path="/" element={<NotImplemented />} />
@@ -68,11 +67,9 @@ function App() {
         {/* Testing routes with not auth. DEBUG ONLY */}
         <Route path='/students/*' element={<StudentRouter />} />
         <Route path="/courses/*" element={<CourseRoutes />} />
-        <Route path="/courses/:courseId/sections/new" element={<SectionCreationPage />} />
         
       </Routes>
-      </SectionProvider>
-      </CourseProvider>
+
     </div>
 
   );

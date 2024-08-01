@@ -5,6 +5,7 @@ import { Card, Input } from 'reactstrap';
 import { useCourseContext } from './contexts/CourseContext';
 import SidebarCourses from './SidebarCourses';
 import { useParams } from 'react-router-dom';
+import { API_URL } from '../../config';
 
 
 interface ICourseCreationFormValues {
@@ -34,13 +35,36 @@ export const CourseCreationPage = () => {
   };
 
   const createCourse = async () => {
-    addCourse({
+    //TODO: IMPLEMENT ID (courseId) -> CONECTION WITH BACKEND
+    const courseId = '1';
+    const courseData = {
+      id: courseId,
       title: formValues.title!,
       description: formValues.description!,
       imageUrl: formValues.imageUrl!,
+      sections: [],
+    }
+
+    // Llama al backend para crear el curso con el ID generado
+    await fetch(`${API_URL}/courses/create`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(courseData),
     });
+
+    addCourse(courseData); // Añade el curso al contexto o estado
+
+    console.log('Course created');
+
+    
+
+    addCourse(courseData); // Añade el curso al contexto o estado
     console.log('Course created');
   };
+
+  
 
   return (
     <div

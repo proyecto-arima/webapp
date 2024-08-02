@@ -1,10 +1,17 @@
 import React, { useEffect, useState } from 'react';
 import { useCourseContext } from './contexts/CourseContext';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import '../../assets/styles/CourseDetailPage.css';
 import { useSectionContext } from './contexts/SectionContext';
 import { API_URL } from '../../config';
-import SidebarCourses from './SidebarCourses'; // Adjust the path as necessary
+import SidebarCourses from './SidebarCourses';
+
+interface ISection {
+  id: string;
+  title: string;
+  description: string;
+  visible: boolean;
+}
 
 interface ICourse {
   id: string;
@@ -14,19 +21,14 @@ interface ICourse {
   matriculationCode: string;
   teacherId: string;
   students: Array<{ id: string; firstName: string; lastName: string }>;
-  sections: Array<{
-    id: string;
-    title: string;
-    description: string;
-    visible: boolean;
-  }>;
+  sections: ISection[];
 }
 
 // Mock data
 const mockCourse: ICourse = {
   id: '1',
-  title: 'Curso de Node.js',
-  description: 'Aprende los fundamentos de Node.js',
+  title: 'Historia',
+  description: 'Aprende Historia de la mejor manera posible',
   imageUrl: 'https://via.placeholder.com/150',
   matriculationCode: 'NODEJS2023',
   teacherId: 'teacher123',
@@ -34,35 +36,23 @@ const mockCourse: ICourse = {
     { id: 'student1', firstName: 'Juan', lastName: 'Pérez' },
     { id: 'student2', firstName: 'Ana', lastName: 'García' },
   ],
-  sections: [
-    {
-      id: 'section1',
-      title: 'Introducción',
-      description: 'Introducción a Node.js',
-      visible: true,
-    },
-    {
-      id: 'section2',
-      title: 'Asincronismo en Node.js',
-      description: 'Aprende cómo manejar operaciones asíncronas',
-      visible: true,
-    },
-  ],
+  sections: [],
 };
 
 export const CourseDetailPage: React.FC = () => {
   const { courseId } = useParams<{ courseId: string }>();
   const { sections, addSection } = useSectionContext();
   const [course, setCourse] = useState<ICourse | null>(null);
-  const [sectionsAdded, setSectionsAdded] = useState<boolean>(false); // Estado local para controlar si ya se añadieron las secciones
+  const [sectionsAdded, setSectionsAdded] = useState<boolean>(false); // Local state to control if sections were already added
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchCourse = async () => {
-      // Usando el mock en lugar de una llamada real a la API
+      // Using the mock instead of a real API call
       if (courseId === mockCourse.id && !sectionsAdded) {
         setCourse(mockCourse);
         mockCourse.sections.forEach(section => addSection(section));
-        setSectionsAdded(true); // Marcar que las secciones ya fueron añadidas
+        setSectionsAdded(true); // Mark that sections were already added
       } else {
         console.error('Curso no encontrado');
       }
@@ -70,6 +60,10 @@ export const CourseDetailPage: React.FC = () => {
 
     fetchCourse();
   }, [courseId, sectionsAdded, addSection]);
+
+  const handleNewSection = () => {
+    navigate(`/courses/${courseId}/new-section`);
+  };
 
   if (!course) {
     return <div>Loading...</div>;
@@ -87,18 +81,23 @@ export const CourseDetailPage: React.FC = () => {
       }}
     >
       <SidebarCourses />
-    <div className="course-detail">
-      <h1>{course.title}</h1>
-      <p>{course.description}</p>
-      <div className="sections">
-        {sections.map((section, index) => (
-          <div key={index} className="section">
-            <h2>{section.title}</h2>
-            <p>{section.description}</p>
-          </div>
-        ))}
+      <div className="course-detail-container">
+        <h1>{course.title}</h1>
+        <button onClick={handleNewSection} className="new-section-button">Nueva Sección</button>
+        <div className="sections-container">
+          {sections.map((section) => (
+            <div key={section.id} className="section-card">
+              <h2>{section.title}</h2>
+              <p>{section.description}</p>
+              {section.visible && <p>Visible</p>}
+              <div className="section-actions">
+                <button className="edit-button">Editar</button>
+                <button className="delete-button">Eliminar</button>
+              </div>
+            </div>
+          ))}
+        </div>
       </div>
-    </div>
     </div>
   );
 };

@@ -1,32 +1,35 @@
-.course-detail {
-    padding: 2rem;
-    background-color: #f6effa;
-    min-height: 100vh;
-  }
-  
-  .course-detail h1 {
-    font-size: 2.5rem;
-    margin-bottom: 1rem;
-  }
-  
-  .sections {
-    margin-top: 2rem;
-  }
-  
-  .section {
-    background-color: #fff;
-    border: 1px solid #ddd;
-    padding: 1rem;
-    margin-bottom: 1rem;
-    border-radius: 0.25rem;
-  }
-  
-  .section h2 {
-    font-size: 1.5rem;
-    margin-bottom: 0.5rem;
-  }
-  
-  .section p {
-    margin: 0;
-  }
-  
+/* src/assets/styles/CourseDetailPage.css */
+.course-detail-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+}
+
+.sidebar-courses {
+  position: absolute;
+  left: 0; /* Esto mueve el sidebar más a la izquierda */
+  top: 0;
+  bottom: 0;
+  width: 200px;
+  background-color: #f6effa;
+  padding: 20px;
+  box-shadow: 2px 0px 5px rgba(0, 0, 0, 0.1);
+}
+
+.sections-container {
+  display: flex;
+  flex-wrap: wrap; /* Permite que las secciones se agrupen en filas */
+  justify-content: space-around;
+  margin-left: 220px; /* Deja espacio suficiente para el sidebar */
+  width: calc(100% - 240px); /* Ajuste del tamaño para dejar espacio al sidebar */
+}
+
+.section-card {
+  flex: 1 1 calc(45% - 20px); /* Cada tarjeta ocupa el 45% del contenedor, dejando espacio entre ellas */
+  background-color: #fff;
+  padding: 15px;
+  margin: 10px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+}

@@ -13,18 +13,9 @@ export const CourseDashboardPage = () => {
   };
 
   return (
-    <div
-      style={{
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        height: '100vh',
-        backgroundColor: '#f6effa',
-        width: '100vw',
-      }}
-    >
+    <div className="course-dashboard-container">
       <SidebarCourses />
-      <ul className="course-dashboard">
+      <div className="course-list-container">
         <div className="course-list">
           {!courses.length ? (
             <h2>No hay cursos disponibles</h2>
@@ -41,7 +32,7 @@ export const CourseDashboardPage = () => {
             ))
           )}
         </div>
-      </ul>
+      </div>
     </div>
   );
 };

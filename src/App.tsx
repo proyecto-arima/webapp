@@ -18,7 +18,7 @@ import Login from './pages/auth/LoginPage';
 import { StudentCreationPage } from './pages/students/StudentCreationPage';
 import { CourseCreationPage } from './pages/courses/CourseCreationPage';
 import { CourseDashboardPage } from './pages/courses/CourseDashboardPage';
-import SectionCreationPage from './pages/courses/SectionCreationPage';
+import {SectionCreationPage} from './pages/courses/SectionCreationPage';
 import { CourseProvider } from './pages/courses/contexts/CourseContext';
 
 import CourseRoutes from './routes/CourseRouter';

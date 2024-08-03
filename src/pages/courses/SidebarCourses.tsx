@@ -6,6 +6,7 @@ import { Nav, NavItem } from "reactstrap";
 import logo from '../../assets/images/horizontal_black.png';
 import { API_URL } from "../../config";
 import { logout } from "../../redux/slices/auth";
+import { useCourseContext } from "./contexts/CourseContext";
 
 const links = [
   { to: '/courses/create', label: 'Crear curso' },
@@ -16,6 +17,7 @@ export default function SidebarCourses() {
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const { courses } = useCourseContext(); // Obtener los cursos del contexto
 
   const signout = () => {
     fetch(`${API_URL}/auth`, {
@@ -43,6 +45,26 @@ export default function SidebarCourses() {
                   color: '#49454f',
                 }} />
                 <span>{link.label}</span>
+              </NavItem>
+            </NavLink>
+          ))}
+        </div>
+
+        <div className="w-100">
+          <span className='sidebar-section-title'>Mis Cursos</span>
+        {/* Mostrar los cursos en el sidebar */}
+        {courses.map(course => (
+            <NavLink 
+              end 
+              to={`/courses/${course.id}`} 
+              key={course.id} 
+              className={({ isActive }) => isActive ? 'sidebar-navlink-active' : 'sidebar-navlink-inactive'}>
+              <NavItem className='sidebar-navlink-item'>
+                <FontAwesomeIcon icon={faCircle} style={{
+                  width: '0.6rem',
+                  color: '#49454f',
+                }} />
+                <span>{course.title}</span>
               </NavItem>
             </NavLink>
           ))}

@@ -1,35 +1,69 @@
 /* src/assets/styles/CourseDetailPage.css */
+
+.section-actions button {
+  font-family: 'Nunito', sans-serif; /* Asegúrate de que esta sea la tipografía del sidebar */
+  font-size: 14px;
+  color: #49454f; /* Mismo color de texto que el sidebar */
+  background-color: transparent;
+  border: 1px solid #cbb1f9; /* Borde violeta claro */
+  border-radius: 4px;
+  padding: 8px 12px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, color 0.3s ease;
+  margin-right: 8px;
+}
+
+.section-actions button:hover {
+  background-color: #e7dbfa; /* Un fondo violeta claro al pasar el ratón */
+  color: #3f3a47; /* Color de texto más oscuro en hover */
+}
+
 .course-detail-container {
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: flex-start; /* Alinea el contenido al principio */
   padding: 20px;
-}
-
-.sidebar-courses {
-  position: absolute;
-  left: 0; /* Esto mueve el sidebar más a la izquierda */
-  top: 0;
-  bottom: 0;
-  width: 200px;
-  background-color: #f6effa;
-  padding: 20px;
-  box-shadow: 2px 0px 5px rgba(0, 0, 0, 0.1);
+  width: 100%;
 }
 
 .sections-container {
   display: flex;
-  flex-wrap: wrap; /* Permite que las secciones se agrupen en filas */
-  justify-content: space-around;
-  margin-left: 220px; /* Deja espacio suficiente para el sidebar */
-  width: calc(100% - 240px); /* Ajuste del tamaño para dejar espacio al sidebar */
+  flex-direction: column; /* Asegura que las secciones se apilen una debajo de la otra */
+  gap: 10px; /* Añade un pequeño espacio entre las secciones */
+  width: 100%;
+  margin-top: 20px;
 }
 
 .section-card {
-  flex: 1 1 calc(45% - 20px); /* Cada tarjeta ocupa el 45% del contenedor, dejando espacio entre ellas */
   background-color: #fff;
   padding: 15px;
-  margin: 10px;
+  margin: 10px 0; /* Ajusta el margen para separarlas verticalmente */
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
   border-radius: 8px;
+  width: calc(100% - 40px); /* Ajusta el ancho del cuadro */
+}
+
+.course-detail-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+
+h1 {
+  margin-bottom: 10px; /* Ajusta el margen inferior del título */
+}
+
+.new-section-button {
+  background-color: #7e22ce;
+  color: #fff; /* Letras blancas */
+  border: 1px solid #7e22ce;
+  border-radius: 5px;
+  padding: 10px 15px;
+  font-family: 'Roboto', sans-serif; /* Usa la misma tipografía que el sidebar */
+  cursor: pointer;
+}
+
+.new-section-button:hover {
+  background-color: #5b17a8;
 }

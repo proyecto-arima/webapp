@@ -74,7 +74,7 @@ export const CourseDetailPage: React.FC = () => {
       style={{
         display: 'flex',
         justifyContent: 'center',
-        alignItems: 'center',
+        alignItems: 'flex-start',  /* Alinea el contenido al inicio, en lugar de al centro */
         height: '100vh',
         backgroundColor: '#f6effa',
         width: '100vw',
@@ -82,14 +82,15 @@ export const CourseDetailPage: React.FC = () => {
     >
       <SidebarCourses />
       <div className="course-detail-container">
-        <h1>{course.title}</h1>
-        <button onClick={handleNewSection} className="new-section-button">Nueva Sección</button>
+        <div className="course-detail-header">
+          <h1>{course.title}</h1>
+          <button onClick={handleNewSection} className="new-section-button">Nueva Sección</button>
+        </div>
         <div className="sections-container">
           {sections.map((section) => (
             <div key={section.id} className="section-card">
               <h2>{section.title}</h2>
               <p>{section.description}</p>
-              {section.visible && <p>Visible</p>}
               <div className="section-actions">
                 <button className="edit-button">Editar</button>
                 <button className="delete-button">Eliminar</button>

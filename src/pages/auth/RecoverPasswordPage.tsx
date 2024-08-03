@@ -16,8 +16,6 @@ const RecoverPassword = () => {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ email }),
     }).then(res => {
-      console.log(res);
-      console.log(res.ok);
       return res.ok;
     }).catch(err => {
       console.error(`An unexpected error occurred: ${err}`);

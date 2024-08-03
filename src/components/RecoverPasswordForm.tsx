@@ -1,7 +1,8 @@
 import { useState } from "react";
 import { Input, Label } from "reactstrap";
-import '../assets/styles/auth-forms.css';
 import { useNavigate } from "react-router-dom";
+
+import '../App.css';
 
 interface IResetPasswordFormProps {
   recoverPassword: (email: string) => Promise<void>;
@@ -22,10 +23,10 @@ export default function RecoverPasswordForm({ recoverPassword: recoverPassword, 
       </div>
       <p className="text-muted">Te enviaremos a tu correo electrónico un enlace que te permitirá restablecer tu contraseña</p>
       <div className="d-flex justify-content-between mt-4">
-        <button className="btn-purple-secondary" onClick={() => navigate('/login')}>
+        <button className="btn-purple-2" onClick={() => navigate('/login')}>
           Volver
         </button>
-        <button className="btn-purple-primary" onClick={() => recoverPassword(email)}>
+        <button className="btn-purple-1" onClick={() => email && recoverPassword(email)}>
           Recuperar contraseña
         </button>
       </div>

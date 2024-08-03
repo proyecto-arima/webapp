@@ -1,78 +1,106 @@
-
-import logo from '../../assets/images/logo_black.png';
 import { useState } from "react";
 import { Card, } from "reactstrap";
-import { API_URL } from "../../config";
+import { API_URL, DEBUG } from "../../config";
+import logo from '../../assets/images/logo_black.png';
 import SetPasswordForm from "../../components/SetPasswordForm";
 
-const SetPasswordPage = () => {
+interface PasswordValidator {
+  hasMinLength: boolean;
+  hastAtLeastOneEspecialCharacter: boolean;
+  hasNumbers: boolean;
+  hasAtLeastOneUppercase: boolean;
+}
 
+const isSecurePassword = (password: string): PasswordValidator => {
+  const hasMinLength = password.length >= 8;
+  const hastAtLeastOneEspecialCharacter = /[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]+/.test(password);
+  const hasNumbers = /\d{2}/.test(password);
+  const hasAtLeastOneUppercase = /[A-Z]+/.test(password);
+  return {
+    hasMinLength,
+    hastAtLeastOneEspecialCharacter,
+    hasNumbers,
+    hasAtLeastOneUppercase,
+  };
+}
+
+const SetPasswordPage = () => {
   const [statusSended, setStatusSended] = useState(false);
   const [statusMessage, setMessage] = useState('');
+  const token = new URLSearchParams(window.location.search).get('token');
 
   const handleSetPassword = async (newPassword: string, newPasswordConfirmation: string) => {
-
-    // TODO: Validaciones del formulario
-
-    const token = new URLSearchParams(window.location.search).get('token');
-    const validToken = token?.split('.').length === 3 ? token : null;
-
-
-    // const setPasswordResponse = await fetch(`${API_URL}/auth/passwordRecovery`, {
-    //   method: 'POST',
-    //   headers: { 'Content-Type': 'application/json' },
-    //   body: JSON.stringify({ email }),
-    // }).then(res => {
-    //   console.log(res);
-    //   console.log(res.ok);
-    //   return res.ok;
-    // }).catch(err => {
-    //   console.error(`An unexpected error occurred: ${err}`);
-    //   return false;
-    // });
-    const setPasswordResponse = true;
-
+    if (newPassword !== newPasswordConfirmation) {
+      setMessage('Las contraseñas no coinciden');
+      setTimeout(() => {
+        setMessage('');
+      }, 2000);
+      return;
+    }
+    const passwordValidation = isSecurePassword(newPassword);
+    if (passwordValidation.hasMinLength &&
+      passwordValidation.hastAtLeastOneEspecialCharacter &&
+      passwordValidation.hasNumbers &&
+      passwordValidation.hasAtLeastOneUppercase) {
+      setMessage('La contraseña no es segura');
+      setTimeout(() => {
+      setMessage('');
+      }, 2000);
+      return;
+    }
+    const setPasswordResponse = await fetch(`${API_URL}/auth/setPassword?token=${token}`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ newPassword, newPasswordConfirmation }),
+    }).then(res => {
+      return res.ok;
+    }).catch(err => {
+      console.error(`An unexpected error occurred on fetch: ${err}`);
+      return;
+    });
+    
     if (setPasswordResponse) {
       setStatusSended(true);
-      // TODO: esperar respuesta del servidor
-      setMessage('Se actualizo la contraseña correctamente');
+      setMessage('Se actualizó la contraseña correctamente');
     } else {
-      setStatusSended(false);
-      setMessage('Ocurrio un error inesperado. Por favor, intenta de nuevo más tarde');
+      setMessage('Ocurrió un error inesperado. Por favor, intenta de nuevo más tarde');
+      return;
     }
+
     setTimeout(() => {
       setStatusSended(false);
       setMessage('');
     }, 5000);
+    return;
   };
-  
+
   return (
-      <div
-        style={{
+    <div
+      style={{
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
         height: '100vh',
         backgroundColor: '#f6effa',
         width: '100vw',
-        }}
-      >
-        {new URLSearchParams(window.location.search).get('token') ? (
+      }}
+    >
+      {token ? (
         <Card style={{ width: '35%', paddingInline: '2rem', paddingBlock: '1rem' }}>
           <div className="text-center">
-          <img src={logo} alt="Proyecto Arima" style={{ height: '10rem' }} />
+            <img src={logo} alt="Proyecto Arima" style={{ height: '10rem' }} />
           </div>
           <SetPasswordForm
-          setPassword={handleSetPassword}
-          statusSended={statusSended}
-          statusMessage={statusMessage}
+            setPassword={handleSetPassword}
+            statusSended={statusSended}
+            statusMessage={statusMessage}
           />
         </Card>
-        ) : (
+      ) : (
         <h2>Ocurrio un error inesperado. Por favor, intenta de nuevo más tarde</h2>
-        )}
-      </div>
-      );
+      )}
+    </div>
+  );
 };
 
 export default SetPasswordPage;

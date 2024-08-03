@@ -13,6 +13,7 @@
   }
 }
 
+/* Headers */
 .App-header {
   background-color: #f6effa;
   min-height: 100vh;
@@ -24,6 +25,11 @@
   color: white;
 }
 
+/* TODO: Forms */
+/* TODO: Tables */
+
+
+/* Buttons */
 .btn-purple-1 {
   background-color: #6650a4;
   color: #fff;
@@ -37,6 +43,19 @@
   background-color: #4d3a8e;
 }
 
+.btn-purple-2 {
+  background-color: #6650a4;
+  color: #fff;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 0.25rem;
+  cursor: pointer;
+}
+
+.btn-purple-2:hover {
+  background-color: #4d3a8e;
+}
+
 @keyframes App-logo-spin {
   from {
     transform: rotate(0deg);
@@ -47,9 +66,7 @@
   }
 }
 
-
-/* Sidebar */
-
+/* Sidebars */
 .sidebar {
   display: flex;
   flex-direction: column;

@@ -22,6 +22,8 @@ import { CourseDashboardPage } from './pages/courses/CourseDashboardPage';
 
 import CourseRoutes from './routes/CourseRouter';
 import StudentRouter from './routes/StudentRouter';
+import { StudentProfilePage } from './pages/user-profile/student/StudentProfilePage';
+import { StudentProfileLearningTypePage } from './pages/user-profile/student/StudentProfileLearningTypePage';
 
 function App() {
   const isAuthenticated = useSelector((state: RootState) => state.auth.isAuthenticated);
@@ -58,10 +60,16 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/forgotPassword" element={<RecoverPasswordPage />} />
 
+        {/* Student profile routes page */}
+        <Route path="/me/profile" element={<StudentProfilePage />} />
+        <Route path="/me/learning-type" element={<StudentProfileLearningTypePage />} />
+        <Route path="/me/evaluations" element={<NotImplemented />} />
+
         {/* Protected routes */}
         {/* <Route path='/students/*' element={<ProtectedRoute>{<StudentCreationPage /> && <SidebarStudents />}</ProtectedRoute>} /> */}
 
         {/* Testing routes with not auth. DEBUG ONLY */}
+
         <Route path='/students/*' element={<StudentRouter />} />
         <Route path="/courses/*" element={<CourseRoutes />} />
       </Routes>

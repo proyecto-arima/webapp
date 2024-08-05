@@ -1,7 +1,8 @@
 import { useState } from "react";
 import { Input, Label } from "reactstrap";
-import '../assets/styles/auth-forms.css';
 import { useNavigate } from "react-router-dom";
+
+import '../App.css';
 
 interface ILoginFormProps {
   login: (email: string, password: string) => Promise<void>;
@@ -25,10 +26,10 @@ export default function LoginForm({ login }: ILoginFormProps) {
       </div>
       <div className="d-flex justify-content-between mt-4">
 
-        <button className="btn-purple-secondary" onClick={() => navigate("/forgotPassword")}>
+        <button className="btn-purple-2" onClick={() => navigate("/forgotPassword")}>
           Olvidé mi contraseña
         </button>
-        <button className="btn-purple-primary" onClick={() => login(email, password)}>
+        <button className="btn-purple-1" onClick={() => email && password && login(email, password)}>
           Iniciar Sesión
         </button>
 

@@ -1,5 +1,5 @@
 import { useSelector } from 'react-redux'
-import { Navigate } from 'react-router-dom'
+import logo_not_auth from '../assets/images/not_auth.jpg'
 import { RootState } from '../redux/store'
 
 interface ProtectedRouteProps {
@@ -8,14 +8,17 @@ interface ProtectedRouteProps {
 
 const ProtectedRoute = ({ children }: ProtectedRouteProps) => {
   const isAuthenticated = useSelector((state: RootState) => state.auth.isAuthenticated);
-
-  // show unauthorized screen if no user is found in redux store
+  
   if (!isAuthenticated) {
-    return <Navigate to='/login' replace />
+    return <div>
+      <h2>Unauthorized</h2>
+      <a href='/login'>🔙 Go back</a>
+      <div>
+      <img src={logo_not_auth} alt="not-auth-log" />
+      </div>
+    </div>
   }
 
-
-  // returns child route elements
   return <>{children}</>
 }
 export default ProtectedRoute

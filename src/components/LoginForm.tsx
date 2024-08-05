@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { Input, Label } from "reactstrap";
-import '../assets/styles/login-form.css';
+import { useNavigate } from "react-router-dom";
+
+import '../App.css';
 
 interface ILoginFormProps {
   login: (email: string, password: string) => Promise<void>;
@@ -10,6 +12,7 @@ export default function LoginForm({ login }: ILoginFormProps) {
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const navigate = useNavigate();
 
   return (
     <div>
@@ -22,12 +25,14 @@ export default function LoginForm({ login }: ILoginFormProps) {
         <Input type="password" id="password" placeholder="**************" onChange={(e) => setPassword(e.target.value)} />
       </div>
       <div className="d-flex justify-content-between mt-4">
-        <span className="text-muted">
-          <a href="#forgot-password">Olvidé mi contraseña</a>
-        </span>
-        <button className="btn-purple-1" onClick={() => login(email, password)}>
+
+        <button className="btn-purple-2" onClick={() => navigate("/forgotPassword")}>
+          Olvidé mi contraseña
+        </button>
+        <button className="btn-purple-1" onClick={() => email && password && login(email, password)}>
           Iniciar Sesión
         </button>
+
       </div>
     </div>
   );

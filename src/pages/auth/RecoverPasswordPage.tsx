@@ -1,26 +1,39 @@
 
 import logo from '../../assets/images/logo_black.png';
-import { useNavigate } from "react-router-dom";
+import { useState } from "react";
 import { Card, } from "reactstrap";
 import { API_URL } from "../../config";
 import RecoverPasswordForm from "../../components/RecoverPasswordForm";
 
 const RecoverPassword = () => {
 
-  const recoverPassword = async (email: string) => {
-    // const res = await fetch(`${API_URL}/auth`, {
-    //   method: 'POST',
-    //   headers: { 'Content-Type': 'application/json' },
-    //   body: JSON.stringify({ email }),
-    //   credentials: 'include',
-    // });
+  const [statusSended, setStatusSended] = useState(false);
+  const [statusMessage, setMessage] = useState('');
 
-    // if (res.ok) {
-    //   navigate('/students/new');
-    // }
-    console.log("testing");
-    
-  }
+  const handleRecoverPassword = async (email: string) => {
+    const recoveryEmailResponse = await fetch(`${API_URL}/auth/passwordRecovery`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email }),
+    }).then(res => {
+      return res.ok;
+    }).catch(err => {
+      console.error(`An unexpected error occurred: ${err}`);
+      return false;
+    });
+
+    if (recoveryEmailResponse) {
+      setStatusSended(true);
+      setMessage('Se envio el correo con las instrucciones para recuperar tu contraseña');
+    } else {
+      setStatusSended(false);
+      setMessage('Ocurrio un error inesperado. Por favor, intenta de nuevo más tarde');
+    }
+    setTimeout(() => {
+      setStatusSended(false);
+      setMessage('');
+    }, 5000);
+  };
 
   return (
     <div
@@ -37,7 +50,11 @@ const RecoverPassword = () => {
         <div className="text-center">
           <img src={logo} alt="Proyecto Arima" style={{ height: '10rem' }} />
         </div>
-        <RecoverPasswordForm recoverPassword={recoverPassword}/>
+        <RecoverPasswordForm
+          recoverPassword={handleRecoverPassword}
+          statusSended={statusSended}
+          statusMessage={statusMessage}
+        />
       </Card>
 
     </div>

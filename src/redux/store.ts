@@ -1,9 +1,13 @@
 import { configureStore } from '@reduxjs/toolkit'
 import auth from './slices/auth'
+import courses from './slices/courses'
+import user from './slices/user'
 
 export const store = configureStore({
   reducer: {
     auth: auth,
+    user: user,
+    courses: courses,
   },
 })
 

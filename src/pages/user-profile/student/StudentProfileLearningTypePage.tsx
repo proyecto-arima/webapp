@@ -4,7 +4,6 @@ import { useState, useEffect } from 'react';
 import { API_URL } from '../../../config';
 
 import '../../../assets/styles/profile-page.css'
-import { setTimeout } from 'timers/promises';
 
 
 interface ICoursesStudent {
@@ -31,33 +30,19 @@ interface IQuestion {
 export const StudentProfileLearningTypePage = () => {
   const [testInProgress, setTestInProgress] = useState<boolean>(false);
   const [testCompleted, setTestCompleted] = useState<boolean>(false);
+  const [testHasMoreQuestions, setTestHasMoreQuestions] = useState<boolean>(true);
   const [learningType, setLearningType] = useState<string>('');
-
-
   const [questionsMessageStatus, setQuestionsMessageStatus] = useState<string>('');
   const [showTestMessage, setShowTestMessage] = useState<boolean>(false);
 
-  // TODO: Get from redux user ID
+  // TODO: Mocked user. Get from redux user ID
   const user: IStudent = {
     id: '1',
     learningProfile: '',
     courses: []
   };
 
-  useEffect(() => {
-    // Mock learning profile
-    user.learningProfile = 'Visualizador';
-    if (!user.learningProfile) {
-      fetch(`${API_URL}/students/${user.id}/learning-profile`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' }
-      }).then(res => res.json())
-        .then(res => res.data)
-        .then(data => { setLearningType(data.learningProfile) });
-    }
-  });
-
-  // TODO: Evaluacion del test mockeadas. Son 12 afirmaciones en total
+  // TODO: Questions mocks
   const [questions, setQuestions] = useState<IQuestion[]>([
     {
       statement: 'Cuando aprendo ...',
@@ -145,12 +130,21 @@ export const StudentProfileLearningTypePage = () => {
     }
   ]);
 
+  useEffect(() => {
+    // Mock learning profile
+    user.learningProfile = 'Visualizador';
+    if (!user.learningProfile) {
+      fetch(`${API_URL}/students/${user.id}/learning-profile`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' }
+      }).then(res => res.json())
+        .then(res => res.data)
+        .then(data => { setLearningType(data.learningProfile) });
+    }
+  });
+
   const doTest = () => {
     setTestInProgress(true);
-  }
-
-  const sliceQuestions = () => {
-    setQuestions(questions.slice(3));
   }
 
   const finishTest = () => {
@@ -172,31 +166,37 @@ export const StudentProfileLearningTypePage = () => {
     }
   }
 
-  const hasNextQuestions = (newQuestions: IQuestion[]) : boolean => {
-    return newQuestions.slice(3).length > 0; 
-  }
-
-  // TODO: Quiza ni es necesario
-  const noMoreQuestions = () => {
-    setShowTestMessage(true);
-    setQuestionsMessageStatus('Estas son las ultimas pregutnas');
-    window.setTimeout(() => {
-      setQuestionsMessageStatus('');
-    }, 3000);
-  }
-
   const getQuestions = (questionsLeft: IQuestion[]) => {
+  {/* TODO: mostrar de a 3 preguntas */}
+  const sliceQuestions = () => {
+    setQuestions(questions.slice(3));
+  }
+
+    const hasNextQuestions = (newQuestions: IQuestion[]) : boolean => {
+      const hasMoreQuestions = newQuestions.slice(3).length > 0;
+      setTestHasMoreQuestions(hasMoreQuestions);
+      return hasMoreQuestions;
+    }
+  
+    // TODO: Quiza ni es necesario
+    const noMoreQuestions = () => {
+      setShowTestMessage(true);
+      setQuestionsMessageStatus('Estas son las ultimas preguntas');
+      window.setTimeout(() => {
+        setQuestionsMessageStatus('');
+      }, 3000);
+    }
+
     return (
       <div>
         {showTestMessage && <p className={testCompleted ? "text-success" : "text-danger"}>{questionsMessageStatus}</p>}
-        {!questionsLeft  && <p className={testCompleted ? "text-success" : "text-danger"}>No hay mas preguntas</p>}
+        {!questionsLeft  && <p className={testHasMoreQuestions && !testCompleted ? "text-success" : "text-danger"}>No hay mas preguntas</p>}
         <h2>Test de Kolb</h2>
         <p>Se puntúa con 1 la que menos te representa y con 4 la que más te representa</p>
         <p>Las 4 deben quedar con puntuación y no se pueden repetir valores.</p>
         <ul>
           {questionsLeft.slice(0,3).map((question, indexQuestions) => (
             <div key={indexQuestions}>
-              {/* TODO: mostrar de a 3 preguntas */}
               <h3>{question.statement}</h3>
               <ul>
                 {question.options.map((option, indexOptions) => (
@@ -207,7 +207,7 @@ export const StudentProfileLearningTypePage = () => {
                       onChange={(e) => {
                         questions[indexQuestions].options[indexOptions].valueAsigned = e.target.value;
                         
-                        {/* Testing finish test */}
+                        {/* DEBUG: Testing finish test */}
                         setTestCompleted(true);
                       }}
                       value={option.valueAsigned}
@@ -237,6 +237,7 @@ export const StudentProfileLearningTypePage = () => {
           <button className="btn-purple-primary" onClick={() => {
             if (hasNextQuestions(questions)) {
               sliceQuestions();
+              // DEBUG
               console.log("Siguiente");
             } else {
               noMoreQuestions();
@@ -265,7 +266,7 @@ export const StudentProfileLearningTypePage = () => {
           <div className="row">
             <ul>
               <h2>{learningType ? `Tu tipo de aprendizaje actualmente es ${learningType}` :
-                "Comenza el test para descubri tu tipo de aprendizaje, son menos de 5 minutos!"
+                "Comenza el test para descubrir tu tipo de aprendizaje, son menos de 5 minutos!"
               }</h2>
             </ul>
             <ul>

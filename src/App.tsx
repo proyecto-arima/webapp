@@ -14,6 +14,8 @@ import LoginPage from './pages/auth/LoginPage';
 import RecoverPasswordPage from './pages/auth/RecoverPasswordPage';
 import CourseRoutes from './routes/CourseRouter';
 import StudentRouter from './routes/StudentRouter';
+import { StudentProfilePage } from './pages/user-profile/student/StudentProfilePage';
+import { StudentProfileLearningTypePage } from './pages/user-profile/student/StudentProfileLearningTypePage';
 
 import Sidebar from './components/Sidebar';
 import SetPasswordPage from './pages/auth/SetPasswordPage';
@@ -66,6 +68,11 @@ function App() {
         <Route path="/login" element={<LoginPage />} />
         <Route path="/forgotPassword" element={<RecoverPasswordPage />} />
         <Route path="/recoverPassword" element={<SetPasswordPage />} />
+
+        {/* Student profile routes page */}
+        <Route path="/me/profile" element={<StudentProfilePage />} />
+        <Route path="/me/learning-type" element={<StudentProfileLearningTypePage />} />
+        <Route path="/me/evaluations" element={<NotImplementedPage />} />
 
         {/* Protected routes */}
         {/* <Route path='/students/*' element={<ProtectedRoute>{<StudentCreationPage /> && <SidebarStudents />}</ProtectedRoute>} /> */}

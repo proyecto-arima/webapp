@@ -1,4 +1,3 @@
-import SidebarProfile from '../SidebarProfile';
 import { Card, CardBody, CardTitle, Input, Label } from 'reactstrap';
 
 interface Profile {
@@ -7,6 +6,7 @@ interface Profile {
   email: string;
   institution: string;
   learningType: string;
+  rol: string;
 }
 
 export const StudentProfilePage = () => {
@@ -16,6 +16,7 @@ export const StudentProfilePage = () => {
     email: "jdoe@frba.utn.edu.ar",
     institution: "Universidad Tecnológica de Buenos Aires",
     learningType: "Asimilador",
+    rol: "Estudiante"
   }
 
   return (
@@ -29,7 +30,6 @@ export const StudentProfilePage = () => {
         width: '100vw',
       }}
     >
-      <SidebarProfile />
       <div className="container">
         <div className="row">
           <Card className='profile-card'>
@@ -45,6 +45,8 @@ export const StudentProfilePage = () => {
               <Input type="text" name="institution" id="institution" value={data.institution} disabled />
               <Label for="learningType">Mi tipo de aprendizaje</Label>
               <Input type="text" name="learningType" id="learningType" value={data.learningType} disabled />
+              <Label for="learningType">Mi rol</Label>
+              <Input type="text" name="rol" id="rol" value={data.rol} disabled />
             </CardBody>
           </Card>
         </div>

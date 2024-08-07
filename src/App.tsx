@@ -72,7 +72,7 @@ function App() {
         {/* Student profile routes page */}
         <Route path="/me/profile" element={<StudentProfilePage />} />
         <Route path="/me/learning-type" element={<StudentProfileLearningTypePage />} />
-        <Route path="/me/evaluations" element={<NotImplemented />} />
+        <Route path="/me/evaluations" element={<NotImplementedPage />} />
 
         {/* Protected routes */}
         {/* <Route path='/students/*' element={<ProtectedRoute>{<StudentCreationPage /> && <SidebarStudents />}</ProtectedRoute>} /> */}

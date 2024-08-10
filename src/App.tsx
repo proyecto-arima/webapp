@@ -21,6 +21,8 @@ import { setCourses } from './redux/slices/courses';
 import { setUser } from './redux/slices/user';
 import { get } from './utils/network';
 import ProtectedRoute from './utils/ProtectedRoute';
+import DirectorRouter from './routes/DirectorRouter';
+import { Index } from './pages/Index';
 
 function App() {
   const isAuthenticated = useSelector((state: RootState) => state.auth.isAuthenticated);
@@ -51,8 +53,12 @@ function App() {
         dispatch(setCourses(res.data));
       })
       .then(() => {
-        navigate('/login');
-      }).catch(err => {
+        if(location.href.includes('/login') || location.href.includes('/recoverPassword')) {
+          navigate('/');
+        }
+      })
+      
+      .catch(err => {
         console.error(`An unexpected error occurred while checking the authentication status: ${err}`);
       });
   }, []);
@@ -62,7 +68,7 @@ function App() {
 
       {isAuthenticated && <Sidebar />}
       <Routes>
-        <Route path="/" element={<NotImplementedPage />} />
+        <Route path="/" element={<Index />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/forgotPassword" element={<RecoverPasswordPage />} />
         <Route path="/recoverPassword" element={<SetPasswordPage />} />
@@ -75,11 +81,13 @@ function App() {
           <>
             <Route path='/students/*' element={<StudentRouter />} />
             <Route path='/courses/*' element={<CourseRoutes />} />
+            <Route path='/directors/*' element={<DirectorRouter/>} />
           </>
         ) : (
           <>
             <Route path='/students/*' element={<ProtectedRoute>{<StudentRouter />}</ProtectedRoute>} />
             <Route path='/courses/*' element={<ProtectedRoute>{<CourseRoutes />}</ProtectedRoute>} />
+            <Route path='/directors/*' element={<ProtectedRoute>{<DirectorRouter/>}</ProtectedRoute>} />
           </>
         )}
       </Routes>

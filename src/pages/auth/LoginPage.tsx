@@ -24,16 +24,16 @@ const LoginPage = () => {
     }).then(() => get('/users/me')).then(res => res.json()).then(res => {
       const user = res.data;
       dispatch(setUser(user));
-    }).then(() => {
-      navigate('/courses/dashboard');
+      return user;
+    }).then((user) => {
+      if(user.role === 'TEACHER' || user.role === 'STUDENT') {
+        navigate('/courses/dashboard');
+      }
+      if(user.role === 'ADMIN') {
+        navigate('/directors');
+      }
     });
   };
-
-  useEffect(() => {
-    if (isAuthenticated) {
-      navigate('/courses/dashboard');
-    }
-  }, []);
 
   return (
     <div

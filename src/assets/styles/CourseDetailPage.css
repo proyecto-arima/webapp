@@ -67,3 +67,17 @@ h1 {
 .new-section-button:hover {
   background-color: #5b17a8;
 }
+
+.students-button {
+  background-color: #CE22C8;
+  color: #fff; /* Letras blancas */
+  border: 1px solid #CE22C8;
+  border-radius: 5px;
+  padding: 10px 15px;
+  font-family: 'Roboto', sans-serif; /* Usa la misma tipografía que el sidebar */
+  cursor: pointer;
+}
+
+.students-button:hover {
+  background-color: #5b17a8;
+}

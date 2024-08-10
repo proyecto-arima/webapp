@@ -35,7 +35,7 @@ export default function Sidebar() {
       <img src={logo} alt="Proyecto Arima" className='sidebar-header' />
       <div className='sidebar-container'>
         <div className="w-100 d-flex flex-column gap-3">
-          {user.role === 'TEACHER' && (
+          {user?.role === 'TEACHER' && (
             <div className="w-100">
               <span className='sidebar-section-title'>Gestión de Cursos</span>
               {coursesManagementLinks.map((link) => (
@@ -52,7 +52,8 @@ export default function Sidebar() {
             </div>
           )}
 
-          <div className="w-100">
+          {user?.role && ['STUDENT', 'TEACHER'].includes(user.role) && (
+            <div className="w-100">
             <span className='sidebar-section-title'>Mis Cursos</span>
             {/* Mostrar los cursos en el sidebar */}
             {courses?.map((course: ICourse) => (
@@ -71,12 +72,38 @@ export default function Sidebar() {
             </NavLink>
           ))}
           </div>
+          )}
+
+          {(user?.role === 'ADMIN') && (
+            <div className="w-100">
+              <span className='sidebar-section-title'>Administración</span>
+              <NavLink to={'/directors'} end className={({ isActive }) => isActive ? 'sidebar-navlink-active' : 'sidebar-navlink-inactive'}>
+                <NavItem className='sidebar-navlink-item'>
+                  <FontAwesomeIcon icon={faCircle} style={{
+                    width: '0.6rem',
+                    color: '#49454f',
+                  }} />
+                  <span>Directivos</span>
+                </NavItem>
+              </NavLink>
+              <NavLink to={'/directors/new'} end className={({ isActive }) => isActive ? 'sidebar-navlink-active' : 'sidebar-navlink-inactive'}>
+                <NavItem className='sidebar-navlink-item'>
+                  <FontAwesomeIcon icon={faCircle} style={{
+                    width: '0.6rem',
+                    color: '#49454f',
+                  }} />
+                  <span>Crear Directivo</span>
+                </NavItem>
+              </NavLink>
+            </div>
+          )}
+
         </div>
 
         <div className="w-100">
           <span className='sidebar-section-title'>Opciones</span>
-          <NavLink to={'/login'} end className={({ isActive }) => isActive ? 'sidebar-navlink-active' : 'sidebar-navlink-inactive'}>
-            <NavItem className='sidebar-navlink-item' onClick={signout}>
+          <NavLink to={'/login'} end className={({ isActive }) => isActive ? 'sidebar-navlink-active' : 'sidebar-navlink-inactive'} onClick={signout}>
+            <NavItem className='sidebar-navlink-item'>
               <FontAwesomeIcon icon={faCircle} style={{
                 width: '0.6rem',
                 color: '#49454f',

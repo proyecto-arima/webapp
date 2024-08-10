@@ -54,7 +54,12 @@ export const CourseDetailPage: React.FC = () => {
       <div className="course-detail-container">
         <div className="course-detail-header">
           <h1>{course.title}</h1>
-          <button onClick={handleNewSection} className="new-section-button">Nueva Sección</button>
+          <div className='d-flex flex-row gap-3'>
+            <button onClick={handleNewSection} className="new-section-button">Nueva Sección</button>
+            <button className='students-button'onClick={() => {
+              navigate(`/courses/${courseId}/students`);
+            }}>Estudiantes</button>
+          </div>
         </div>
         <div className="sections-container">
           {course.sections.map((section) => (

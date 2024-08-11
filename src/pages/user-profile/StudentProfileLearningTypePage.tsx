@@ -1,21 +1,10 @@
 import { Card, CardBody, CardTitle, Input } from 'reactstrap';
 import { useState, useEffect } from 'react';
+import { useSelector } from "react-redux";
+import { RootState } from "../../redux/store";
+import { get } from '../../utils/network';
 
-import { API_URL } from '../../../config';
-
-import '../../../assets/styles/profile-page.css'
-
-
-interface ICoursesStudent {
-  id: string;
-  name: string;
-}
-
-interface IStudent {
-  id: string;
-  learningProfile: string;
-  courses: ICoursesStudent[];
-}
+import '../../assets/styles/profile-page.css'
 
 interface IOption {
   text: string;
@@ -35,12 +24,10 @@ export const StudentProfileLearningTypePage = () => {
   const [questionsMessageStatus, setQuestionsMessageStatus] = useState<string>('');
   const [showTestMessage, setShowTestMessage] = useState<boolean>(false);
 
-  // TODO: Mocked user. Get from redux user ID
-  const user: IStudent = {
-    id: '1',
-    learningProfile: '',
-    courses: []
-  };
+  const user = useSelector((state: RootState) => state.user);
+  
+  // TODO: Mocked user learning profile. Get from redux
+  const learningProfile = "VISUALIZADOR";
 
   // TODO: Questions mocks
   const [questions, setQuestions] = useState<IQuestion[]>([
@@ -131,15 +118,17 @@ export const StudentProfileLearningTypePage = () => {
   ]);
 
   useEffect(() => {
-    // Mock learning profile
-    user.learningProfile = 'Visualizador';
-    if (!user.learningProfile) {
-      fetch(`${API_URL}/students/${user.id}/learning-profile`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' }
-      }).then(res => res.json())
-        .then(res => res.data)
-        .then(data => { setLearningType(data.learningProfile) });
+    if (!learningProfile) {
+      // fetch(`${API_URL}/students/${user.id}/learning-profile`, {
+      //   method: 'POST',
+      //   headers: { 'Content-Type': 'application/json' }
+      // }).then(res => res.json())
+      //   .then(res => res.data)
+      //   .then(data => { setLearningType(data.learningProfile) });
+      get(`/students/${user.id}/learning-profile`)
+        .then(res => { return res.ok ? res.json() : Promise.reject(res) })
+        .then(res => { return res.data ? setLearningType(res.data.learningProfile) : Promise.reject(res) })
+        .catch(err => console.error(`An error ocurred while fetching learning profile: ${err}`));
     }
   });
 
@@ -167,7 +156,6 @@ export const StudentProfileLearningTypePage = () => {
   }
 
   const getQuestions = (questionsLeft: IQuestion[]) => {
-  {/* TODO: mostrar de a 3 preguntas */}
   const sliceQuestions = () => {
     setQuestions(questions.slice(3));
   }

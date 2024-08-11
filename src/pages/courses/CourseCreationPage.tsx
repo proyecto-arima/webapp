@@ -6,6 +6,7 @@ import { addCourse } from '../../redux/slices/courses';
 import { post } from '../../utils/network';
 
 
+
 interface ICourseCreationFormValues {
   title?: string;
   description?: string;

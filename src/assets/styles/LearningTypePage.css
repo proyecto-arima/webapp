@@ -7,7 +7,7 @@
   background-color: #f6effa;
 }
 
-.profile-card {
+.profile-card-init {
   width: 35rem;
   padding-inline: 2rem;
   padding-block: 1rem;
@@ -16,9 +16,18 @@
   transition: transform 0.2s;
 }
 
-.profile-card:hover {
-  transform: scale(1.05);
+.profile-card-questions {
+  width: 80rem;
+  padding-inline: 2rem;
+  padding-block: 1rem;
+  border: none;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s;
 }
+
+/* .profile-card:hover {
+  transform: scale(1.05);
+} */
 
 .profile-image {
   width: 100%;
@@ -69,3 +78,30 @@
   margin-left: 1rem;
   cursor: pointer;
 }
+
+.profile-learningtype-page-container {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 20px;
+  width: 100%;
+}
+
+.profile-learningtype-actions {
+  font-family: inherit;
+  font-size: 12px;
+  color: #49454f;
+  background-color: transparent;
+  border: 1px solid #cbb1f9;
+  border-radius: 6px;
+  padding: 10px 12px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, color 0.3s ease;
+  margin-right: 8px;
+}
+
+.profile-learningtype-actions:hover {
+  background-color: #e7dbfa;
+  color: #3f3a47;
+}
+

@@ -3,7 +3,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Route, Routes, useNavigate } from 'react-router-dom';
 
 import './App.css';
-import { DEBUG } from './config';
 
 import { login } from './redux/slices/auth';
 import { RootState } from './redux/store';
@@ -12,8 +11,10 @@ import { RootState } from './redux/store';
 import NotImplementedPage from './components/NotImplementedPage';
 import LoginPage from './pages/auth/LoginPage';
 import RecoverPasswordPage from './pages/auth/RecoverPasswordPage';
+
 import CourseRoutes from './routes/CourseRouter';
 import StudentRouter from './routes/StudentRouter';
+import ProfileRouter from './routes/ProfileRouter';
 
 import Sidebar from './components/Sidebar';
 import SetPasswordPage from './pages/auth/SetPasswordPage';
@@ -23,6 +24,7 @@ import { get } from './utils/network';
 import ProtectedRoute from './utils/ProtectedRoute';
 import DirectorRouter from './routes/DirectorRouter';
 import { Index } from './pages/Index';
+
 
 function App() {
   const isAuthenticated = useSelector((state: RootState) => state.auth.isAuthenticated);
@@ -65,7 +67,6 @@ function App() {
 
   return (
     <div className='main-content'>
-
       {isAuthenticated && <Sidebar />}
       <Routes>
         <Route path="/" element={<Index />} />
@@ -73,23 +74,10 @@ function App() {
         <Route path="/forgotPassword" element={<RecoverPasswordPage />} />
         <Route path="/recoverPassword" element={<SetPasswordPage />} />
 
-        {/* Protected routes */}
-        {/* <Route path='/students/*' element={<ProtectedRoute>{<StudentCreationPage /> && <SidebarStudents />}</ProtectedRoute>} /> */}
-
-
-        {DEBUG ? (
-          <>
-            <Route path='/students/*' element={<StudentRouter />} />
-            <Route path='/courses/*' element={<CourseRoutes />} />
-            <Route path='/directors/*' element={<DirectorRouter/>} />
-          </>
-        ) : (
-          <>
-            <Route path='/students/*' element={<ProtectedRoute>{<StudentRouter />}</ProtectedRoute>} />
-            <Route path='/courses/*' element={<ProtectedRoute>{<CourseRoutes />}</ProtectedRoute>} />
-            <Route path='/directors/*' element={<ProtectedRoute>{<DirectorRouter/>}</ProtectedRoute>} />
-          </>
-        )}
+        <Route path='/students/*' element={<ProtectedRoute>{<StudentRouter />}</ProtectedRoute>} />
+        <Route path='/courses/*' element={<ProtectedRoute>{<CourseRoutes />}</ProtectedRoute>} />
+        <Route path='/directors/*' element={<ProtectedRoute>{<DirectorRouter />}</ProtectedRoute>} />
+        <Route path='/me/*' element={<ProtectedRoute>{<ProfileRouter />}</ProtectedRoute>} />
       </Routes>
 
     </div>

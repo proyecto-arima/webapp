@@ -2,9 +2,10 @@
 import React, { useState } from 'react';
 import { Card, Input } from 'reactstrap';
 import { useParams, useNavigate } from 'react-router-dom';
-import { v4 as uuidv4 } from 'uuid';
 import { API_URL } from '../../config';
-import { post } from '../../utils/network';
+import { post, del } from '../../utils/network';
+import ConfirmModal from '../../components/ConfirmModal';
+
 
 
 interface ISectionCreationFormValues {
@@ -14,10 +15,14 @@ interface ISectionCreationFormValues {
 }
 
 export const SectionCreationPage = () => {
-  const { courseId } = useParams<{ courseId: string }>();
+  const { courseId, sectionId } = useParams<{ courseId: string; sectionId?: string }>();
   const [formValues, setFormValues] = useState<ISectionCreationFormValues>({ visible: true });
+  const [isModalOpen, setIsModalOpen] = useState(false);
   //const { addSection } = useSectionContext();
   const navigate = useNavigate();
+
+  // 
+  const toggleModal = () => setIsModalOpen(!isModalOpen);
 
   const handleFormChange = (label: keyof ISectionCreationFormValues) => (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.type === 'checkbox' ? e.target.checked : e.target.value;
@@ -28,6 +33,30 @@ export const SectionCreationPage = () => {
   };
 
   const createSection = () => post(`/courses/${courseId}/section`, { ...formValues }).then((res) => res.json()).then(() => navigate(`/courses/${courseId}`));  
+
+  const deleteSection = async () => {
+    toggleModal(); // Mostrar el modal
+
+    const onConfirmDelete = async () => {
+      try {
+        await del(`/courses/${courseId}/section/${sectionId}`);
+        alert('Sección eliminada exitosamente');
+        navigate(`/courses/${courseId}`);
+      } catch (error) {
+        console.error('Error eliminando la sección:', error);
+        alert('Hubo un problema eliminando la sección');
+      }
+    };
+
+    return (
+      <ConfirmModal
+        isOpen={isModalOpen}
+        toggle={toggleModal}
+        onConfirm={onConfirmDelete}
+        message="¿Estás seguro de que deseas eliminar esta sección?"
+      />
+    );
+  };
 
   return (
     <div
@@ -53,6 +82,19 @@ export const SectionCreationPage = () => {
         <button className="btn-purple-1 w-100" onClick={createSection}>
           Crear
         </button>
+        {/* Botón de eliminación */}
+        {sectionId && (
+          <button className="btn-purple-1 w-100 mt-3" onClick={toggleModal}>
+            Eliminar Sección
+          </button>
+        )}
+        {/* Modal de confirmación */}
+        <ConfirmModal
+          isOpen={isModalOpen}
+          toggle={toggleModal}
+          onConfirm={deleteSection}
+          message="¿Estás seguro de que deseas eliminar esta sección?"
+        />
       </Card>
     </div>
   );

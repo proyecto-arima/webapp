@@ -25,12 +25,6 @@ const meProfile = [
   { key: "2", to: '/me/logout', label: 'Cerrar sesión' },
 ];
 
-interface IProfile {
-  key: string
-  to: string;
-  label: string;
-}
-
 export default function Sidebar() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -50,6 +44,7 @@ export default function Sidebar() {
       <img src={logo} alt="Proyecto Arima" className='sidebar-header' />
       <div className='sidebar-container'>
         <div className="w-100 d-flex flex-column gap-3">
+
           {user?.role === 'TEACHER' && (
             <div className="w-100">
               <span className='sidebar-section-title'>Gestión de Cursos</span>
@@ -109,7 +104,6 @@ export default function Sidebar() {
             </div>
           )}
 
-
           {(user?.role === 'ADMIN') && (
             <div className="w-100">
               <span className='sidebar-section-title'>Administración</span>
@@ -133,31 +127,22 @@ export default function Sidebar() {
               </NavLink>
             </div>
           )}
-
         </div>
 
         <div className="w-100">
-          <span className='sidebar-section-title'>Perfil</span>
-          {meProfile?.map((profile: IProfile) => (
-            <NavLink
-              to={profile.to} end
-              key={profile.key}
-              className={({ isActive }) => isActive ? 'sidebar-navlink-active' : 'sidebar-navlink-inactive'}
-              onClick={profile.key === '2' ? signout : undefined}
-            >
-              <NavItem className='sidebar-navlink-item'>
-                <FontAwesomeIcon icon={faCircle} style={{
-                  width: '0.6rem',
-                  color: '#49454f',
-                }} />
-                <span>{profile.label}</span>
-              </NavItem>
-            </NavLink>
-          ))}
+          <span className='sidebar-section-title'>Opciones</span>
+          <NavLink to={'/login'} end className={({ isActive }) => isActive ? 'sidebar-navlink-active' : 'sidebar-navlink-inactive'} onClick={signout}>
+            <NavItem className='sidebar-navlink-item'>
+              <FontAwesomeIcon icon={faCircle} style={{
+                width: '0.6rem',
+                color: '#49454f',
+              }} />
+              <span>Cerrar sesión</span>
+            </NavItem>
+          </NavLink>
         </div>
 
       </div>
-
     </Nav>
   )
 }

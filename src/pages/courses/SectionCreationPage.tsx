@@ -27,7 +27,10 @@ export const SectionCreationPage = () => {
     });
   };
 
-  const createSection = () => post(`/courses/${courseId}/section`, { ...formValues }).then((res) => res.json()).then(() => navigate(`/courses/${courseId}`));  
+  const createSection = () => 
+    post(`/courses/${courseId}/section`, { ...formValues })
+      .then((res) => res.json())
+      .then(() => navigate(`/courses/${courseId}`));  
 
   return (
     <div

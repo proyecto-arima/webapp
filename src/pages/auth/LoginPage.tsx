@@ -10,6 +10,7 @@ import { login } from "../../redux/slices/auth";
 import { setUser } from "../../redux/slices/user";
 import { RootState } from "../../redux/store";
 import { get, post } from "../../utils/network";
+import { setCourses } from "../../redux/slices/courses";
 
 const LoginPage = () => {
   const navigate = useNavigate();
@@ -25,12 +26,19 @@ const LoginPage = () => {
       const user = res.data;
       dispatch(setUser(user));
       return user;
-    }).then((user) => {
+    })
+    .then((user) => {
       if(user.role === 'TEACHER' || user.role === 'STUDENT') {
-        navigate('/courses/dashboard');
+        const getCourses = user.role === 'TEACHER' ? get('/teachers/me/courses') : get('/students/me/courses');
+        return getCourses.then(res => res.json()).then(res => {
+          dispatch(setCourses(res.data));
+        }).then(() => navigate('/courses/dashboard'));
       }
       if(user.role === 'ADMIN') {
         navigate('/directors');
+      }
+      if(user.role === 'DIRECTOR') {
+        navigate('/students');
       }
     });
   };

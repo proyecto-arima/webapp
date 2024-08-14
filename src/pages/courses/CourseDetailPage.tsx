@@ -112,8 +112,22 @@ export const CourseDetailPage: React.FC = () => {
 
                     />
                   </div>
-                  <h2>{section.name}</h2>
-                  <p>{section.description}</p>
+                  <div style={{
+                    display: 'flex',
+                    flexDirection: 'row',
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
+                    paddingInline: '1rem',
+                    paddingTop: '1rem',
+                  }}>
+                    <div style={{
+                      width: '90%',
+                    }}>
+                      <h2>{section.name}</h2>
+                      <p>{section.description}</p>
+                    </div>
+                      <button className='btn-purple-1' onClick={() => navigate(`/courses/${courseId}/sections/${section.id}`)}>Ver Sección</button>
+                  </div>
                 </Card>
               ))}
             </Slider>

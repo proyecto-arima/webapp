@@ -92,7 +92,7 @@ export const StudentLinkingPage = () => {
               </tr>
             </thead>
             <tbody>
-              {course?.students.map((student: any) => (
+              {course?.students?.map((student: any) => (
                 <tr key={student.id}> {/* TODO: CHANGE */}
                   <td style={{ verticalAlign: 'middle' }}>{student.firstName}</td>
                   <td style={{ verticalAlign: 'middle' }}>{student.lastName}</td>

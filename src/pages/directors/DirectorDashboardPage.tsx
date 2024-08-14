@@ -34,7 +34,7 @@ export const DirectorDashboardPage = () => {
           </tr>
         </thead>
         <tbody>
-          {directors.map((director: any) => (
+          {directors?.map((director: any) => (
             <tr key={director.id}>
               <td>{director.user.firstName}</td>
               <td>{director.user.lastName}</td>

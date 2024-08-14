@@ -11,6 +11,7 @@ import DirectorRouter from '../routes/DirectorRouter';
 import InstitutesRouter from '../routes/InstitutesRouter';
 import ProfileRouter from '../routes/ProfileRouter';
 import StudentRouter from '../routes/StudentRouter';
+import { TeacherRouter } from '../routes/TeacherRouter';
 import { get } from '../utils/network';
 
 export const Index = () => {
@@ -72,6 +73,7 @@ export const Index = () => {
       {isAuthenticated && <Sidebar />}
       <Routes>
         <Route path='/students/*' element={<StudentRouter />} />
+        <Route path='/teachers/*' element={<TeacherRouter />} />
         <Route path='/courses/*' element={<CourseRoutes />} />
         <Route path='/directors/*' element={<DirectorRouter />} />
         <Route path='/institutes/*' element={<InstitutesRouter />} />

@@ -2,7 +2,6 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import ReactSelect from "react-select";
 import { Card, Input } from "reactstrap";
-import { API_URL } from "../../config";
 import { post } from "../../utils/network";
 
 
@@ -11,19 +10,19 @@ interface IDocument {
   number?: string,
 }
 
-interface IStudentCreationFormValues {
+interface ITeacherCreationFormValues {
   firstName?: string,
   lastName?: string,
   email?: string,
   document?: IDocument,
 }
 
-export const StudentCreationPage = () => {
+export const TeacherCreationPage = () => {
 
-  const [formValues, setFormValues] = useState<IStudentCreationFormValues>();
+  const [formValues, setFormValues] = useState<ITeacherCreationFormValues>();
   const navigate = useNavigate();
 
-  const handleFormChange = (label: keyof IStudentCreationFormValues) => (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFormChange = (label: keyof ITeacherCreationFormValues) => (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormValues({
       ...formValues,
       [label]: e.target.value,
@@ -50,9 +49,9 @@ export const StudentCreationPage = () => {
     })
   }
 
-  const createStudent = async () => {
-    post('/students', formValues).then((res) => res.json()).then((res) => {
-      navigate('/students');
+  const createTeacher = async () => {
+    post('/teachers', formValues).then((res) => res.json()).then((res) => {
+      navigate('/teachers');
     });
   }
 
@@ -68,7 +67,7 @@ export const StudentCreationPage = () => {
       }}
     >
       <Card style={{ width: '30rem', paddingInline: '2rem', paddingBlock: '1rem' }}>
-        <h2 className="text-center mb-3">Crear Estudiante</h2>
+        <h2 className="text-center mb-3">Crear Docente</h2>
         <Input name="firstName" type="text" placeholder="Nombre" className="mb-3" onChange={handleFormChange('firstName')} />
         <Input name="lastName" type="text" placeholder="Apellido" className="mb-3" onChange={handleFormChange('lastName')} />
         <Input name="email" type="email" placeholder="Correo Electrónico" className="mb-3" onChange={handleFormChange('email')} />
@@ -85,7 +84,7 @@ export const StudentCreationPage = () => {
         />
         <Input type="text" placeholder="Número de Documento" className="mb-3" onChange={(e) => setDocumentNumber(e.target.value)} />
 
-        <button className="btn-purple-1 w-100" onClick={createStudent}>
+        <button className="btn-purple-1 w-100" onClick={createTeacher}>
           Crear
         </button>
       </Card>

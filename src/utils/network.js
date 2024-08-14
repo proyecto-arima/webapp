@@ -12,6 +12,7 @@ const doFetch = (path, body, method, useAuthentication, headers, isForm, token) 
   let options = {
     method: method,
     headers,
+    mode: 'cors',
   };
 
   if (token) {

@@ -1,6 +1,16 @@
+import { useEffect, useState } from "react"
 import { Card, Table } from "reactstrap"
+import { get } from "../../utils/network"
 
 export const DirectorDashboardPage = () => {
+
+  const [directors, setDirectors] = useState([])
+
+  useEffect(() => {
+    get('/directors').then(res => res.json()).then(res => setDirectors(res.data))
+  }, [])
+
+
   return <div
     style={{
       display: 'flex',
@@ -20,14 +30,18 @@ export const DirectorDashboardPage = () => {
             <th>Nombre</th>
             <th>Apellido</th>
             <th>Email</th>
+            <th>Instituto</th>
           </tr>
         </thead>
         <tbody>
-          <tr>
-            <td>John</td>
-            <td>Doe</td>
-            <td>director@proyectoarima.tech</td>
-          </tr>
+          {directors.map((director: any) => (
+            <tr key={director.id}>
+              <td>{director.user.firstName}</td>
+              <td>{director.user.lastName}</td>
+              <td>{director.user.email}</td>
+              <td>{director.institute.name}</td>
+            </tr>
+          ))}
         </tbody>
       </Table>
     </Card>

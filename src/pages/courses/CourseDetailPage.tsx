@@ -1,11 +1,16 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
+import Slider from 'react-slick';
+import { Card } from 'reactstrap';
+import "slick-carousel/slick/slick-theme.css";
+import "slick-carousel/slick/slick.css";
 import '../../assets/styles/CourseDetailPage.css';
 import { get } from '../../utils/network';
+import placeholder from '../../assets/images/placeholder.webp';
 
 interface ISection {
   id: string;
-  title: string;
+  name: string;
   description: string;
   visible: boolean;
 }
@@ -36,10 +41,6 @@ export const CourseDetailPage: React.FC = () => {
     navigate(`/courses/${courseId}/new-section`);
   };
 
-  if (!course) {
-    return <div>Loading...</div>;
-  }
-
   return (
     <div
       style={{
@@ -52,27 +53,73 @@ export const CourseDetailPage: React.FC = () => {
       }}
     >
       <div className="course-detail-container">
-        <div className="course-detail-header">
-          <h1>{course.title}</h1>
-          <div className='d-flex flex-row gap-3'>
-            <button onClick={handleNewSection} className="new-section-button">Nueva Sección</button>
-            <button className='students-button'onClick={() => {
-              navigate(`/courses/${courseId}/students`);
-            }}>Estudiantes</button>
-          </div>
-        </div>
-        <div className="sections-container">
-          {course.sections.map((section) => (
-            <div key={section.id} className="section-card">
-              <h2>{section.title}</h2>
-              <p>{section.description}</p>
-              <div className="section-actions">
-                <button className="edit-button">Editar</button>
-                <button className="delete-button">Eliminar</button>
-              </div>
+        <Card style={{ width: '100%', paddingInline: '2rem', paddingBlock: '1rem', height: '100%', maxWidth: 'calc(100vw - 25rem)' }}>
+          <div className="course-detail-header">
+            <h1>{course?.title}</h1>
+            <div className='d-flex flex-row gap-3'>
+              <button onClick={handleNewSection} className="new-section-button">Nueva Sección</button>
+              <button className='students-button' onClick={() => {
+                navigate(`/courses/${courseId}/students`);
+              }}>Estudiantes</button>
             </div>
-          ))}
-        </div>
+          </div>
+          <hr />
+          <div style={{
+            display: 'flex',
+            flexDirection: 'row',
+            justifyContent: 'center',
+            alignItems: 'center',
+            height: '100%',
+          }}>
+            <Slider
+              dots
+              infinite
+              speed={500}
+              slidesToShow={1}
+              slidesToScroll={1}
+              arrows
+              autoplaySpeed={3000}
+              centerMode
+              className='section-slider'
+              useTransform={false}
+            >
+              {course?.sections.map(section => (
+                <Card key={section.id} style={{
+                  display: 'flex',
+                  flexDirection: 'column',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  height: '100%',
+                  padding: '1rem',
+                }}
+                  className="section-card"
+                >
+                  <div style={{
+                    display: 'flex',
+                    flexDirection: 'column',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    height: '30rem',
+                  }}>
+                    <img src={placeholder}
+                      alt="Section"
+                      style={{
+                        width: '100%',
+                        borderRadius: '0.5rem',
+                        objectFit: 'cover',
+                        overflow: 'hidden',
+                      }}
+
+                    />
+                  </div>
+                  <h2>{section.name}</h2>
+                  <p>{section.description}</p>
+                </Card>
+              ))}
+            </Slider>
+          </div>
+
+        </Card>
       </div>
     </div>
   );

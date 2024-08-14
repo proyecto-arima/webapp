@@ -23,7 +23,13 @@ export default function RecoverPasswordForm({ recoverPassword: recoverPassword, 
       </div>
       <p className="text-muted">Te enviaremos a tu correo electrónico un enlace que te permitirá restablecer tu contraseña</p>
       <div className="d-flex justify-content-between mt-4">
-        <button className="btn-purple-2" onClick={() => navigate('/login')}>
+        <button onClick={() => navigate('/login')} style={{
+          backgroundColor: "transparent",
+          border: "none",
+          color: "#6c757d",
+          textDecoration: "underline",
+          cursor: "pointer",
+        }}>
           Volver
         </button>
         <button className="btn-purple-1" onClick={() => email && recoverPassword(email)}>

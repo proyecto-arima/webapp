@@ -106,7 +106,26 @@ export default function Sidebar() {
 
           {(user?.role === 'ADMIN') && (
             <div className="w-100">
-              <span className='sidebar-section-title'>Administración</span>
+              <span className='sidebar-section-title'>Instituciones</span>
+              <NavLink to={'/institutes'} end className={({ isActive }) => isActive ? 'sidebar-navlink-active' : 'sidebar-navlink-inactive'}>
+                <NavItem className='sidebar-navlink-item'>
+                  <FontAwesomeIcon icon={faCircle} style={{
+                    width: '0.6rem',
+                    color: '#49454f',
+                  }} />
+                  <span>Institutos</span>
+                </NavItem>
+              </NavLink>
+              <NavLink to={'/institutes/new'} end className={({ isActive }) => isActive ? 'sidebar-navlink-active' : 'sidebar-navlink-inactive'}>
+                <NavItem className='sidebar-navlink-item'>
+                  <FontAwesomeIcon icon={faCircle} style={{
+                    width: '0.6rem',
+                    color: '#49454f',
+                  }} />
+                  <span>Crear Instituto</span>
+                </NavItem>
+              </NavLink>
+              <span className='sidebar-section-title'>Directivos</span>
               <NavLink to={'/directors'} end className={({ isActive }) => isActive ? 'sidebar-navlink-active' : 'sidebar-navlink-inactive'}>
                 <NavItem className='sidebar-navlink-item'>
                   <FontAwesomeIcon icon={faCircle} style={{

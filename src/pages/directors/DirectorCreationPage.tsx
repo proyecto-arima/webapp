@@ -1,7 +1,9 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import ReactSelect from "react-select";
 import { Card, Input } from "reactstrap";
 import { API_URL } from "../../config";
+import { get, post } from "../../utils/network";
 
 
 interface IDocument {
@@ -14,11 +16,20 @@ interface IDirectorCreationFormValues {
   lastName?: string,
   email?: string,
   document?: IDocument,
+  institute?: string,
 }
 
 export const DirectorCreationPage = () => {
 
   const [formValues, setFormValues] = useState<IDirectorCreationFormValues>();
+  const [institutes, setInstitutes] = useState<any[]>([]);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    get(`/institutes`)
+      .then(res => res.json())
+      .then(res => setInstitutes(res.data));
+  }, []);
 
   const handleFormChange = (label: keyof IDirectorCreationFormValues) => (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormValues({
@@ -48,15 +59,11 @@ export const DirectorCreationPage = () => {
   }
 
   const createDirector = async () => {
-    const res = await fetch(`${API_URL}/directors`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(formValues),
+    post(`/directors`, formValues).then(res => {
+      if (res.ok) {
+        navigate('/directors');
+      }
     });
-
-    if (res.ok) {
-      console.log('Director created');
-    }
   }
 
   return (
@@ -87,6 +94,21 @@ export const DirectorCreationPage = () => {
           onChange={(e) => setDocumentType(e?.value)}
         />
         <Input type="text" placeholder="Número de Documento" className="mb-3" onChange={(e) => setDocumentNumber(e.target.value)} />
+
+        <ReactSelect
+          options={institutes}
+          getOptionLabel={(option) => option.name}
+          getOptionValue={(option) => option.id}
+          className="mb-3"
+          placeholder="Institución"
+          name="institute"
+          onChange={(e) => {
+            setFormValues({
+              ...formValues,
+              institute: e,
+            })
+          }}
+        />
 
         <button className="btn-purple-1 w-100" onClick={createDirector}>
           Crear

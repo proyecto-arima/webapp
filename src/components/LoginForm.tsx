@@ -26,7 +26,13 @@ export default function LoginForm({ login }: ILoginFormProps) {
       </div>
       <div className="d-flex justify-content-between mt-4">
 
-        <button className="btn-purple-2" onClick={() => navigate("/forgotPassword")}>
+        <button onClick={() => navigate("/forgotPassword")} style={{
+          backgroundColor: "transparent",
+          border: "none",
+          color: "#6c757d",
+          textDecoration: "underline",
+          cursor: "pointer",
+        }}>
           Olvidé mi contraseña
         </button>
         <button className="btn-purple-1" onClick={() => email && password && login(email, password)}>

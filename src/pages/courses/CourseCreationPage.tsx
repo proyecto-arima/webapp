@@ -33,17 +33,26 @@ export const CourseCreationPage = () => {
 
   return (
     <div
-      style={{
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        height: '100vh',
-        backgroundColor: '#f6effa',
-        width: '100vw',
-      }}
-    >
-      <Card style={{ width: '90%', paddingInline: '2rem', paddingBlock: '1rem' }}>
-        <h2 className="text-center mb-3">Crear Curso</h2>
+    style={{
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'flex-start',  /* Alinea el contenido al inicio, en lugar de al centro */
+      height: '100vh',
+      backgroundColor: '#f6effa',
+      width: '100vw',
+    }}
+  >
+    <div style={{
+      display: 'flex',
+      flexDirection: 'column',
+      alignItems: 'flex-start', /* Alinea el contenido al principio */
+      padding: '20px',
+      width: '100%',
+      height: '100%',
+    }}>
+      <Card style={{ paddingInline: '2rem', paddingBlock: '1rem', width: '100%', height: '100%' }}>
+        <h1>Crear Curso</h1>
+        <hr />
         <Input name="title" type="text" placeholder="Nombre" className="mb-3" onChange={handleFormChange('title')} />
         <Input name="description" type="textarea" placeholder="Descripción del curso" className="mb-3" onChange={handleFormChange('description')} />
         <Input name="image" type="text" placeholder="URL de la portada del curso" className="mb-3" onChange={handleFormChange('image')} />
@@ -53,6 +62,7 @@ export const CourseCreationPage = () => {
           </button>
         </div>
       </Card>
+      </div>
     </div>
   );
 };

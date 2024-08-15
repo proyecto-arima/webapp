@@ -1,15 +1,38 @@
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { Card, CardBody, CardTitle, CardText, Button, CardFooter, CardHeader } from 'reactstrap';
+import { Card, CardBody, CardTitle, CardText, CardFooter, Button } from 'reactstrap';
 import '../../assets/styles/CourseDashboardPage.css';
+import { useState } from 'react';
 import { RootState } from '../../redux/store';
+import { del } from '../../utils/network'; // Asegúrate de importar tu método delete
+import { useDispatch } from 'react-redux';
+import { ConfirmDialog } from '../../components/ConfirmDialog';
+import { setCourses } from '../../redux/slices/courses';
 
 export const CourseDashboardPage = () => {
   const { courses } = useSelector((state: RootState) => state.courses);
+  const [selectedCourse, setSelectedCourse] = useState<string | null>(null);
+  const [confirmOpen, setConfirmOpen] = useState(false);
+  const dispatch = useDispatch();
   const history = useNavigate();
 
   const handleViewCourse = (courseId: string) => {
     history(`/courses/${courseId}`);
+  };
+
+  const toggleConfirm = () => setConfirmOpen(!confirmOpen);
+
+  const handleDeleteCourse = async (courseId: string) => {
+    toggleConfirm();
+    setSelectedCourse(courseId);
+  };
+
+  const confirmDelete = async () => {
+    if (selectedCourse) {
+      await del(`/courses/${selectedCourse}`);
+      dispatch(setCourses(courses?.filter(course => course.id !== selectedCourse)));
+    }
+    toggleConfirm();
   };
 
   return (
@@ -49,6 +72,7 @@ export const CourseDashboardPage = () => {
                     backgroundColor: 'transparent',
                   }}>
                     <button className='btn-purple-1' onClick={() => handleViewCourse(course.id)}>Ver Curso</button>
+                    <Button color="danger" onClick={() => handleDeleteCourse(course.id)}>Eliminar Curso</Button>
                   </CardFooter>
                 </Card>
               ))}
@@ -56,6 +80,14 @@ export const CourseDashboardPage = () => {
           </div>
         </Card>
       </div>
+
+      <ConfirmDialog
+        isOpen={confirmOpen}
+        toggle={toggleConfirm}
+        onConfirm={confirmDelete}
+        onCancel={() => history('/courses')}
+        message="¿Estás seguro de que quieres eliminar este curso?"
+      />
     </div>
   );
 };

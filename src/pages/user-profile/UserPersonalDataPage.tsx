@@ -2,8 +2,7 @@ import { Card, CardBody, CardTitle, Input, Label } from 'reactstrap';
 import { RootState } from "../../redux/store";
 import { useSelector } from "react-redux";
 
-export const UserProfilePage = () => {
-  // TODO: Pendiente agregar institucion, tipo de aprendizaje en el store
+export const UserPersonalDataPage = () => {
   const user = useSelector((state: RootState) => state.user);
 
   return (
@@ -19,9 +18,23 @@ export const UserProfilePage = () => {
     >
       <div className="container">
         <div className="row">
-          <Card className='profile-card'>
-            <CardTitle tag="h5">Datos personales</CardTitle>
-            <CardBody>
+          <Card
+          style={{
+            width: '100%',
+            padding: '2rem',
+            borderRadius: '10px',
+            boxShadow: '0 0 10px rgba(0, 0, 0, 0.1)',
+            backgroundColor: '#fff',
+          }}
+          >
+            <CardTitle tag="h2">Tus datos</CardTitle>
+            <CardBody
+            style={{
+              display: 'flex',
+              flexDirection: 'column',
+              gap: '2px',
+            }}
+            >
               <Label for="firstName">Nombre</Label>
               <Input type="text" name="firstName" id="firstName" defaultValue={user.firstName} disabled />
               <Label for="lastName">Apellido</Label>
@@ -29,9 +42,9 @@ export const UserProfilePage = () => {
               <Label for="email">Email</Label>
               <Input type="email" name="email" id="email" defaultValue={user.email} disabled />
               <Label for="institution">Institución</Label>
-              <Input type="text" name="institution" id="institution" defaultValue={"SIN_INSTITUCION"} disabled />
+              <Input type="text" name="institution" id="institution" defaultValue={user.institution} disabled />
               <Label for="learningType">Mi tipo de aprendizaje</Label>
-              <Input type="text" name="learningType" id="learningType" defaultValue={"SIN_TIPO_APRENDIZAJE"} disabled />
+              <Input type="text" name="learningType" id="learningType" defaultValue={user.learningType} disabled />
               <Label for="learningType">Mi rol</Label>
               <Input type="text" name="rol" id="rol" defaultValue={
                 user.role === 'STUDENT' ? "Estudiante" : 

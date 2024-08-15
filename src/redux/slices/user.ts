@@ -12,6 +12,8 @@ export interface UserState {
     number: string
   },
   email?: string,
+  institution?: string,
+  learningType?: string,
 }
 
 const initialState: UserState = {}
@@ -22,6 +24,11 @@ export const userSlice = createSlice({
   reducers: {
     setUser: (state, action) => {
       state = action.payload
+      
+      // TODO: Add attributes to state
+      state.institution = 'SIN_INSTITUCION'
+      state.learningType = 'SIN_TIPO_APRENDIZAJE'
+
       return state
     },
     reset: () => {

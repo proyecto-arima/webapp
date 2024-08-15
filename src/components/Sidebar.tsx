@@ -10,20 +10,16 @@ import { reset } from "../redux/slices/user";
 import { RootState } from "../redux/store";
 import { del } from "../utils/network";
 
-const myCourses = [
+const coursesManagmentSection = [
   { to: '/courses/create', label: 'Crear curso' },
   { to: '/courses/dashboard', label: 'Ver Cursos' },
 ];
 
-const meStudent = [
+const studentLearningSection = [
   { key: "1", to: '/me/learning-type', label: 'Test de aprendizaje' },
-  { key: "2", to: '/me/evaluations', label: 'Evaluaciones' },
+  // { key: "2", to: '/me/evaluations', label: 'Evaluaciones' },
 ];
 
-const meProfile = [
-  { key: "1", to: '/me/profile', label: 'Mis datos' },
-  { key: "2", to: '/me/logout', label: 'Cerrar sesión' },
-];
 
 export default function Sidebar() {
   const dispatch = useDispatch();
@@ -48,7 +44,7 @@ export default function Sidebar() {
           {user?.role === 'TEACHER' && (
             <div className="w-100">
               <span className='sidebar-section-title'>Gestión de Cursos</span>
-              {myCourses.map((link) => (
+              {coursesManagmentSection.map((link) => (
                 <NavLink end to={link.to} key={link.to} className={({ isActive }) => isActive ? 'sidebar-navlink-active' : 'sidebar-navlink-inactive'}>
                   <NavItem className='sidebar-navlink-item'>
                     <FontAwesomeIcon icon={faCircle} style={{
@@ -85,8 +81,8 @@ export default function Sidebar() {
 
           {user?.role === 'STUDENT' && (
             <div className="w-100">
-              <span className='sidebar-section-title'>Estudiante</span>
-              {meStudent.map((link) => (
+              <span className='sidebar-section-title'>Aprendizaje</span>
+              {studentLearningSection.map((link) => (
                 <NavLink end
                   to={link.to}
                   key={link.key}
@@ -146,9 +142,8 @@ export default function Sidebar() {
               </NavLink>
             </div>
           )}
-          {(
-            user?.role === 'DIRECTOR'
-          ) && (
+          
+          {( user?.role === 'DIRECTOR') && (
             <div className="w-100">
               <span className='sidebar-section-title'>Estudiantes</span>
               <NavLink to={'/students/'} end className={({ isActive }) => isActive ? 'sidebar-navlink-active' : 'sidebar-navlink-inactive'}>
@@ -193,7 +188,17 @@ export default function Sidebar() {
         </div>
 
         <div className="w-100">
-          <span className='sidebar-section-title'>Opciones</span>
+          <span className='sidebar-section-title'>Perfil</span>
+          <NavLink to={'/me/profile'} end className={({ isActive }) => isActive ? 'sidebar-navlink-active' : 'sidebar-navlink-inactive'}>
+            <NavItem className='sidebar-navlink-item'>
+              <FontAwesomeIcon icon={faCircle} style={{
+                width: '0.6rem',
+                color: '#49454f',
+              }} />
+              <span>Datos personales</span>
+            </NavItem>
+          </NavLink>
+
           <NavLink to={'/login'} end className={({ isActive }) => isActive ? 'sidebar-navlink-active' : 'sidebar-navlink-inactive'} onClick={signout}>
             <NavItem className='sidebar-navlink-item'>
               <FontAwesomeIcon icon={faCircle} style={{

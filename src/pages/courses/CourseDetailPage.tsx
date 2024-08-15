@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import Slider from 'react-slick';
-import { Card } from 'reactstrap';
+import { Card, Button } from 'reactstrap';
 import "slick-carousel/slick/slick-theme.css";
 import "slick-carousel/slick/slick.css";
 import '../../assets/styles/CourseDetailPage.css';
-import { get } from '../../utils/network';
+import { get, del } from '../../utils/network';
 import placeholder from '../../assets/images/placeholder.webp';
+import { ConfirmDialog } from '../../components/ConfirmDialog';
 
 interface ISection {
   id: string;
@@ -28,9 +29,9 @@ interface ICourse {
 
 export const CourseDetailPage: React.FC = () => {
   const { courseId } = useParams<{ courseId: string }>();
-  //const { sections, addSection } = useSectionContext();
   const [course, setCourse] = useState<ICourse | null>(null);
-  const [sectionsAdded, setSectionsAdded] = useState<boolean>(false); // Local state to control if sections were already added
+  const [selectedSection, setSelectedSection] = useState<string | null>(null);
+  const [confirmOpen, setConfirmOpen] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -41,12 +42,30 @@ export const CourseDetailPage: React.FC = () => {
     navigate(`/courses/${courseId}/new-section`);
   };
 
+  const toggleConfirm = () => setConfirmOpen(!confirmOpen);
+
+  const handleDeleteSection = (sectionId: string) => {
+    setSelectedSection(sectionId);
+    toggleConfirm();
+  };
+
+  const confirmDelete = async () => {
+    if (selectedSection) {
+      await del(`/courses/${courseId}/sections/${selectedSection}`);
+      setCourse(prevCourse => ({
+        ...prevCourse!,
+        sections: prevCourse?.sections.filter(section => section.id !== selectedSection) || []
+      }));
+    }
+    toggleConfirm();
+  };
+
   return (
     <div
       style={{
         display: 'flex',
         justifyContent: 'center',
-        alignItems: 'flex-start',  /* Alinea el contenido al inicio, en lugar de al centro */
+        alignItems: 'flex-start',
         height: '100vh',
         backgroundColor: '#f6effa',
         width: '100vw',
@@ -109,7 +128,6 @@ export const CourseDetailPage: React.FC = () => {
                         objectFit: 'cover',
                         overflow: 'hidden',
                       }}
-
                     />
                   </div>
                   <div style={{
@@ -126,15 +144,23 @@ export const CourseDetailPage: React.FC = () => {
                       <h2>{section.name}</h2>
                       <p>{section.description}</p>
                     </div>
-                      <button className='btn-purple-1' onClick={() => navigate(`/courses/${courseId}/sections/${section.id}`)}>Ver Sección</button>
+                    <button className='btn-purple-1' onClick={() => navigate(`/courses/${courseId}/sections/${section.id}`)}>Ver Sección</button>
+                    <Button color="danger" onClick={() => handleDeleteSection(section.id)}>Eliminar Sección</Button>
                   </div>
                 </Card>
               ))}
             </Slider>
           </div>
-
         </Card>
       </div>
+
+      <ConfirmDialog
+        isOpen={confirmOpen}
+        toggle={toggleConfirm}
+        onConfirm={confirmDelete}
+        onCancel={toggleConfirm}
+        message="¿Estás seguro de que quieres eliminar esta sección?"
+      />
     </div>
   );
 };

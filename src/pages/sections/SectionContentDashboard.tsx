@@ -1,7 +1,12 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { Card, Table } from "reactstrap"
-import { get } from "../../utils/network";
+import { useSelector } from "react-redux";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+
+import { get, post } from "../../utils/network";
+import { faThumbsUp, faThumbsDown } from '@fortawesome/free-solid-svg-icons';
+import { RootState } from "../../redux/store";
 
 interface ISection {
   id: string;
@@ -18,15 +23,13 @@ interface IContent {
 }
 
 export const SectionContentDashboard = () => {
-
   const { courseId, sectionId } = useParams<{ courseId: string, sectionId: string }>();
+  const user = useSelector((state: RootState) => state.user);
   const navigate = useNavigate();
 
   const [section, setSection] = useState<ISection | null>(null);
   const [content, setContent] = useState<IContent[]>([]);
 
-
-  // Fetch section data
   useEffect(() => {
     get(`/courses/${courseId}/sections/${sectionId}`).then(res => res.json()).then(res => res.data).then((data: ISection) => setSection(data));
     get(`/courses/${courseId}/sections/${sectionId}/content`).then(res => res.json()).then(res => res.data).then((data: IContent[]) => setContent(data));
@@ -37,11 +40,25 @@ export const SectionContentDashboard = () => {
     navigate(`/courses/${courseId}/sections/${sectionId}/new`);
   }
 
+  const sendContentReaction = (id: string, _isSatisfied: boolean): void => {
+    post(`/contents/${id}/reactions`, { isSatisfied: _isSatisfied })
+      .then((res) => {
+        if (!res.ok) {
+          throw new Error('Failed to send content reaction');
+        } else {
+          return res.json();
+        }
+      })
+      .catch((err) => {
+        console.error(`An unexpected error occurred while sending the content reaction: ${err}`);
+      });
+  }
+
   return <div
     style={{
       display: 'flex',
       justifyContent: 'center',
-      alignItems: 'flex-start',  /* Alinea el contenido al inicio, en lugar de al centro */
+      alignItems: 'flex-start',
       height: '100vh',
       backgroundColor: '#f6effa',
       width: '100vw',
@@ -50,7 +67,7 @@ export const SectionContentDashboard = () => {
     <div style={{
       display: 'flex',
       flexDirection: 'column',
-      alignItems: 'flex-start', /* Alinea el contenido al principio */
+      alignItems: 'flex-start',
       padding: '20px',
       width: '100%',
       height: '100%',
@@ -69,6 +86,7 @@ export const SectionContentDashboard = () => {
             <tr>
               <th>Contenido</th>
               <th>Modo de Publicación</th>
+              {user.role === 'STUDENT' && <th>¿Que te parece el contenido?</th>}
               <th></th>
             </tr>
           </thead>
@@ -77,22 +95,52 @@ export const SectionContentDashboard = () => {
               <tr key={c.id}>
                 <td>{c.title}</td>
                 <td>{c.publicationType}</td>
+                {user.role === 'STUDENT' &&
+                  <td>
+                    <div style={
+                      {
+                        display: 'flex',
+                        gap: '2rem',
+                        fontSize: '1.5rem'
+                      }
+                    }>
+                      <FontAwesomeIcon
+                        icon={faThumbsUp}
+                        onClick={() => {
+                          sendContentReaction(c.id, true);
+                        }}
+                        style={{
+                          color: '#4d3a8e',
+                          cursor: 'pointer'
+                        }} />
+                      <FontAwesomeIcon
+                        icon={faThumbsDown}
+                        onClick={() => {
+                          sendContentReaction(c.id, false);
+                        }}
+                        style={{
+                          color: 'lightgray',
+                          cursor: 'pointer'
+                        }} />
+                    </div>
+                  </td>
+                }
                 <td style={{
                   display: 'flex',
                   justifyContent: 'flex-end',
                   gap: '1rem',
-                }}><button className="btn-purple-1"
-                  onClick={() => {
-                    navigate(`/courses/${courseId}/sections/${sectionId}/content/${c.id}?url=${encodeURIComponent(c.presignedUrl)}`);
-                  }}
-                >Ver PDF</button>
-                <button className="btn-purple-1"
+                }}>
+                  <button className="btn-purple-1"
+                    onClick={() => {
+                      navigate(`/courses/${courseId}/sections/${sectionId}/content/${c.id}?url=${encodeURIComponent(c.presignedUrl)}`);
+                    }}
+                  >Ver PDF</button>
+                  <button className="btn-purple-1"
                     onClick={() => {
                       navigate(`/courses/${courseId}/sections/${sectionId}/content/${c.id}/view`);
                     }}
                   >Ver contenido generado</button>
                 </td>
-                  
               </tr>
             ))}
           </tbody>
@@ -100,5 +148,4 @@ export const SectionContentDashboard = () => {
       </Card>
     </div>
   </div>
-
 };

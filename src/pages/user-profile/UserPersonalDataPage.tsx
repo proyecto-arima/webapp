@@ -47,9 +47,10 @@ export const UserPersonalDataPage = () => {
               <Input type="text" name="learningType" id="learningType" defaultValue={user.learningType} disabled />
               <Label for="learningType">Mi rol</Label>
               <Input type="text" name="rol" id="rol" defaultValue={
+                user.role === 'DIRECTOR' ? "Directivo" :
                 user.role === 'STUDENT' ? "Estudiante" : 
-                user.role === 'TEACHER' ? "Profesor" : 
-                user.role === 'ADMIN' ? "Administrador" : "Administrador"
+                user.role === 'TEACHER' ? "Docente" : 
+                user.role === 'ADMIN' ? "Administrador" : "SIN_ROL"
               } disabled />
             </CardBody>
           </Card>

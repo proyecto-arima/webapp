@@ -32,7 +32,7 @@ export const SectionContentDashboard = () => {
 
   useEffect(() => {
     get(`/courses/${courseId}/sections/${sectionId}`).then(res => res.json()).then(res => res.data).then((data: ISection) => setSection(data));
-    get(`/courses/${courseId}/sections/${sectionId}/content`).then(res => res.json()).then(res => res.data).then((data: IContent[]) => setContent(data));
+    get(`/courses/${courseId}/sections/${sectionId}/contents`).then(res => res.json()).then(res => res.data).then((data: IContent[]) => setContent(data));
   }, [courseId, sectionId]);
 
 

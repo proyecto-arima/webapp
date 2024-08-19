@@ -2,28 +2,32 @@ import { Button, Card, Table } from "reactstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faListCheck, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { useEffect, useState } from "react";
-import { get, post } from "../../utils/network";
+import { get, post, del } from "../../utils/network";
 import { useParams } from "react-router-dom";
-import { ICourse } from "../../redux/slices/courses";
+import { ConfirmDialog } from "../../components/ConfirmDialog";
 import Select from "react-select";
+import { useDispatch } from 'react-redux';
+import { removeStudentFromCourse } from '../../redux/slices/courses';
 
 export const StudentLinkingPage = () => {
-
   const { courseId } = useParams<'courseId'>();
   const [course, setCourse] = useState<any>(null);
   const [selectedStudent, setSelectedStudent] = useState<any>(null);
   const [students, setStudents] = useState<any>([{
-    id: '669eff3a59c10b779a0db804',
-    firstName: 'Alexis',
-    lastName: 'Herasimiuk',
-    email: 'aherasimiuk@frba.utn.edu.ar',
+    id: '66b91f41b38b4ceb0d97a59a',
+    firstName: 'Nacho',
+    lastName: 'García',
+    email: 'nachoestudiante@gmail.com',
   }, {
-    id: '66b286168a477a169a5f2d35',
-    firstName: 'Ailén',
-    lastName: 'Gonzalez',
-    email: 'agonzalezperez@frba.utn.edu.ar',
+    id: '66b7df41b4233e9e6de95960',
+    firstName: 'Nacho',
+    lastName: 'García',
+    email: 'nachoestudiante2@gmail.com',
   }
   ]);
+  const [confirmOpen, setConfirmOpen] = useState(false);
+  const [studentToDelete, setStudentToDelete] = useState<any>(null);
+  const dispatch = useDispatch();
 
   const addStudent = (student: any) => {
     post(`/courses/${courseId}/students`, { studentEmails: [selectedStudent.email] })
@@ -37,6 +41,24 @@ export const StudentLinkingPage = () => {
         )
       })
   }
+
+  const deleteStudent = (userId: string) => {
+    del(`/users/${userId}/courses/${courseId}`).then(() => {
+      setCourse((prevCourse: any) => ({
+        ...prevCourse,
+        students: prevCourse.students.filter((s: any) => s.id !== userId)
+      }));
+      dispatch(removeStudentFromCourse({ courseId, userId }));
+      toggleConfirm(); // Cierra el cuadro de confirmación
+    });
+  };
+
+  const toggleConfirm = () => setConfirmOpen(!confirmOpen);
+
+  const handleDeleteStudent = (student: any) => {
+    setStudentToDelete(student);
+    toggleConfirm();
+  };
 
   useEffect(() => {
     get(`/courses/${courseId}`).then(res => res.json()).then(res => res.data).then(setCourse);
@@ -76,9 +98,7 @@ export const StudentLinkingPage = () => {
               getOptionValue={(option) => option.id}
               onChange={(value) => setSelectedStudent(value)}
             />
-            <button className="btn-purple-1" onClick={() => addStudent(selectedStudent)}
-
-            >Agregar</button>
+            <button className="btn-purple-1" onClick={() => addStudent(selectedStudent)}>Agregar</button>
           </div>
 
           <h5 style={{ fontWeight: 'bold' }}>Listado</h5>
@@ -93,7 +113,7 @@ export const StudentLinkingPage = () => {
             </thead>
             <tbody>
               {course?.students?.map((student: any) => (
-                <tr key={student.id}> {/* TODO: CHANGE */}
+                <tr key={student.id}>
                   <td style={{ verticalAlign: 'middle' }}>{student.firstName}</td>
                   <td style={{ verticalAlign: 'middle' }}>{student.lastName}</td>
                   <td style={{ verticalAlign: 'middle' }}>{student.email}</td>
@@ -101,29 +121,27 @@ export const StudentLinkingPage = () => {
                     <Button className="me-3" style={{ background: 'green', border: 'green' }}>
                       <FontAwesomeIcon icon={faListCheck} />
                     </Button>
-                    <Button style={{ background: 'red', border: 'red' }} onClick={() => {
-                      setCourse((course: any) => {
-                        return {
-                          ...course,
-                          students: course.students.filter((s: any) => s.id !== student.id)
-                        }
-                      }
-                      )
-                    }}>
-
-
+                    <Button
+                      style={{ background: 'red', border: 'red' }}
+                      onClick={() => handleDeleteStudent(student)}
+                    >
                       <FontAwesomeIcon icon={faTrash} />
                     </Button>
                   </td>
                 </tr>
-
               ))}
-
             </tbody>
-
           </Table>
         </div>
       </Card>
+
+      <ConfirmDialog
+        isOpen={confirmOpen}
+        toggle={toggleConfirm}
+        onConfirm={() => deleteStudent(studentToDelete.id)}
+        onCancel={toggleConfirm}
+        message={`¿Estás seguro de que quieres eliminar a ${studentToDelete?.firstName} ${studentToDelete?.lastName} del curso?`}
+      />
     </div>
   );
 };

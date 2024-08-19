@@ -35,11 +35,27 @@ export const courseSlice = createSlice({
       return {
         courses: action.payload
       }
-  },
+    },
+    removeStudentFromCourse: (state, action) => {
+      const { courseId, studentId } = action.payload;
+      
+      const courseIndex = state.courses?.findIndex(course => course.id === courseId);
+      
+      if (courseIndex !== undefined && courseIndex >= 0) {
+        const updatedStudents = state.courses![courseIndex].students.filter(
+          student => student.id !== studentId
+        );
+        
+        state.courses![courseIndex] = {
+          ...state.courses![courseIndex],
+          students: updatedStudents,
+        };
+      }
+    },    
   },
 })
 
 // Action creators are generated for each case reducer function
-export const { addCourse, reset, setCourses } = courseSlice.actions
+export const { addCourse, reset, setCourses, removeStudentFromCourse } = courseSlice.actions
 
 export default courseSlice.reducer

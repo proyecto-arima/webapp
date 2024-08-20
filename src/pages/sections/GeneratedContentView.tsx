@@ -54,7 +54,7 @@ export const GeneratedContentView = () => {
         }}>
           <h3>{content?.title}</h3>
         <textarea className="generated-content" value={content?.generated} style={{ 
-          width: '80%', 
+          width: '  0%', 
           height: '100%' ,
           border: 'none',
           scrollbarWidth: 'none',

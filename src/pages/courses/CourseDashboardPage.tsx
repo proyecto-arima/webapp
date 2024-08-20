@@ -8,6 +8,8 @@ import { del } from '../../utils/network'; // Asegúrate de importar tu método 
 import { useDispatch } from 'react-redux';
 import { ConfirmDialog } from '../../components/ConfirmDialog';
 import { setCourses } from '../../redux/slices/courses';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faTrash } from '@fortawesome/free-solid-svg-icons';
 
 export const CourseDashboardPage = () => {
   const { courses } = useSelector((state: RootState) => state.courses);
@@ -70,9 +72,12 @@ export const CourseDashboardPage = () => {
                     display: 'flex',
                     justifyContent: 'flex-end',
                     backgroundColor: 'transparent',
+                    gap: '0.5rem',
                   }}>
                     <button className='btn-purple-1' onClick={() => handleViewCourse(course.id)}>Ver Curso</button>
-                    <Button color="danger" onClick={() => handleDeleteCourse(course.id)}>Eliminar Curso</Button>
+                    <Button color="danger" onClick={() => handleDeleteCourse(course.id)}>
+                      <FontAwesomeIcon icon={faTrash} />
+                    </Button>
                   </CardFooter>
                 </Card>
               ))}
@@ -85,7 +90,7 @@ export const CourseDashboardPage = () => {
         isOpen={confirmOpen}
         toggle={toggleConfirm}
         onConfirm={confirmDelete}
-        onCancel={() => history('/courses')}
+        onCancel={() => toggleConfirm()}
         message="¿Estás seguro de que quieres eliminar este curso?"
       />
     </div>

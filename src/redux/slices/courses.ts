@@ -1,4 +1,4 @@
-import { createSlice } from '@reduxjs/toolkit'
+import { createSlice } from '@reduxjs/toolkit';
 
 export interface ICourse {
   id: string,
@@ -9,11 +9,10 @@ export interface ICourse {
   teacherUserId: string,
   students: any[],
   sections: any[],
- }
+}
 
-// TODO: Match with potential User.model.ts
 export interface CoursesState {
- courses?: ICourse[]
+  courses?: ICourse[]
 }
 
 const initialState: CoursesState = {}
@@ -26,20 +25,25 @@ export const courseSlice = createSlice({
       return {
         ...state,
         courses: state.courses ? [...state.courses, action.payload] : [action.payload]
-      }
+      };
     },
     reset: () => {
-      return {}
+      return {};
     },
     setCourses: (state, action) => {
       return {
         courses: action.payload
-      }
+      };
+    },
+    removeCourse: (state, action) => {
+      return {
+        ...state,
+        courses: state.courses?.filter(course => course.id !== action.payload)
+      };
+    },
   },
-  },
-})
+});
 
-// Action creators are generated for each case reducer function
-export const { addCourse, reset, setCourses } = courseSlice.actions
+export const { addCourse, reset, setCourses, removeCourse } = courseSlice.actions;
 
-export default courseSlice.reducer
+export default courseSlice.reducer;

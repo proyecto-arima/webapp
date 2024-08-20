@@ -8,6 +8,8 @@ import '../../assets/styles/CourseDetailPage.css';
 import { get, del } from '../../utils/network';
 import placeholder from '../../assets/images/placeholder.webp';
 import { ConfirmDialog } from '../../components/ConfirmDialog';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faTrash } from '@fortawesome/free-solid-svg-icons';
 
 interface ISection {
   id: string;
@@ -34,8 +36,10 @@ export const CourseDetailPage: React.FC = () => {
   const [confirmOpen, setConfirmOpen] = useState(false);
   const navigate = useNavigate();
 
+  const fetchCourses = () => get(`/courses/${courseId}`).then(res => res.json()).then(res => res.data).then((data: ICourse) => setCourse(data));
+
   useEffect(() => {
-    get(`/courses/${courseId}`).then(res => res.json()).then(res => res.data).then((data: ICourse) => setCourse(data));
+    fetchCourses();
   }, [courseId]);
 
   const handleNewSection = () => {
@@ -52,10 +56,7 @@ export const CourseDetailPage: React.FC = () => {
   const confirmDelete = async () => {
     if (selectedSection) {
       await del(`/courses/${courseId}/sections/${selectedSection}`);
-      setCourse(prevCourse => ({
-        ...prevCourse!,
-        sections: prevCourse?.sections.filter(section => section.id !== selectedSection) || []
-      }));
+      await fetchCourses();
     }
     toggleConfirm();
   };
@@ -139,13 +140,19 @@ export const CourseDetailPage: React.FC = () => {
                     paddingTop: '1rem',
                   }}>
                     <div style={{
-                      width: '90%',
+                      width: '85%',
                     }}>
                       <h2>{section.name}</h2>
                       <p>{section.description}</p>
                     </div>
-                    <button className='btn-purple-1' onClick={() => navigate(`/courses/${courseId}/sections/${section.id}`)}>Ver Sección</button>
-                    <Button color="danger" onClick={() => handleDeleteSection(section.id)}>Eliminar Sección</Button>
+                    <div
+                      className='d-flex flex-row gap-3'
+                    >
+                      <button className='btn-purple-1' onClick={() => navigate(`/courses/${courseId}/sections/${section.id}`)}>Ver Sección</button>
+                      <Button color="danger" onClick={() => handleDeleteSection(section.id)}>
+                        <FontAwesomeIcon icon={faTrash} />
+                      </Button>
+                    </div>
                   </div>
                 </Card>
               ))}

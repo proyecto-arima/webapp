@@ -1,28 +1,9 @@
 import { useState } from "react";
 import { Card, } from "reactstrap";
-import { API_URL, DEBUG } from "../../config";
+import { API_URL } from "../../config";
 import logo from '../../assets/images/logo_black.png';
 import SetPasswordForm from "../../components/SetPasswordForm";
-
-interface PasswordValidator {
-  hasMinLength: boolean;
-  hastAtLeastOneEspecialCharacter: boolean;
-  hasNumbers: boolean;
-  hasAtLeastOneUppercase: boolean;
-}
-
-const isSecurePassword = (password: string): PasswordValidator => {
-  const hasMinLength = password.length >= 8;
-  const hastAtLeastOneEspecialCharacter = /[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]+/.test(password);
-  const hasNumbers = /\d{2}/.test(password);
-  const hasAtLeastOneUppercase = /[A-Z]+/.test(password);
-  return {
-    hasMinLength,
-    hastAtLeastOneEspecialCharacter,
-    hasNumbers,
-    hasAtLeastOneUppercase,
-  };
-}
+import { isSecurePassword } from "../../utils/FormValidators";
 
 const SetPasswordPage = () => {
   const [statusSended, setStatusSended] = useState(false);
@@ -38,10 +19,7 @@ const SetPasswordPage = () => {
       return;
     }
     const passwordValidation = isSecurePassword(newPassword);
-    if (passwordValidation.hasMinLength &&
-      passwordValidation.hastAtLeastOneEspecialCharacter &&
-      passwordValidation.hasNumbers &&
-      passwordValidation.hasAtLeastOneUppercase) {
+    if (!passwordValidation) {
       setMessage('La contraseña no es segura');
       setTimeout(() => {
       setMessage('');

@@ -10,12 +10,10 @@ import { Index } from './pages/Index';
 function App() {
   return (
     <div className='main-content'>
-      {/* {isAuthenticated && <Sidebar />} */}
       <Routes>
         <Route path="/login" element={<LoginPage />} />
         <Route path="/forgotPassword" element={<RecoverPasswordPage />} />
         <Route path="/recoverPassword" element={<SetPasswordPage />} />
-
         <Route path='/*' element={<Index />} />
       </Routes>
 

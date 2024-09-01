@@ -1,8 +1,9 @@
 import { useState } from "react";
 import { Card, } from "reactstrap";
-import { API_URL, DEBUG } from "../../config";
 import logo from '../../assets/images/logo_black.png';
 import SetPasswordForm from "../../components/SetPasswordForm";
+import { post } from "../../utils/network";
+
 
 interface PasswordValidator {
   hasMinLength: boolean;
@@ -48,16 +49,15 @@ const SetPasswordPage = () => {
       }, 2000);
       return;
     }
-    const setPasswordResponse = await fetch(`${API_URL}/auth/setPassword?token=${token}`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ newPassword, newPasswordConfirmation }),
-    }).then(res => {
-      return res.ok;
-    }).catch(err => {
-      console.error(`An unexpected error occurred on fetch: ${err}`);
-      return;
-    });
+
+    const setPasswordResponse = await post(`/auth/setPassword?token=${token}`, { newPassword, newPasswordConfirmation })
+      .then(res => {
+        return res.ok;
+      })
+      .catch(err => {
+        console.error(`An unexpected error occurred: ${err}`);
+        return false;
+      });
     
     if (setPasswordResponse) {
       setStatusSended(true);

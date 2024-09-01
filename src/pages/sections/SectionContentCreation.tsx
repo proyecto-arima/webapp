@@ -25,7 +25,7 @@ export const SectionContentCreation = () => {
     formData.append('publicationType', formValues?.publicationType as string);
     formData.append('file', formValues?.file as string);
 
-
+    // TODO: Usar post de utils/network
     fetch(`${API_URL}/courses/${courseId}/sections/${sectionId}/content`, {
       method: 'POST',
       credentials: 'include',

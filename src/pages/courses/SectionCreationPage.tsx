@@ -2,8 +2,6 @@
 import React, { useState } from 'react';
 import { Card, Input } from 'reactstrap';
 import { useParams, useNavigate } from 'react-router-dom';
-import { v4 as uuidv4 } from 'uuid';
-import { API_URL } from '../../config';
 import { post } from '../../utils/network';
 
 

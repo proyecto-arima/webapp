@@ -5,26 +5,6 @@ import logo from '../../assets/images/logo_black.png';
 import SetPasswordForm from "../../components/SetPasswordForm";
 import { post } from "../../utils/network";
 
-interface PasswordValidator {
-  hasMinLength: boolean;
-  hastAtLeastOneEspecialCharacter: boolean;
-  hasNumbers: boolean;
-  hasAtLeastOneUppercase: boolean;
-}
-
-const isSecurePassword = (password: string): PasswordValidator => {
-  const hasMinLength = password.length >= 8;
-  const hastAtLeastOneEspecialCharacter = /[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]+/.test(password);
-  const hasNumbers = /\d{2}/.test(password);
-  const hasAtLeastOneUppercase = /[A-Z]+/.test(password);
-  return {
-    hasMinLength,
-    hastAtLeastOneEspecialCharacter,
-    hasNumbers,
-    hasAtLeastOneUppercase,
-  };
-}
-
 const SetPasswordPage = () => {
   const [statusSended, setStatusSended] = useState(false);
   const [statusMessage, setMessage] = useState('');

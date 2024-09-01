@@ -2,8 +2,8 @@
 import logo from '../../assets/images/logo_black.png';
 import { useState } from "react";
 import { Card, } from "reactstrap";
-import { API_URL } from "../../config";
 import RecoverPasswordForm from "../../components/RecoverPasswordForm";
+import { post } from '../../utils/network';
 
 const RecoverPassword = () => {
 
@@ -11,16 +11,14 @@ const RecoverPassword = () => {
   const [statusMessage, setMessage] = useState('');
 
   const handleRecoverPassword = async (email: string) => {
-    const recoveryEmailResponse = await fetch(`${API_URL}/auth/passwordRecovery`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email }),
-    }).then(res => {
-      return res.ok;
-    }).catch(err => {
-      console.error(`An unexpected error occurred: ${err}`);
-      return false;
-    });
+    const recoveryEmailResponse = await post('/auth/passwordRecovery', { email })
+      .then(res => {
+        return res.ok;
+      })
+      .catch(err => {
+        console.error(`An unexpected error occurred: ${err}`);
+        return false;
+      });
 
     if (recoveryEmailResponse) {
       setStatusSended(true);

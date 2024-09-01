@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import ReactSelect from "react-select";
 import { Card, Input } from "reactstrap";
-import { API_URL } from "../../config";
 import { get, post } from "../../utils/network";
 
 

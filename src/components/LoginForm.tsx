@@ -2,17 +2,20 @@ import { useState } from "react";
 import { Input, Label } from "reactstrap";
 import { useNavigate } from "react-router-dom";
 
+import { isValidEmail } from "../utils/FormValidators";
 import '../App.css';
 
 interface ILoginFormProps {
-  login: (email: string, password: string) => Promise<void>;
+  login: (email: string, password: string) => Promise<boolean>;
 }
 
 export default function LoginForm({ login }: ILoginFormProps) {
-
+  const navigate = useNavigate();
+  
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const navigate = useNavigate();
+  const [showAlert, setShowAlert] = useState(false);
+  const [message, setMessage] = useState('');
 
   return (
     <div>
@@ -24,6 +27,7 @@ export default function LoginForm({ login }: ILoginFormProps) {
         <Label htmlFor="password" className="form-label">Contraseña</Label>
         <Input type="password" id="password" placeholder="**************" onChange={(e) => setPassword(e.target.value)} />
       </div>
+      {showAlert && <div className="text-danger"> {message} </div>}
       <div className="d-flex justify-content-between mt-4">
 
         <button onClick={() => navigate("/forgotPassword")} style={{
@@ -35,7 +39,26 @@ export default function LoginForm({ login }: ILoginFormProps) {
         }}>
           Olvidé mi contraseña
         </button>
-        <button className="btn-purple-1" onClick={() => email && password && login(email, password)}>
+        <button className="btn-purple-1" onClick={async () => {
+          if (!isValidEmail(email)) {
+            setShowAlert(true);
+            setMessage('El email ingresado no es válido.');
+            setTimeout(() => {
+              setShowAlert(false);
+              setMessage('');
+            }, 4000);
+            return;
+          }
+          const authStatus = await login(email, password);
+          if(!authStatus) {
+            setShowAlert(true);
+            setMessage('Usuario o contraseña incorrecto');
+            setTimeout(() => {
+              setShowAlert(false);
+              setMessage('');
+            }, 3000);
+          }
+        }}>
           Iniciar Sesión
         </button>
 

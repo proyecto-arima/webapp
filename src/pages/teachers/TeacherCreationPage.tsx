@@ -73,9 +73,8 @@ export const TeacherCreationPage = () => {
         <Input name="email" type="email" placeholder="Correo Electrónico" className="mb-3" onChange={handleFormChange('email')} />
         <ReactSelect
           options={[
-            { value: 'dni', label: 'DNI' },
-            { value: 'passport', label: 'Pasaporte' },
-            { value: 'legajo', label: 'Legajo' },
+            { value: 'DNI', label: 'DNI' },
+            { value: 'Pasaporte', label: 'Pasaporte' }
           ]}
           className="mb-3"
           placeholder="Tipo de Documento"

@@ -1,13 +1,17 @@
 import { useState } from "react";
 import { Card, } from "reactstrap";
-import { isSecurePassword } from "../../utils/FormValidators";
+import { useNavigate } from "react-router-dom";
+
 import logo from '../../assets/images/logo_black.png';
 import SetPasswordForm from "../../components/SetPasswordForm";
+
+import { isSecurePassword } from "../../utils/FormValidators";
 import { post } from "../../utils/network";
 
 const SetPasswordPage = () => {
   const [statusSended, setStatusSended] = useState(false);
   const [statusMessage, setMessage] = useState('');
+  const navigate = useNavigate();
   const token = new URLSearchParams(window.location.search).get('token');
 
   const handleSetPassword = async (newPassword: string, newPasswordConfirmation: string) => {
@@ -47,7 +51,8 @@ const SetPasswordPage = () => {
     setTimeout(() => {
       setStatusSended(false);
       setMessage('');
-    }, 5000);
+      navigate('/login');
+    }, 4000);
     return;
   };
 

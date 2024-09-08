@@ -2,9 +2,9 @@ import React from 'react';
 import { Route, Routes } from 'react-router-dom';
 
 import { UserPersonalDataPage } from '../pages/user-profile/UserPersonalDataPage';
-import { StudentLearningTypePage } from '../pages/user-profile/StudentLearningTypePage';
-import { StudentLearningTypeForm } from '../pages/user-profile/StudentLearningTypeForm';
-import { StudentLearningTypeResult } from '../pages/user-profile/StudentLearningTypeResult';
+import { StudentLearningTypePage } from '../pages/students/test/StudentTestPage';
+import { StudentLearningTypeForm } from '../pages/students/test/StudentTestForm';
+import { StudentLearningTypeResult } from '../pages/students/test/StudentTestResult';
 
 const ProfileRouter: React.FC = () => {
   return (

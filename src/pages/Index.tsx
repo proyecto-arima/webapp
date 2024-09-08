@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Route, Routes, useNavigate } from 'react-router-dom';
+import { login } from '../redux/slices/auth';
 
 import { setCourses } from '../redux/slices/courses';
 import { setUser } from '../redux/slices/user';
@@ -15,44 +16,31 @@ import StudentRouter from '../routes/StudentRouter';
 import { TeacherRouter } from '../routes/TeacherRouter';
 
 import Sidebar from '../components/Sidebar';
-import { get } from '../utils/network';
+import { get, del } from '../utils/network';
 
 export const Index = () => {
   const isAuthenticated = useSelector((state: RootState) => state.auth.isAuthenticated);
-  const user = useSelector((state: RootState) => state.user);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  useEffect(() => {
-    if (user.role === 'TEACHER' || user.role === 'STUDENT') {
-      navigate('/courses/dashboard');
-    }
-    if (user.role === 'ADMIN') {
-      navigate('/directors');
-    }
-  }, [user?.role])
-
-  useEffect(() => {
-    if (isAuthenticated) return;
-    if (!localStorage.getItem('token')) {
-      dispatch(logout());
-      navigate('/login');
-      return;
-    }
-    get('/auth')
+  const fetchSession = async () => {
+    console.info('Checking user session');
+    const userSession = await get('/auth')
       .then(async (res) => {
         if (res.ok) {
           const dataResponse = await res.json();
           return dataResponse;
         } else {
-          console.error(`Status response failed. Status code ${res}`);
+          console.error(`Status response failed. Status code ${res.status}`);
+          return { success: false };
         }
       })
       .then((res) => {
         if (res.success) {
+          dispatch(login());
           return true;
         } else {
-          console.error("User is not authenticated, redirecting ...");
+          console.warn("User is not authenticated");
           dispatch(logout());
           navigate('/login');
           return false;
@@ -60,50 +48,63 @@ export const Index = () => {
       })
       .then(() => get('/users/me'))
       .then(res => res.json())
-      .then(res => dispatch(setUser(res.data)))
-      .catch((error) => {
-        console.error(`An error occurred while retrieve user session: ${error}`);
-        return false;
+      .then(res => {
+        if (!res.success) {
+          return false;
+        }
+        const stateRes = dispatch(setUser(res.data));
+        return stateRes.payload;
       })
       .catch((error) => {
         console.error(`An error occurred while retrieve user session: ${error}`);
         return false;
       });
+      
+    // En caso de roles desconocidos en la sesion, se cierra la sesion y se vuelve a loguear
+    if (!userSession || !['TEACHER', 'STUDENT', 'ADMIN', 'DIRECTOR'].includes(userSession.role)) {
+      console.warn('Session not found');
+      dispatch(logout());
+      del('/auth');
+      navigate('/login');
+      return;
+    } else if (userSession.role === 'TEACHER') {
+      get('/teachers/me/courses')
+        .then(res => res.json())
+        .then(res => {
+          dispatch(setCourses(res.data));
+        })
+        .then(() => {
+          navigate(window.location.pathname);
+        })
+        .catch(err => {
+          console.error(`An unexpected error occurred while checking the courses of the teacher: ${err}`);
+        });
+    } else if (userSession.role === 'STUDENT') {
+      get('/students/me/courses')
+        .then(res => res.json())
+        .then(res => {
+          dispatch(setCourses(res.data));
+        })
+        .then(() => {
+          navigate(window.location.pathname);
+        })
+        .catch(err => {
+          console.error(`An unexpected error occurred while checking the courses of the student: ${err}`);
+        });
+    } else if (userSession.role === 'ADMIN') {
+      navigate(window.location.pathname);
+    } else if (userSession.role === 'DIRECTOR') {
+      navigate(window.location.pathname);
+    }
+  };
 
-      if (user.role === 'TEACHER') {
-        get('/teachers/me/courses')
-          .then(res => res.json())
-          .then(res => {
-            dispatch(setCourses(res.data));
-          })
-          .then(() => {
-            navigate('/courses/dashboard');
-          })
-          .catch(err => {
-            console.error(`An unexpected error occurred while checking the courses of he teacher: ${err}`);
-          });
-      }
-      else if (user.role === 'STUDENT') {
-        get('/students/me/courses')
-          .then(res => res.json())
-          .then(res => {
-            dispatch(setCourses(res.data));
-          })
-          .then(() => {
-            navigate('/courses/dashboard');
-          })
-          .catch(err => {
-            console.error(`An unexpected error occurred while checking the courses of the student: ${err}`);
-          });
-      } else if (user.role === 'ADMIN') {
-        navigate('/directors');
-      } else if (user.role === 'DIRECTOR') {
-        navigate('/students');
-      } else {
-        // En caso de roles desconocidos en la sesion, se cierra la sesion y se vuelve a loguear
-        dispatch(logout());
-        navigate('/login');
-      }
+  useEffect(() => {
+    if (isAuthenticated) return;
+    if (isAuthenticated && window.location.pathname === '/') {
+      navigate('/me/profile');
+      return;
+    }
+    fetchSession();
   }, []);
 
   return (

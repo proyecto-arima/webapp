@@ -1,7 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit'
 
 
-// TODO: Match with potential User.model.ts
 export interface UserState {
   id?: string,
   firstName?: string,
@@ -12,8 +11,8 @@ export interface UserState {
     number: string
   },
   email?: string,
-  institution?: string,
-  learningType?: string,
+  institute?: string,
+  learningProfile?: string,
 }
 
 const initialState: UserState = {}
@@ -23,12 +22,7 @@ export const userSlice = createSlice({
   initialState,
   reducers: {
     setUser: (state, action) => {
-      state = action.payload
-      
-      // TODO: Add attributes to state
-      state.institution = 'SIN_INSTITUCION'
-      state.learningType = 'SIN_TIPO_APRENDIZAJE'
-
+      state = action.payload  
       return state
     },
     reset: () => {

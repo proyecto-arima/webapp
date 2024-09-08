@@ -1,7 +1,10 @@
-import { Card, CardBody, CardTitle, Input } from 'reactstrap';
+import { Card, CardBody, CardTitle } from 'reactstrap';
 import { useNavigate } from "react-router-dom";
+import { useSelector } from 'react-redux';
 
-import '../../assets/styles/LearningTypePage.css'
+import { RootState } from '../../../redux/store';
+
+import '../../../assets/styles/LearningTypePage.css';
 
 const testPreviousComments = [
   "Ubicate en un lugar tranquilo con conexión a internet",
@@ -13,6 +16,7 @@ const testPreviousComments = [
 
 export const StudentLearningTypePage = () => {
   const navigate = useNavigate();
+  const user = useSelector((state: RootState) => state.user);
 
   const doTest = () => {
     navigate('/me/learning-type/test');
@@ -39,12 +43,13 @@ export const StudentLearningTypePage = () => {
             <Card className='profile-card-init'>
               <CardTitle tag="h5">Consideraciones antes de realizar el test</CardTitle>
               <CardBody>
-                {testPreviousComments.map((comment, index) => (
-                  <div key={index}>
-                    <Input type='checkbox' defaultChecked />
-                    <span>{comment}</span>
-                  </div>
-                ))}
+                <ol>
+                  {testPreviousComments.map((comment, index) => (
+                    <div key={index}>
+                      <li>{comment}</li>
+                    </div>
+                  ))}
+                </ol>
               </CardBody>
             </Card>
 

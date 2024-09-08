@@ -4,8 +4,8 @@ import { Card, CardBody, CardFooter, CardTitle } from 'reactstrap';
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
-import { RootState } from "../../redux/store";
-import { get, patch, post } from '../../utils/network';
+import { RootState } from "../../../redux/store";
+import { get, patch, post } from '../../../utils/network';
 
 interface IOption {
   questionId: number,
@@ -19,6 +19,13 @@ interface IQuestion {
   statementId: number;
   options: IOption[];
 }
+
+const learningt = [
+  "CONVERGENTE",
+  "DIVERGENTE",
+  "ACOMODADOR",
+  "ASIMILADOR"
+]
 
 const mockedQuestions: IQuestion[] = [
   {
@@ -161,17 +168,31 @@ export const StudentLearningTypeForm = () => {
 
   useEffect(() => {
     // TODO: Mocked user learning profile. Get from redux
+    get(`/students/${user.id}/learning-profile`)
+    .then(async (res) => {
+      console.log("RES");
+      console.log(res);
+      if (res.ok) {
+        return res.json();
+      } else {
+        console.error('Error fetching learning profile');
+        return Promise.reject(res);
+      }
+    }).
+    then(async (res) => {
+      console.log("DATA");
+      console.log(res.data);
+      
+      if (res.data) {
+        setLearningType(res.data.learningProfile);
+      } else {
+        console.error('Error fetching data from learning profile');
+        return Promise.reject(res);
+      }
+    }).
+    catch((err) => console.error(`An error ocurred while fetching learning profile: ${err}`));
     setLearningType("VISUALIZADOR");
     return;
-
-    // TODO: Fetch learning profile from backend
-    if (!learningType) {
-      get(`/students/${user.id}/learning-profile`)
-        .then(res => { return res.ok ? res.json() : Promise.reject(res) })
-        // TODO: Set learningProfile attribute
-        .then(res => { return res.data ? setLearningType(res.data.learningProfile) : Promise.reject(res) })
-        .catch(err => console.error(`An error ocurred while fetching learning profile: ${err}`));
-    }
 
     // TODO: Fetch questions from backend
     get(`/learning-profile/questions`)
@@ -329,7 +350,8 @@ export const StudentLearningTypeForm = () => {
                                       <option
                                       key={`${indexQuestions}-${indexOptions}-${index}`}
                                       value={value}
-                                      selected={option.valueAsigned === parseInt(value)}
+                                      defaultValue={option.valueAsigned}
+                                      // selected={option.valueAsigned === parseInt(value)}
                                       >
                                       {value}
                                       </option>

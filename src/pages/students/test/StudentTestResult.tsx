@@ -1,10 +1,11 @@
 import { Card, CardBody, CardTitle, Input } from 'reactstrap';
 import { useSelector } from 'react-redux';
-import { RootState } from '../../redux/store';
-import { get } from '../../utils/network';
-
-import '../../assets/styles/LearningTypePage.css';
 import { useEffect, useState } from 'react';
+
+import { RootState } from '../../../redux/store';
+import { get } from '../../../utils/network';
+
+import '../../../assets/styles/LearningTypePage.css';
 
 const testPostComments = [
     "El test de kolb fue desarrollado en 1984",

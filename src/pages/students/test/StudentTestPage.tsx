@@ -9,9 +9,10 @@ import '../../../assets/styles/LearningTypePage.css';
 const testPreviousComments = [
   "Ubicate en un lugar tranquilo con conexión a internet",
   "Podes poner música de fondo",
-  "Te llevará entre X y X minutos realizar todo el text",
+  "Te llevará entre X y X minutos realizar el test",
   "Al finalizar el resultado aparecerá en pantalla y quedará asociado a tu usuario",
-  "Es importante que lo respondas con sinceridad ya que el contenido de la plataforma se adaptará en función del resultado  obtenido"
+  "Responde con sinceridad ya que el contenido de la plataforma se adaptará en función del resultado obtenido",
+  "[IMPORTANTE] Por cada pregunta tenes que seleccionar una opción numericamente del 1 a 4 SIN REPETIR",
 ];
 
 export const StudentLearningTypePage = () => {
@@ -34,14 +35,16 @@ export const StudentLearningTypePage = () => {
       }}
     >
       <div className="container">
-        <div className='profile-learningtype-page-container'>
-          <h1>Test de aprendizaje</h1>
-        </div>
-
         <div className="row">
           <ul>
-            <Card className='profile-card-init'>
-              <CardTitle tag="h5">Consideraciones antes de realizar el test</CardTitle>
+            <Card className='profile-card-init'
+            style={{
+              width: '100%',
+              maxWidth: '1100px',
+              padding: '20px',
+            }}
+            >
+              <CardTitle tag="h3">Consideraciones antes de realizar el test</CardTitle>
               <CardBody>
                 <ol>
                   {testPreviousComments.map((comment, index) => (

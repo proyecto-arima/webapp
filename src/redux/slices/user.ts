@@ -21,8 +21,12 @@ export const userSlice = createSlice({
   name: 'user',
   initialState,
   reducers: {
-    setUser: (state, action) => {
-      state = action.payload  
+    setUser: (state, action) => {      
+      state = action.payload
+
+      // TODO: DEBUG
+      state.learningProfile = "CONVERGENTE"
+      
       return state
     },
     reset: () => {

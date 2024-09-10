@@ -137,7 +137,7 @@ export const SectionContentDashboard = () => {
                   >Ver PDF</button>
                   <button className="btn-purple-1"
                     onClick={() => {
-                      navigate(`/courses/${courseId}/sections/${sectionId}/content/${c.id}/view`);
+                      navigate(`/courses/${courseId}/sections/${sectionId}/content/${c.id}/map`);
                     }}
                   >Ver contenido generado</button>
                 </td>

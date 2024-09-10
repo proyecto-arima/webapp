@@ -93,7 +93,7 @@ export const CourseDetailPage: React.FC = () => {
           }}>
             <Slider
               dots
-              infinite
+              infinite={course?.sections && course?.sections.length > 1}
               speed={500}
               slidesToShow={1}
               slidesToScroll={1}
@@ -102,6 +102,7 @@ export const CourseDetailPage: React.FC = () => {
               centerMode
               className='section-slider'
               useTransform={false}
+              variableWidth={false}
             >
               {course?.sections.map(section => (
                 <Card key={section.id} style={{
@@ -140,10 +141,13 @@ export const CourseDetailPage: React.FC = () => {
                     paddingTop: '1rem',
                   }}>
                     <div style={{
-                      width: '85%',
+                      width: '90%',
+                      flexGrow: 1,
                     }}>
                       <h2>{section.name}</h2>
-                      <p>{section.description}</p>
+                      <div>
+                        <span>{section.description}</span>
+                      </div>
                     </div>
                     <div
                       className='d-flex flex-row gap-3'

@@ -12,18 +12,7 @@ export const StudentLinkingPage = () => {
   const { courseId } = useParams<'courseId'>();
   const [course, setCourse] = useState<any>(null);
   const [selectedStudent, setSelectedStudent] = useState<any>(null);
-  const [students, setStudents] = useState<any>([{
-    id: '669eff3a59c10b779a0db804',
-    firstName: 'Alexis',
-    lastName: 'Herasimiuk',
-    email: 'aherasimiuk@frba.utn.edu.ar',
-  }, {
-    id: '66b286168a477a169a5f2d35',
-    firstName: 'Ailén',
-    lastName: 'Gonzalez',
-    email: 'agonzalezperez@frba.utn.edu.ar',
-  }
-  ]);
+  const [students, setStudents] = useState<any>([]);
 
   const addStudent = (student: any) => {
     post(`/courses/${courseId}/students`, { studentEmails: [selectedStudent.email] })

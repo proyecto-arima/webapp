@@ -6,7 +6,8 @@ import { CourseDashboardPage } from '../pages/courses/CourseDashboardPage';
 import { CourseDetailPage } from '../pages/courses/CourseDetailPage';
 import { SectionCreationPage } from '../pages/courses/SectionCreationPage';
 import { StudentLinkingPage } from '../pages/courses/StudentLinkingPage';
-import { GeneratedContentView } from '../pages/sections/GeneratedContentView';
+import { GeneratedContentView } from '../pages/sections/text/GeneratedContentView';
+import { GeneratedContentView as MarkmapView } from '../pages/sections/markmap/GeneratedContentView';
 import { RawContentView } from '../pages/sections/RawContentView';
 import { SectionContentCreation } from '../pages/sections/SectionContentCreation';
 import { SectionContentDashboard } from '../pages/sections/SectionContentDashboard';
@@ -24,6 +25,7 @@ const CourseRoutes: React.FC = () => {
         <Route path=":courseId/sections/:sectionId/new" element={<SectionContentCreation/>} /> {/* TODO: FIX */}
         <Route path=":courseId/sections/:sectionId/content/:contentId" element={<RawContentView/>} />
         <Route path=":courseId/sections/:sectionId/content/:contentId/view" element={<GeneratedContentView/>} />
+        <Route path=":courseId/sections/:sectionId/content/:contentId/map" element={<MarkmapView/>} />
       </Routes>
   );
 };

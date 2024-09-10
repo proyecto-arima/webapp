@@ -22,7 +22,7 @@ export const userSlice = createSlice({
   initialState,
   reducers: {
     setUser: (state, action) => {
-      state = action.payload  
+      state = action.payload
       return state
     },
     reset: () => {

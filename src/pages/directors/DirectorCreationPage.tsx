@@ -84,7 +84,8 @@ export const DirectorCreationPage = () => {
         <ReactSelect
           options={[
             { value: 'DNI', label: 'DNI' },
-            { value: 'Pasaporte', label: 'Pasaporte' }
+            { value: 'PASAPORTE', label: 'Pasaporte' },
+            { value: 'LEGAJO', label: 'Legajo' },
           ]}
           className="mb-3"
           placeholder="Tipo de Documento"

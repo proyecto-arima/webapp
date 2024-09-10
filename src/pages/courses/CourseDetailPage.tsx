@@ -9,7 +9,7 @@ import { get, del } from '../../utils/network';
 import placeholder from '../../assets/images/placeholder.webp';
 import { ConfirmDialog } from '../../components/ConfirmDialog';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faTrash } from '@fortawesome/free-solid-svg-icons';
+import { faTrash, faEdit } from '@fortawesome/free-solid-svg-icons';
 
 interface ISection {
   id: string;
@@ -59,6 +59,12 @@ export const CourseDetailPage: React.FC = () => {
       await fetchCourses();
     }
     toggleConfirm();
+  };
+
+  const handleEditSection = (sectionId: string) => {
+    // Redirigir a la pantalla de edición de sección con los datos precargados
+    setSelectedSection(sectionId);
+    navigate(`/courses/${courseId}/sections/${sectionId}/edit`);
   };
 
   return (
@@ -152,7 +158,11 @@ export const CourseDetailPage: React.FC = () => {
                     <div
                       className='d-flex flex-row gap-3'
                     >
+                      {/* Botón Ver Sección */}
                       <button className='btn-purple-1' onClick={() => navigate(`/courses/${courseId}/sections/${section.id}`)}>Ver Sección</button>
+                      <Button color="primary" onClick={() => handleEditSection(section.id)}>
+                        <FontAwesomeIcon icon={faEdit} />
+                      </Button>
                       <Button color="danger" onClick={() => handleDeleteSection(section.id)}>
                         <FontAwesomeIcon icon={faTrash} />
                       </Button>
@@ -165,6 +175,7 @@ export const CourseDetailPage: React.FC = () => {
         </Card>
       </div>
 
+      {/* Confirmación para eliminar la sección */}
       <ConfirmDialog
         isOpen={confirmOpen}
         toggle={toggleConfirm}

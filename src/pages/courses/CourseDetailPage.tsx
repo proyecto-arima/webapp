@@ -77,10 +77,8 @@ export const CourseDetailPage: React.FC = () => {
           <div className="course-detail-header">
             <h1>{course?.title}</h1>
             <div className='d-flex flex-row gap-3'>
-              <button onClick={handleNewSection} className="new-section-button">Nueva Sección</button>
-              <button className='students-button' onClick={() => {
-                navigate(`/courses/${courseId}/students`);
-              }}>Estudiantes</button>
+              <button className="btn-purple-1" onClick={handleNewSection}>Nueva Sección</button>
+              <button className='btn-purple-2' onClick={() => navigate(`/courses/${courseId}/students`)}>Estudiantes</button>
             </div>
           </div>
           <hr />

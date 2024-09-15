@@ -11,6 +11,7 @@ import { GeneratedContentView as MarkmapView } from '../pages/sections/markmap/G
 import { RawContentView } from '../pages/sections/RawContentView';
 import { SectionContentCreation } from '../pages/sections/SectionContentCreation';
 import { SectionContentDashboard } from '../pages/sections/SectionContentDashboard';
+import { EditContentPage } from '../pages/sections/EditContentPage';
 
 const CourseRoutes: React.FC = () => {
   return (
@@ -26,6 +27,7 @@ const CourseRoutes: React.FC = () => {
         <Route path=":courseId/sections/:sectionId/content/:contentId" element={<RawContentView/>} />
         <Route path=":courseId/sections/:sectionId/content/:contentId/view" element={<GeneratedContentView/>} />
         <Route path=":courseId/sections/:sectionId/content/:contentId/map" element={<MarkmapView/>} />
+        <Route path=":courseId/sections/:sectionId/contents/:contentId/edit-title" element={<EditContentPage />} />
       </Routes>
   );
 };

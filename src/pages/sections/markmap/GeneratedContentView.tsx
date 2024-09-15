@@ -17,7 +17,7 @@ export const GeneratedContentView = () => {
   const [content, setContent] = useState<IContent>();
 
   useEffect(() => {
-    get(`/content/${contentId}`).then(res => res.json()).then(res => res.data).then((data: IContent) => setContent(data));
+    get(`/contents/${contentId}`).then(res => res.json()).then(res => res.data).then((data: IContent) => setContent(data));
   }, []);
 
 

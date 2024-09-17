@@ -1,8 +1,9 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Card, CardBody, CardHeader, CardTitle } from 'reactstrap'
+import Swal from 'sweetalert2'
 
 interface Item {
-  id: string
+  id: number
   content: string
 }
 
@@ -14,37 +15,64 @@ interface Column {
 
 export interface DragDropAgreementProps {
   answers: string[],
-  question: string
+  question: string,
+  next: (answers: number[]) => void
 }
 
-export default function DragDropAgreement({ answers, question }: DragDropAgreementProps) {
+export default function DragDropAgreement({ answers, question, next }: DragDropAgreementProps) {
   const [columns, setColumns] = useState<{ [key: string]: Column }>({
     totallyAgree: {
       id: 'totallyAgree',
-      title: 'Muy efectivo',
+      title: 'Muy de acuerdo',
       item: null
     },
     agree: {
       id: 'agree',
-      title: 'Efectivo',
+      title: 'De acuerdo',
       item: null
     },
     notAgree: {
       id: 'notAgree',
-      title: 'Poco efectivo',
+      title: 'Poco de acuerdo',
       item: null
     },
     absolutelyNotAgree: {
       id: 'absolutelyNotAgree',
-      title: 'Nada efectivo',
+      title: 'Nada de acuerdo',
       item: null
     }
   })
 
-  const [availableResponses, setAvailableResponses] = useState<Item[]>(answers.map((answer: string, index: number) => ({
-    id: index.toString(),
-    content: answer
-  })))
+  const [availableResponses, setAvailableResponses] = useState<Item[]>([])
+
+  useEffect(() => {
+    setColumns({
+      totallyAgree: {
+        id: 'totallyAgree',
+        title: 'Muy de acuerdo',
+        item: null
+      },
+      agree: {
+        id: 'agree',
+        title: 'De acuerdo',
+        item: null
+      },
+      notAgree: {
+        id: 'notAgree',
+        title: 'Poco de acuerdo',
+        item: null
+      },
+      absolutelyNotAgree: {
+        id: 'absolutelyNotAgree',
+        title: 'Nada de acuerdo',
+        item: null
+      }
+    });
+    setAvailableResponses(answers.map((answer: string, index: number) => ({
+      id: index,
+      content: answer
+    })))
+  }, [answers, question])
 
   const [draggingItem, setDraggingItem] = useState<Item | null>(null)
 
@@ -126,7 +154,7 @@ export default function DragDropAgreement({ answers, question }: DragDropAgreeme
         <div
           className="flex flex-wrap gap-2 min-h-[100px] bg-gray-50 rounded p-4 flex-row d-flex align-items-center justify-content-center"
           style={{
-            height: '90px'
+            height: '125px'
           }}
           onDragOver={onDragOver}
           onDrop={onDropToAvailable}
@@ -181,8 +209,38 @@ export default function DragDropAgreement({ answers, question }: DragDropAgreeme
             </CardBody>
           </Card>
         ))}
+
       </div>
 
+      <div className='d-flex flex-row justify-content-end mt-5'>
+        <button className='btn-purple-1' onClick={() => {
+
+          // if(Object.values(columns).some(column => column?.item?.id === null)) {
+          //   alert('Por favor, completa todas las columnas antes de continuar.')
+          //   return
+          // }
+
+          // next([
+          //   columns['absolutelyNotAgree'].item?.id,
+          //   columns['notAgree'].item?.id,
+          //   columns['agree'].item?.id,
+          //   columns['totallyAgree'].item?.id,
+          // ])
+
+          const responses = Object.values(columns).reverse().map(column => column?.item?.id);
+          if (responses.some(response => response === undefined)) {
+            Swal.fire({
+              icon: 'error',
+              title: '¡Error!',
+              text: 'Por favor, completa todas las columnas antes de continuar.'
+            })
+            return
+          }
+          next(responses as number[]);
+        }}>
+          Siguiente
+        </button>
+      </div>
     </div>
   )
 }

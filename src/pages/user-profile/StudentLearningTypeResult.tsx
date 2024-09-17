@@ -5,88 +5,76 @@ import { get } from '../../utils/network';
 
 import '../../assets/styles/LearningTypePage.css';
 import { useEffect, useState } from 'react';
+import { useLocation } from 'react-router-dom';
 
-const testPostComments = [
-    "El test de kolb fue desarrollado en 1984",
-    "El test te permite descubrir que forma de aprender es la que mejor se adapta a vos",
-    "Podes repetir el test cuantas veces quieras!"
-];
+
+const result: { [key: string]: { description: string; image: string } } = {
+    'DIVERGENTE': {
+        "description": "Se benefician del estudio de mapas conceptuales, las discusiones en grupo y las actividades prácticas. Prefieren materiales que les permitan explorar y colaborar",
+        "image": 'https://blog.newportschool.edu.co/hubfs/Imported_Blog_Media/6-Feb-28-2024-05-08-47-7970-PM.png',
+    },
+    "CONVERGENTE": {
+        "description": "Se benefician de problemas prácticos, hojas de trabajo y actividades interactivas. Prefieren materiales que les permitan aplicar conceptos teóricos a situaciones reales.",
+        "image": 'https://blog.newportschool.edu.co/hubfs/Imported_Blog_Media/5-Feb-28-2024-05-08-44-6756-PM.png'
+    },
+    "ASIMILADOR": {
+        "description": "Prefieren resúmenes, diagramas y presentaciones estructuradas. Les gustan los contenidos que proporcionan una visión detallada y lógica de los conceptos.",
+        "image": "https://blog.newportschool.edu.co/hubfs/Imported_Blog_Media/7-Feb-28-2024-05-08-58-7610-PM.png",
+    },
+    "ACOMODADOR": {
+        "description": 'Disfrutan de videos, talleres y proyectos prácticos. Les gusta el contenido que les permita experimentar y descubrir por sí mismos.',
+        "image": 'https://blog.newportschool.edu.co/hubfs/Imported_Blog_Media/8-Feb-28-2024-05-08-49-5639-PM.png'
+    },
+}
+
 
 export const StudentLearningTypeResult = () => {
-    const user = useSelector((state: RootState) => state.user);
-    const [learningType, setLearningType] = useState<string>('');
-    const [learningTypeMessage, setLearningTypeMessage] = useState<string>('');
-
+    const [learningProfile, setLearningProfile] = useState<string | null>(null);
+    const location = useLocation();
+    
     useEffect(() => {
-        // TODO: Fetch learning type from redux
-        // After test is completed, the learning type is stored in the redux store
-        // user.learningType && setLearningType(user.learningType);
-        setLearningType("VISUALIZADOR");
-        setLearningTypeMessage(`Tu estilo de aprendizaje "${learningType}" implica que asimilas mejor la información a través de la escucha.
-            Probablemente prefieras recibir información de manera verbal y encuentres más efectivo escuchar explicaciones,
-            participar en discusiones y debates para comprender el contenido. Tienes una gran capacidad para recordar diálogos y sonidos,
-            y a menudo recurres a la repetición en voz alta y al diálogo interno como métodos de estudio.
+        // get(`/students/${user.id}/learning-profile`).then((res) => {
+        //     setLearningProfile(res.data);
+        // });
+        setLearningProfile(location.state.profile as string ?? 'DIVERGENTE');
 
-            Además, eres especialmente sensible a los matices y tonos de voz, lo que te permite captar detalles adicionales en
-            la comunicación.
-
-            Es probable que disfrutes participar activamente en discusiones grupales y actividades auditivas,
-            ya que estas te facilitan la consolidación de tu aprendizaje.`
-        )
-
-        // TODO: Get test last results from backend
-        get(`/students/${user.id}/learning-profile/last-test`)
-            .then((res) => {
-                return res.ok ? res.json() : Promise.reject(res);
-            })
-            .then((res) => {
-                const data = res.data;
-                console.log("Last test info: ", data);
-            })
-            .catch((err) => {
-                console.error(`An error ocurred while fetching learning type: ${err}`);
-            });
     }, []);
 
-    return (
-        <div
-            style={{
-                display: 'flex',
-                justifyContent: 'center',
-                alignItems: 'center',
-                height: '100vh',
-                backgroundColor: '#f6effa',
-                width: '100vw',
-            }}
-        >
-            <div className="container">
-                <ul>
-                    <Card className='profile-card-init'>
-                        <CardTitle tag="h1">Tu resultado</CardTitle>
-                        <CardBody>{learningTypeMessage}</CardBody>
-                    </Card>
-                </ul>
+    return ( <div
+    style={{
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'flex-start',  /* Alinea el contenido al inicio, en lugar de al centro */
+      height: '100vh',
+      backgroundColor: '#f6effa',
+      width: '100vw',
+    }}
+  >
+    <div
+      style={{
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'flex-start', /* Alinea el contenido al principio */
+        padding: '20px',
+        width: '100%',
+        height: '100%',
+      }}
+    >
+      <Card style={{ width: '100%', paddingInline: '2rem', paddingBlock: '1rem', height: '100%' }}>
+        <h2>Resultado del test de aprendizaje</h2>
+        <hr />
+        {learningProfile ? (<>
 
-                <ul>
-                    <Card className='profile-card-init'>
-                        <CardTitle tag="h5">Queres saber mas?</CardTitle>
-                        <CardBody>
-                            {testPostComments.map((comment, index) => (
-                                <div key={index}>
-                                    <Input type='checkbox' defaultChecked />
-                                    <span>{comment}</span>
-                                </div>
-                            ))}
-                        </CardBody>
-                    </Card>
-                </ul>
+        <h2>Según el test realizado, tu perfil de aprendizaje es <b>{learningProfile?.toLocaleLowerCase()}</b></h2>
+        <span>Aquellas personas con tu perfil de aprendizaje:</span>
+        <span>{(result[learningProfile]).description }</span>
 
-                <ul>
-                    <button className="btn-purple-primary" onClick={() => { window.location.href = '/me/learning-type'; }}>
-                        Volver
-                    </button>
-                </ul>
-            </div>
-        </div>
+        <img src={(result[learningProfile]).image} alt="learning-type" style={{ width: '70%', height: 'auto', alignSelf: 'center' }} />
+        
+
+        </>) : "Cargando..." }
+      </Card>
+    </div>
+  </div>
     );
 }

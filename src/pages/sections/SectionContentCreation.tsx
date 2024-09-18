@@ -26,7 +26,7 @@ export const SectionContentCreation = () => {
     formData.append('file', formValues?.file as string);
 
     // TODO: Usar post de utils/network
-    fetch(`${API_URL}/courses/${courseId}/sections/${sectionId}/content`, {
+    fetch(`${API_URL}/courses/${courseId}/sections/${sectionId}/contents`, {
       method: 'POST',
       credentials: 'include',
       body: formData
@@ -39,16 +39,24 @@ export const SectionContentCreation = () => {
 
   return (
     <div
-      style={{
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        height: '100vh',
-        backgroundColor: '#f6effa',
-        width: '100vw',
-      }}
-    >
-      <Card style={{ width: '90%', paddingInline: '2rem', paddingBlock: '1rem', height: '90%' }}>
+    style={{
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'flex-start',  /* Alinea el contenido al inicio, en lugar de al centro */
+      height: '100vh',
+      backgroundColor: '#f6effa',
+      width: '100vw',
+    }}
+  >
+    <div style={{
+      display: 'flex',
+      flexDirection: 'column',
+      alignItems: 'flex-start', /* Alinea el contenido al principio */
+      padding: '20px',
+      width: '100%',
+      height: '100%',
+    }}>
+      <Card style={{ paddingInline: '2rem', paddingBlock: '1rem', width: '100%', height: '100%' }}>
         <h2>Contenido de la Sección</h2>
         <hr />
 
@@ -77,5 +85,6 @@ export const SectionContentCreation = () => {
         </div>
       </Card>
     </div>
+  </div>
   );
 }

@@ -37,22 +37,33 @@ export const StudentLinkingPage = () => {
   }, [course]);
 
   return (
+  <div
+    style={{
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'flex-start',  /* Alinea el contenido al inicio, en lugar de al centro */
+      height: '100vh',
+      backgroundColor: '#f6effa',
+      width: '100vw',
+    }}
+  >
     <div
       style={{
         display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        height: '100vh',
-        backgroundColor: '#f6effa',
-        width: '100vw',
+        flexDirection: 'column',
+        alignItems: 'flex-start', /* Alinea el contenido al principio */
+        padding: '20px',
+        width: '100%',
+        height: '100%',
       }}
     >
-      <Card style={{ width: '90%', paddingInline: '2rem', paddingBlock: '1rem', height: '90%' }}>
+      <Card style={{ width: '100%', paddingInline: '2rem', paddingBlock: '1rem', height: '100%' }}>
         <h2>Estudiantes</h2>
         <hr />
         <p>Aquí podrá agregar, eliminar o ver estudiantes al curso <b>{course?.title}</b>. Los alumnos podrán auto-matricularse utilizando el código: <b>{course?.matriculationCode}</b> </p>
         <div className="d-flex flex-column">
           <h5 style={{ fontWeight: 'bold' }}>Agregar estudiante</h5>
+          <hr />
           <div className="d-flex flex-row align-items-center w-100 gap-2 mb-5">
             <Select
               className="w-100"
@@ -71,6 +82,7 @@ export const StudentLinkingPage = () => {
           </div>
 
           <h5 style={{ fontWeight: 'bold' }}>Listado</h5>
+          <hr />
           <Table>
             <thead>
               <tr>
@@ -113,6 +125,7 @@ export const StudentLinkingPage = () => {
           </Table>
         </div>
       </Card>
+      </div>
     </div>
   );
 };

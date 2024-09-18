@@ -88,6 +88,8 @@ export default function DragDropAgreement({ answers, question, next }: DragDropA
     e.preventDefault()
     if (!draggingItem) return
 
+    console.log(targetColumnId)
+
     setColumns(prevColumns => {
       const updatedColumns = { ...prevColumns }
 
@@ -134,12 +136,19 @@ export default function DragDropAgreement({ answers, question, next }: DragDropA
       return updatedColumns
     })
 
-    setAvailableResponses(prev => [...prev, draggingItem])
+    setAvailableResponses(prev => {
+      if (prev.some(item => item.id === draggingItem.id)) return prev
+      return [...prev, draggingItem]
+    })
     setDraggingItem(null)
   }
 
   return (
-    <div>
+    <div style={{
+      display: 'flex',
+      flexDirection: 'column',
+      height: '100%'
+    }}>
       <div>
         <p style={{
           textAlign: 'left',
@@ -211,6 +220,11 @@ export default function DragDropAgreement({ answers, question, next }: DragDropA
         ))}
 
       </div>
+      <div style={{
+        display: 'flex',
+        flex: '1',
+      }}></div>
+
 
       <div className='d-flex flex-row justify-content-end mt-5'>
         <button className='btn-purple-1' onClick={() => {

@@ -12,8 +12,11 @@ export interface UserState {
     number: string
   },
   email?: string,
-  institute?: string,
-  learningProfile?: string,
+  institute?: {
+    id: string,
+    name: string
+  },
+  learningProfile?: 'DIVERGENTE' | 'ASIMILADOR' | 'ACOMODADOR' | 'CONVERGENTE',
   surveyAvailable?: boolean,
 }
 

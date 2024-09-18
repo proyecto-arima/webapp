@@ -6,7 +6,6 @@ import { post } from '../../utils/network';
 import { useNavigate } from 'react-router-dom';
 
 
-
 interface IQuestion {
   question: string;
   answers: string[];
@@ -162,7 +161,10 @@ export const StudentLearningTypeForm = () => {
           height: '100%',
           gap: '1rem',
         }}>
-          <div>
+          <div style={{
+            height: '100%',
+            flex: '1',
+          }}>
             <DragDropAgreement
               answers={questions[current].answers} question={questions[current].question} next={(responses) => {
                 if (current < questions.length - 1) {
@@ -172,8 +174,9 @@ export const StudentLearningTypeForm = () => {
                 }
 
                 const finalResponses = [...testResponses, responses].map((response) => response.map((answer) => answer + 1));
-                post('/test', { answers: finalResponses }).then((res) => {
+                post('/test', { answers: finalResponses }).then(res => res.json()).then((res) => {
 
+                  console.log(res)
                   const profile = res.data;
                   console.log(res.data)
 

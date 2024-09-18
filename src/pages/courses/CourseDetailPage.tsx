@@ -18,12 +18,15 @@ import '../../assets/styles/CourseDetailPage.css';
 import placeholder from '../../assets/images/placeholder.webp';
 import { faTrash, faEdit } from '@fortawesome/free-solid-svg-icons';
 
+import empty from '../../assets/images/empty.svg';
+
 
 interface ISection {
   id: string;
   name: string;
   description: string;
   visible: boolean;
+  image: string;
 }
 
 interface ICourse {
@@ -111,7 +114,7 @@ export const CourseDetailPage: React.FC = () => {
             alignItems: 'center',
             height: '100%',
           }}>
-            <Slider
+            {course?.sections?.length ? <Slider
               dots
               infinite={course?.sections && course?.sections.length > 1}
               speed={500}
@@ -142,7 +145,7 @@ export const CourseDetailPage: React.FC = () => {
                     alignItems: 'center',
                     height: '30rem',
                   }}>
-                    <img src={placeholder}
+                    <img src={section.image ? section.image : placeholder}
                       alt="Section"
                       style={{
                         width: '100%',
@@ -161,8 +164,9 @@ export const CourseDetailPage: React.FC = () => {
                     paddingTop: '1rem',
                   }}>
                     <div style={{
-                      width: '90%',
+                      width: '80%',
                       flexGrow: 1,
+                      marginRight: '1rem',
                     }}>
                       <h2>{section.name}</h2>
                       <div>
@@ -174,17 +178,24 @@ export const CourseDetailPage: React.FC = () => {
                     >
                       {/* Botón Ver Sección */}
                       <button className='btn-purple-1' onClick={() => navigate(`/courses/${courseId}/sections/${section.id}`)}>Ver Sección</button>
-                      <Button color="primary" onClick={() => handleEditSection(section.id)}>
-                        <FontAwesomeIcon icon={faEdit} />
-                      </Button>
-                      <Button color="danger" onClick={() => handleDeleteSection(section.id)}>
-                        <FontAwesomeIcon icon={faTrash} />
-                      </Button>
+                      {user.role === 'TEACHER' && <Button color="primary" onClick={() => handleEditSection(section.id)}><FontAwesomeIcon icon={faEdit} /></Button>}
+                      {user.role === 'TEACHER' && <Button color="danger" onClick={() => handleDeleteSection(section.id)}><FontAwesomeIcon icon={faTrash} /></Button>}
                     </div>
                   </div>
                 </Card>
               ))}
-            </Slider>
+            </Slider> : <div className='d-flex flex-column justify-content-center align-items-center'>
+                <img
+                  src={empty}
+                ></img>
+                {user.role === 'STUDENT' ? <>
+                  <h3>Parece que aún no hay secciones en este curso.</h3>
+                  <h4>Por favor intenta de nuevo más tarde</h4>
+                </> : <>
+                  <h3>Parece que aún no has creado ninguna sección en este curso.</h3>
+                  <h4>Por favor crea una sección para comenzar a añadir contenido.</h4>
+                </>}
+              </div>}
           </div>
         </Card>
       </div>

@@ -81,7 +81,7 @@ export const CourseDashboardPage = () => {
             alignItems: 'center',
             height: '100%',
           }}>
-            <div className='d-flex flex-row justify-content-center gap-3'>
+            <div className='d-flex flex-row justify-content-center gap-3 flex-wrap'>
               {courses?.map(course => (
                 <Card key={course.id} className="course-card">
                   <img src={course.image} alt={course.title} className="course-image" />
@@ -96,9 +96,7 @@ export const CourseDashboardPage = () => {
                     gap: '0.5rem',
                   }}>
                     <button className='btn-purple-1' onClick={() => handleViewCourse(course.id)}>Ver Curso</button>
-                    <Button color="danger" onClick={() => handleDeleteCourse(course.id)}>
-                      <FontAwesomeIcon icon={faTrash} />
-                    </Button>
+                    {user.role === 'TEACHER' && <Button color="danger" onClick={() => handleDeleteCourse(course.id)}><FontAwesomeIcon icon={faTrash} /></Button>}
                   </CardFooter>
                 </Card>
               ))}

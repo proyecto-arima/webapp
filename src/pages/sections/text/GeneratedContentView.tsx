@@ -4,10 +4,15 @@ import { Card } from "reactstrap";
 import { get } from "../../../utils/network";
 import './GeneratedContentView.css';
 
+interface IGenerated {
+  type: string;
+  content: string;
+}
+
 export interface IContent {
   id: string;
   title: string;
-  generated: string;
+  generated: IGenerated[];
 }
 
 export const GeneratedContentView = () => {
@@ -16,7 +21,7 @@ export const GeneratedContentView = () => {
   const [content, setContent] = useState<IContent>();
 
   useEffect(() => {
-    get(`/content/${contentId}`).then(res => res.json()).then(res => res.data).then((data: IContent) => setContent(data));
+    get(`/contents/${contentId}`).then(res => res.json()).then(res => res.data).then((data: IContent) => setContent(data));
   }, []);
 
 
@@ -53,7 +58,7 @@ export const GeneratedContentView = () => {
           gap: '1rem',
         }}>
           <h3>{content?.title}</h3>
-        <textarea className="generated-content" value={content?.generated} style={{ 
+        <textarea className="generated-content" value={content?.generated?.[0]?.content} style={{ 
           width: '80%', 
           height: '100%' ,
           border: 'none',

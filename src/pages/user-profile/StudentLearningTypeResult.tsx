@@ -1,29 +1,31 @@
-import { Card, CardBody, CardTitle, Input } from 'reactstrap';
-import { useSelector } from 'react-redux';
-import { RootState } from '../../redux/store';
-import { get } from '../../utils/network';
+import { Card } from 'reactstrap';
 
-import '../../assets/styles/LearningTypePage.css';
 import { useEffect, useState } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
+import '../../assets/styles/LearningTypePage.css';
+
+import acomodador from '../../assets/images/acomodador.png';
+import asimilador from '../../assets/images/asimilador.png';
+import convergente from '../../assets/images/convergente.png';
+import divergente from '../../assets/images/divergente.png';
 
 
 const result: { [key: string]: { description: string; image: string } } = {
     'DIVERGENTE': {
         "description": "Se benefician del estudio de mapas conceptuales, las discusiones en grupo y las actividades prácticas. Prefieren materiales que les permitan explorar y colaborar",
-        "image": 'https://blog.newportschool.edu.co/hubfs/Imported_Blog_Media/6-Feb-28-2024-05-08-47-7970-PM.png',
+        "image": divergente,
     },
     "CONVERGENTE": {
         "description": "Se benefician de problemas prácticos, hojas de trabajo y actividades interactivas. Prefieren materiales que les permitan aplicar conceptos teóricos a situaciones reales.",
-        "image": 'https://blog.newportschool.edu.co/hubfs/Imported_Blog_Media/5-Feb-28-2024-05-08-44-6756-PM.png'
+        "image": convergente,
     },
     "ASIMILADOR": {
         "description": "Prefieren resúmenes, diagramas y presentaciones estructuradas. Les gustan los contenidos que proporcionan una visión detallada y lógica de los conceptos.",
-        "image": "https://blog.newportschool.edu.co/hubfs/Imported_Blog_Media/7-Feb-28-2024-05-08-58-7610-PM.png",
+        "image": asimilador,
     },
     "ACOMODADOR": {
         "description": 'Disfrutan de videos, talleres y proyectos prácticos. Les gusta el contenido que les permita experimentar y descubrir por sí mismos.',
-        "image": 'https://blog.newportschool.edu.co/hubfs/Imported_Blog_Media/8-Feb-28-2024-05-08-49-5639-PM.png'
+        "image": acomodador,
     },
 }
 
@@ -31,11 +33,13 @@ const result: { [key: string]: { description: string; image: string } } = {
 export const StudentLearningTypeResult = () => {
     const [learningProfile, setLearningProfile] = useState<string | null>(null);
     const location = useLocation();
+    const navigate = useNavigate();
     
     useEffect(() => {
         // get(`/students/${user.id}/learning-profile`).then((res) => {
         //     setLearningProfile(res.data);
         // });
+        console.log(location.state);
         setLearningProfile(location.state.profile as string ?? 'DIVERGENTE');
 
     }, []);
@@ -69,7 +73,22 @@ export const StudentLearningTypeResult = () => {
         <span>Aquellas personas con tu perfil de aprendizaje:</span>
         <span>{(result[learningProfile]).description }</span>
 
-        <img src={(result[learningProfile]).image} alt="learning-type" style={{ width: '70%', height: 'auto', alignSelf: 'center' }} />
+        <div style={{
+          flex: '1',
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+        }}>
+          <img src={(result[learningProfile]).image} alt="learning-type" style={{ width: '70%', height: 'auto', alignSelf: 'center' }} />
+        </div>
+        <div className='d-flex flex-row justify-content-end gap-3'>
+          <button className="btn-purple-2" onClick={() => {
+            navigate('/me/learning-type');
+          }}>Repetir test</button>
+          <button className="btn-purple-1" onClick={() => {
+            navigate('/courses/dashboard');
+          }}>Finalizar</button>
+        </div>
         
 
         </>) : "Cargando..." }

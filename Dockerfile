@@ -3,6 +3,10 @@ FROM node:alpine3.19
 # Set the working directory
 WORKDIR /app
 
+# Set react .env vars
+ARG REACT_APP_API_URL
+ENV REACT_APP_API_URL=$REACT_APP_API_URL
+
 # Copy package.json and package-lock.json
 COPY package.json package-lock.json ./
 

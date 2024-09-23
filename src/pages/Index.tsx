@@ -1,11 +1,10 @@
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Route, Routes, useNavigate } from 'react-router-dom';
-import { login } from '../redux/slices/auth';
+import { Navigate, Route, Routes, useNavigate } from 'react-router-dom';
 
 import { setCourses } from '../redux/slices/courses';
 import { setUser } from '../redux/slices/user';
-import { logout } from '../redux/slices/auth';
+import { login, logout } from '../redux/slices/auth';
 import { RootState } from '../redux/store';
 
 import CourseRoutes from '../routes/CourseRouter';
@@ -17,14 +16,16 @@ import { TeacherRouter } from '../routes/TeacherRouter';
 
 import Sidebar from '../components/Sidebar';
 import { get, del } from '../utils/network';
+import { DEFAULT_PAGE_ROLE } from '../config';
 
 export const Index = () => {
   const isAuthenticated = useSelector((state: RootState) => state.auth.isAuthenticated);
+  const user = useSelector((state: RootState) => state.user);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const fetchSession = async () => {
-    console.info('Checking user session');
+    console.info('[Index] Checking user session');
     const userSession = await get('/auth')
       .then(async (res) => {
         if (res.ok) {
@@ -59,7 +60,7 @@ export const Index = () => {
         console.error(`An error occurred while retrieve user session: ${error}`);
         return false;
       });
-      
+    
     // En caso de roles desconocidos en la sesion, se cierra la sesion y se vuelve a loguear
     if (!userSession || !['TEACHER', 'STUDENT', 'ADMIN', 'DIRECTOR'].includes(userSession.role)) {
       console.warn('Session not found');
@@ -92,7 +93,7 @@ export const Index = () => {
           console.error(`An unexpected error occurred while checking the courses of the student: ${err}`);
         });
     } else if (userSession.role === 'ADMIN') {
-      navigate(window.location.pathname);
+      // nada
     } else if (userSession.role === 'DIRECTOR') {
       navigate(window.location.pathname);
     }
@@ -100,23 +101,52 @@ export const Index = () => {
 
   useEffect(() => {
     if (isAuthenticated) return;
-    if (isAuthenticated && window.location.pathname === '/') {
-      navigate('/me/profile');
-      return;
-    }
     fetchSession();
-  }, []);
+  }, [user]);
 
   return (
     <>
       {isAuthenticated && <Sidebar />}
       <Routes>
-        <Route path='/students/*' element={<StudentRouter />} />
-        <Route path='/teachers/*' element={<TeacherRouter />} />
-        <Route path='/courses/*' element={<CourseRoutes />} />
-        <Route path='/directors/*' element={<DirectorRouter />} />
-        <Route path='/institutes/*' element={<InstitutesRouter />} />
-        <Route path='/me/*' element={<ProfileRouter />} />
+
+        {/* BUG: Cualquier rol puede seguir accediendo al login. Arreglar */}
+
+        { user.role &&
+          <>
+            <Route path='/me/*' element={<ProfileRouter />} />
+          </>
+        }
+
+        {user.role === 'ADMIN' && (
+          <>
+            <Route path='/directors/*' element={<DirectorRouter />} />
+            <Route path='/institutes/*' element={<InstitutesRouter />} />
+            <Route path="*" element={<Navigate to={DEFAULT_PAGE_ROLE.ADMIN} replace />} />
+          </>
+        )}
+
+        {user.role === 'DIRECTOR' && (
+          <>
+            <Route path='/students/*' element={<StudentRouter />} />
+            <Route path='/teachers/*' element={<TeacherRouter />} />
+            <Route path="*" element={<Navigate to={DEFAULT_PAGE_ROLE.DIRECTOR} replace />} />
+          </>
+        )}
+
+
+        {user.role === 'TEACHER' && (
+          <>
+            <Route path='/courses/*' element={<CourseRoutes />} />
+            <Route path="*" element={<Navigate to={DEFAULT_PAGE_ROLE.TEACHER} replace />} />
+          </>
+        )}
+
+        {user.role === 'STUDENT' && (
+          <>
+            <Route path='/courses/*' element={<CourseRoutes />} />
+            <Route path="*" element={<Navigate to={DEFAULT_PAGE_ROLE.STUDENT} replace />} />
+          </>
+        )}
       </Routes></>
   );
 };

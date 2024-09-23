@@ -61,7 +61,6 @@ export const Index = () => {
         return false;
       });
     
-    // En caso de roles desconocidos en la sesion, se cierra la sesion y se vuelve a loguear
     if (!userSession || !['TEACHER', 'STUDENT', 'ADMIN', 'DIRECTOR'].includes(userSession.role)) {
       console.warn('Session not found');
       dispatch(logout());
@@ -93,9 +92,9 @@ export const Index = () => {
           console.error(`An unexpected error occurred while checking the courses of the student: ${err}`);
         });
     } else if (userSession.role === 'ADMIN') {
-      // nada
+      navigate(window.location.pathname)
     } else if (userSession.role === 'DIRECTOR') {
-      navigate(window.location.pathname);
+      navigate(window.location.pathname)
     }
   };
 
@@ -111,7 +110,7 @@ export const Index = () => {
 
         {/* BUG: Cualquier rol puede seguir accediendo al login. Arreglar */}
 
-        { user.role &&
+        {user.role &&
           <>
             <Route path='/me/*' element={<ProfileRouter />} />
           </>

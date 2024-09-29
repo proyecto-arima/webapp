@@ -155,7 +155,7 @@ export const SurveyPage = () => {
         return null;
       }
       }).filter(answer => answer !== null),
-      free: (document.querySelector('textarea[name="opinion"]') as HTMLTextAreaElement)?.value || null
+      free: (document.querySelector('textarea[name="opinion"]') as HTMLTextAreaElement)?.value || ''
     };
 
     await post('/survey', surveyAnswers)

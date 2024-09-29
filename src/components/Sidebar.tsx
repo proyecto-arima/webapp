@@ -15,10 +15,6 @@ const coursesManagmentSection = [
   { to: '/courses/dashboard', label: 'Ver Cursos' },
 ];
 
-const studentLearningSection = [
-  { key: "1", to: '/me/learning-type', label: 'Test de aprendizaje' },
-  // { key: "2", to: '/me/evaluations', label: 'Evaluaciones' },
-];
 
 
 export default function Sidebar() {
@@ -79,27 +75,6 @@ export default function Sidebar() {
             </div>
           )}
 
-          {user?.role === 'STUDENT' && (
-            <div className="w-100">
-              <span className='sidebar-section-title'>Aprendizaje</span>
-              {studentLearningSection.map((link) => (
-                <NavLink end
-                  to={link.to}
-                  key={link.key}
-                  className={({ isActive }) => isActive ? 'sidebar-navlink-active' : 'sidebar-navlink-inactive'}
-                >
-                  <NavItem className='sidebar-navlink-item'>
-                    <FontAwesomeIcon icon={faCircle} style={{
-                      width: '0.6rem',
-                      color: '#49454f',
-                    }} />
-                    <span>{link.label}</span>
-                  </NavItem>
-                </NavLink>
-              ))}
-            </div>
-          )}
-
           {(user?.role === 'ADMIN') && (
             <div className="w-100">
               <span className='sidebar-section-title'>Instituciones</span>
@@ -109,7 +84,7 @@ export default function Sidebar() {
                     width: '0.6rem',
                     color: '#49454f',
                   }} />
-                  <span>Institutos</span>
+                  <span>Instituciones</span>
                 </NavItem>
               </NavLink>
               <NavLink to={'/institutes/new'} end className={({ isActive }) => isActive ? 'sidebar-navlink-active' : 'sidebar-navlink-inactive'}>
@@ -118,7 +93,7 @@ export default function Sidebar() {
                     width: '0.6rem',
                     color: '#49454f',
                   }} />
-                  <span>Crear Instituto</span>
+                  <span>Crear Institución</span>
                 </NavItem>
               </NavLink>
               <span className='sidebar-section-title'>Directivos</span>
@@ -198,6 +173,25 @@ export default function Sidebar() {
               <span>Datos personales</span>
             </NavItem>
           </NavLink>
+          {user?.role === 'STUDENT' && (
+            <div className="w-100">
+              
+              <NavLink end
+                to={user.learningProfile ? '/me/learning-type/result' : '/me/learning-type'}
+                className={({ isActive }) => isActive ? 'sidebar-navlink-active' : 'sidebar-navlink-inactive'}
+                state={{ profile: user.learningProfile }}
+              >
+                <NavItem className='sidebar-navlink-item'>
+                  <FontAwesomeIcon icon={faCircle} style={{
+                    width: '0.6rem',
+                    color: '#49454f',
+                  }} />
+                  <span>Test de Aprendizaje</span>
+                </NavItem>
+              </NavLink>
+              
+            </div>
+          )}
 
           <NavLink to={'/login'} end className={({ isActive }) => isActive ? 'sidebar-navlink-active' : 'sidebar-navlink-inactive'} onClick={signout}>
             <NavItem className='sidebar-navlink-item'>

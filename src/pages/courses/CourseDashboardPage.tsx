@@ -1,22 +1,43 @@
+import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { Card, CardBody, CardTitle, CardText, CardFooter, Button } from 'reactstrap';
-import '../../assets/styles/CourseDashboardPage.css';
-import { useState } from 'react';
-import { RootState } from '../../redux/store';
-import { del } from '../../utils/network'; // Asegúrate de importar tu método delete
 import { useDispatch } from 'react-redux';
-import { ConfirmDialog } from '../../components/ConfirmDialog';
-import { setCourses } from '../../redux/slices/courses';
+
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrash } from '@fortawesome/free-solid-svg-icons';
 
+import { ConfirmDialog } from '../../components/ConfirmDialog';
+import { SwalUtils } from '../../utils/SwalUtils';
+import { setCourses } from '../../redux/slices/courses';
+import { RootState } from '../../redux/store';
+import { del } from '../../utils/network';
+
+import '../../assets/styles/CourseDashboardPage.css';
+
 export const CourseDashboardPage = () => {
   const { courses } = useSelector((state: RootState) => state.courses);
+  const user = useSelector((state: RootState) => state.user);
+  
   const [selectedCourse, setSelectedCourse] = useState<string | null>(null);
   const [confirmOpen, setConfirmOpen] = useState(false);
+
   const dispatch = useDispatch();
   const history = useNavigate();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    // TODO: DEBUG, por ahora solo muestra la encuesta segun redux
+    if(user.surveyAvailable) {
+      SwalUtils.infoSwal(
+        "Encuesta disponible",
+        "Hay una encuesta disponible para evaluar el contenido de la plataforma. ¿Deseas realizarla?",
+        "Si",
+        "No",
+        () => navigate("/me/survey"),
+      );
+    }
+  }, [courses]);
 
   const handleViewCourse = (courseId: string) => {
     history(`/courses/${courseId}`);
@@ -42,7 +63,7 @@ export const CourseDashboardPage = () => {
       style={{
         display: 'flex',
         justifyContent: 'center',
-        alignItems: 'flex-start',  /* Alinea el contenido al inicio, en lugar de al centro */
+        alignItems: 'flex-start',
         height: '100vh',
         backgroundColor: '#f6effa',
         width: '100vw',
@@ -60,7 +81,7 @@ export const CourseDashboardPage = () => {
             alignItems: 'center',
             height: '100%',
           }}>
-            <div className='d-flex flex-row justify-content-center gap-3'>
+            <div className='d-flex flex-row justify-content-center gap-3 flex-wrap'>
               {courses?.map(course => (
                 <Card key={course.id} className="course-card">
                   <img src={course.image} alt={course.title} className="course-image" />
@@ -75,9 +96,7 @@ export const CourseDashboardPage = () => {
                     gap: '0.5rem',
                   }}>
                     <button className='btn-purple-1' onClick={() => handleViewCourse(course.id)}>Ver Curso</button>
-                    <Button color="danger" onClick={() => handleDeleteCourse(course.id)}>
-                      <FontAwesomeIcon icon={faTrash} />
-                    </Button>
+                    {user.role === 'TEACHER' && <Button color="danger" onClick={() => handleDeleteCourse(course.id)}><FontAwesomeIcon icon={faTrash} /></Button>}
                   </CardFooter>
                 </Card>
               ))}
@@ -86,6 +105,9 @@ export const CourseDashboardPage = () => {
         </Card>
       </div>
 
+
+
+      {/* TODO: Cambiar x SwalUtils  */}
       <ConfirmDialog
         isOpen={confirmOpen}
         toggle={toggleConfirm}

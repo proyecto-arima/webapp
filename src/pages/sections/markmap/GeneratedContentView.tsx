@@ -1,24 +1,36 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { Card } from "reactstrap";
+import { Card, Progress } from "reactstrap";
 import { get } from "../../../utils/network";
 import './GeneratedContentView.css';
 import MarkmapHooks from './utils/MarkmapHooks';
+import { useSelector } from "react-redux";
+import { RootState } from "../../../redux/store";
+
+import processing from '../../../assets/images/processing.gif';
+
+interface IGenerated {
+  type: string;
+  content: string;
+}
 
 export interface IContent {
   id: string;
   title: string;
-  generated: string;
+  generated: IGenerated[];
 }
 
 export const GeneratedContentView = () => {
 
   const { contentId } = useParams<{ contentId: string }>();
   const [content, setContent] = useState<IContent>();
+  const user = useSelector((state: RootState) => state.user);
 
   useEffect(() => {
     get(`/contents/${contentId}`).then(res => res.json()).then(res => res.data).then((data: IContent) => setContent(data));
   }, []);
+
+  const markmap = content?.generated[1].content;
 
 
   return <div
@@ -54,8 +66,20 @@ export const GeneratedContentView = () => {
           gap: '1rem',
         }}>
           <h3>{content?.title}</h3>
-          {content && <MarkmapHooks initValue={content.generated}/>}
+          {markmap ? <MarkmapHooks initValue={markmap} editable={user.role === 'TEACHER'} /> : <div style={{ flex: 1, display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'column', width: '100%' }}>
+            {/* <img src={processing} alt="processing" height={600}/> */}
+            <Progress animated value={100}
+              style={{ width: '90%', marginBottom: '1rem' }}
+            />
+            <h3>El contenido aún se encuentra procesándose</h3>
+            <h4>Por favor, vuelva más tarde</h4>
           </div>
+
+          }
+
+
+
+        </div>
       </Card>
     </div>
   </div>

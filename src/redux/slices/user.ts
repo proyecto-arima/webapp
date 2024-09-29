@@ -1,4 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit'
+import courses from './courses'
 
 
 export interface UserState {
@@ -11,8 +12,12 @@ export interface UserState {
     number: string
   },
   email?: string,
-  institute?: string,
-  learningProfile?: string,
+  institute?: {
+    id: string,
+    name: string
+  },
+  learningProfile?: 'DIVERGENTE' | 'ASIMILADOR' | 'ACOMODADOR' | 'CONVERGENTE',
+  surveyAvailable?: boolean,
 }
 
 const initialState: UserState = {}
@@ -23,6 +28,12 @@ export const userSlice = createSlice({
   reducers: {
     setUser: (state, action) => {
       state = action.payload
+
+      // DEBUG: Activa la encuesta si hay 2 o más cursos asignados al usuario. 
+      // DEBUG: Lo deberia hacer basado en base a la HU definida (cantidad multiplo)
+      state.surveyAvailable = courses.length >= 2
+      // state.surveyAvailable = false
+
       return state
     },
     reset: () => {

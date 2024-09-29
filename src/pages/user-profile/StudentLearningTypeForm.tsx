@@ -1,7 +1,9 @@
 import { useEffect, useRef, useState } from 'react';
 import { Card } from 'reactstrap';
 import DragDropAgreement from './Kolb';
-
+import Swal from 'sweetalert2';
+import { post } from '../../utils/network';
+import { useNavigate } from 'react-router-dom';
 
 
 interface IQuestion {
@@ -125,9 +127,8 @@ const questions = [
 export const StudentLearningTypeForm = () => {
 
   const [current, setCurrent] = useState(0);
-  const [sliderValues, setSliderValues] = useState([
-    0, 0, 0, 0
-  ]);
+  const [testResponses, setTestResponses] = useState<number[][]>([]);
+  const navigate = useNavigate();
 
   return <div
     style={{
@@ -160,15 +161,37 @@ export const StudentLearningTypeForm = () => {
           height: '100%',
           gap: '1rem',
         }}>
-          <div>
+          <div style={{
+            height: '100%',
+            flex: '1',
+          }}>
             <DragDropAgreement
-              answers={questions[current].answers} question={questions[current].question}
+              answers={questions[current].answers} question={questions[current].question} next={(responses) => {
+                if (current < questions.length - 1) {
+                  setCurrent(current + 1);
+                  setTestResponses([...testResponses, responses]);
+                  return;
+                }
+
+                const finalResponses = [...testResponses, responses].map((response) => response.map((answer) => answer + 1));
+                post('/test', { answers: finalResponses }).then(res => res.json()).then((res) => {
+
+                  console.log(res)
+                  const profile = res.data;
+                  console.log(res.data)
+
+                  Swal.fire({
+                    title: '¡Completaste el test de aprendizaje!',
+                    text: '¿Querés conocer los resultados?',
+                    icon: 'success',
+                    confirmButtonText: '¡Si!'
+                  }).then((result) => {
+                    navigate('/me/learning-type/result', { state: { profile }})
+                  })
+                })
+              }}
+
             />
-          </div>
-          <div className='d-flex flex-row justify-content-end mt-5'>
-            <button className='btn-purple-1'>
-              Siguiente
-            </button>
           </div>
 
         </div>

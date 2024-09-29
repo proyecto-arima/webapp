@@ -24,8 +24,10 @@ const CourseRoutes: React.FC = () => {
         <Route path=":courseId/students" element={<StudentLinkingPage />} />
         <Route path=":courseId/sections/:sectionId" element={<SectionContentDashboard/>} />
         <Route path=":courseId/sections/:sectionId/new" element={<SectionContentCreation/>} /> {/* TODO: FIX */}
+        <Route path="/courses/:courseId/sections/:sectionId/edit" element={<EditSectionPage />} />
+        <Route path=":courseId/sections/:sectionId/edit" element={<EditSectionPage />} />
         <Route path=":courseId/sections/:sectionId/content/:contentId" element={<RawContentView/>} />
-        <Route path=":courseId/sections/:sectionId/content/:contentId/view" element={<GeneratedContentView/>} />
+        <Route path=":courseId/sections/:sectionId/content/:contentId/summary" element={<GeneratedContentView/>} />
         <Route path=":courseId/sections/:sectionId/content/:contentId/map" element={<MarkmapView/>} />
         <Route path=":courseId/sections/:sectionId/contents/:contentId/edit-title" element={<EditContentPage />} />
       </Routes>

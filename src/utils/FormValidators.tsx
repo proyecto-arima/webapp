@@ -39,20 +39,47 @@ export const isValidEmail = (email: string) => {
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-interface PhoneNumberValidator {
-  (phoneNumber: string): {
-    isPhoneNumber: boolean;
-    // isFromAR: boolean;
-  };
-}
-
 export const isPhoneNumber = (phoneNumber: string) => {
   return /^\d{10}$/.test(phoneNumber);
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+const dniValidations = (dni: string) => ({
+  isNumber: /^\d{8}$/.test(dni),
+});
+
 export const isDNI = (dni: string) => {
-  return /^\d{8}$/.test(dni);
+  return validator(dniValidations(dni));
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// TODO: Mejorar
+interface Address {
+  street: string;
+  number: number;
+  city: string;
+  country: string;
+}
+
+interface AddressValidator {
+  (address: Address): {
+    isStreet: boolean;
+    isNumber: boolean;
+    isCity: boolean;
+    isCountry: boolean;
+  };
+}
+
+const addressValidations: AddressValidator = (address) => ({
+  isStreet: address.street.length > 0 && address.street.length < 100,
+  isNumber: address.number > 0 && address.number < 10000,
+  isCity: ['BA', 'MDP'].includes(address.city),
+  isCountry: ['AR'].includes(address.country)
+});
+
+export const isAddress= (address: Address) => {
+  return validator(addressValidations(address));
+}
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+

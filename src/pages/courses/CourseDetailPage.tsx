@@ -1,21 +1,32 @@
 import React, { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
 import Slider from 'react-slick';
 import { Card, Button } from 'reactstrap';
+
+import { get, del } from '../../utils/network';
+import { RootState } from '../../redux/store';
+
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+
+import { ConfirmDialog } from '../../components/ConfirmDialog';
+
 import "slick-carousel/slick/slick-theme.css";
 import "slick-carousel/slick/slick.css";
 import '../../assets/styles/CourseDetailPage.css';
-import { get, del } from '../../utils/network';
+
 import placeholder from '../../assets/images/placeholder.webp';
-import { ConfirmDialog } from '../../components/ConfirmDialog';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faTrash } from '@fortawesome/free-solid-svg-icons';
+import { faTrash, faEdit } from '@fortawesome/free-solid-svg-icons';
+
+import empty from '../../assets/images/empty.svg';
+
 
 interface ISection {
   id: string;
   name: string;
   description: string;
   visible: boolean;
+  image: string;
 }
 
 interface ICourse {
@@ -30,17 +41,20 @@ interface ICourse {
 }
 
 export const CourseDetailPage: React.FC = () => {
+  const navigate = useNavigate();
+  const user = useSelector((state: RootState) => state.user);
+
   const { courseId } = useParams<{ courseId: string }>();
+
   const [course, setCourse] = useState<ICourse | null>(null);
   const [selectedSection, setSelectedSection] = useState<string | null>(null);
   const [confirmOpen, setConfirmOpen] = useState(false);
-  const navigate = useNavigate();
-
-  const fetchCourses = () => get(`/courses/${courseId}`).then(res => res.json()).then(res => res.data).then((data: ICourse) => setCourse(data));
 
   useEffect(() => {
     fetchCourses();
   }, [courseId]);
+
+  const fetchCourses = () => get(`/courses/${courseId}`).then(res => res.json()).then(res => res.data).then((data: ICourse) => setCourse(data));
 
   const handleNewSection = () => {
     navigate(`/courses/${courseId}/new-section`);
@@ -61,6 +75,12 @@ export const CourseDetailPage: React.FC = () => {
     toggleConfirm();
   };
 
+  const handleEditSection = (sectionId: string) => {
+    // Redirigir a la pantalla de edición de sección con los datos precargados
+    setSelectedSection(sectionId);
+    navigate(`/courses/${courseId}/sections/${sectionId}/edit`);
+  };
+
   return (
     <div
       style={{
@@ -74,16 +94,19 @@ export const CourseDetailPage: React.FC = () => {
     >
       <div className="course-detail-container">
         <Card style={{ width: '100%', paddingInline: '2rem', paddingBlock: '1rem', height: '100%', maxWidth: 'calc(100vw - 25rem)' }}>
-          <div className="course-detail-header">
+          
+          <div className="course-detail-header">  
             <h1>{course?.title}</h1>
+            { user.role === 'TEACHER' &&
             <div className='d-flex flex-row gap-3'>
-              <button onClick={handleNewSection} className="new-section-button">Nueva Sección</button>
-              <button className='students-button' onClick={() => {
-                navigate(`/courses/${courseId}/students`);
-              }}>Estudiantes</button>
+              <button className="btn-purple-1" onClick={handleNewSection}>Nueva Sección</button>
+              <button className='btn-purple-2' onClick={() => navigate(`/courses/${courseId}/students`)}>Estudiantes</button>
             </div>
+            }
           </div>
+
           <hr />
+
           <div style={{
             display: 'flex',
             flexDirection: 'row',
@@ -91,7 +114,7 @@ export const CourseDetailPage: React.FC = () => {
             alignItems: 'center',
             height: '100%',
           }}>
-            <Slider
+            {course?.sections?.length ? <Slider
               dots
               infinite={course?.sections && course?.sections.length > 1}
               speed={500}
@@ -122,7 +145,7 @@ export const CourseDetailPage: React.FC = () => {
                     alignItems: 'center',
                     height: '30rem',
                   }}>
-                    <img src={placeholder}
+                    <img src={section.image ? section.image : placeholder}
                       alt="Section"
                       style={{
                         width: '100%',
@@ -141,8 +164,9 @@ export const CourseDetailPage: React.FC = () => {
                     paddingTop: '1rem',
                   }}>
                     <div style={{
-                      width: '90%',
+                      width: '80%',
                       flexGrow: 1,
+                      marginRight: '1rem',
                     }}>
                       <h2>{section.name}</h2>
                       <div>
@@ -152,19 +176,31 @@ export const CourseDetailPage: React.FC = () => {
                     <div
                       className='d-flex flex-row gap-3'
                     >
+                      {/* Botón Ver Sección */}
                       <button className='btn-purple-1' onClick={() => navigate(`/courses/${courseId}/sections/${section.id}`)}>Ver Sección</button>
-                      <Button color="danger" onClick={() => handleDeleteSection(section.id)}>
-                        <FontAwesomeIcon icon={faTrash} />
-                      </Button>
+                      {user.role === 'TEACHER' && <Button color="primary" onClick={() => handleEditSection(section.id)}><FontAwesomeIcon icon={faEdit} /></Button>}
+                      {user.role === 'TEACHER' && <Button color="danger" onClick={() => handleDeleteSection(section.id)}><FontAwesomeIcon icon={faTrash} /></Button>}
                     </div>
                   </div>
                 </Card>
               ))}
-            </Slider>
+            </Slider> : <div className='d-flex flex-column justify-content-center align-items-center'>
+                <img
+                  src={empty}
+                ></img>
+                {user.role === 'STUDENT' ? <>
+                  <h3>Parece que aún no hay secciones en este curso.</h3>
+                  <h4>Por favor intenta de nuevo más tarde</h4>
+                </> : <>
+                  <h3>Parece que aún no has creado ninguna sección en este curso.</h3>
+                  <h4>Por favor crea una sección para comenzar a añadir contenido.</h4>
+                </>}
+              </div>}
           </div>
         </Card>
       </div>
 
+      {/* Confirmación para eliminar la sección */}
       <ConfirmDialog
         isOpen={confirmOpen}
         toggle={toggleConfirm}

@@ -4,6 +4,7 @@ import { Markmap } from 'markmap-view';
 import { transformer } from './markmap';
 import { Toolbar } from 'markmap-toolbar';
 import 'markmap-toolbar/dist/style.css';
+import { Card, CardTitle } from 'reactstrap';
 
 
 function renderToolbar(mm: Markmap, wrapper: HTMLElement) {
@@ -25,9 +26,10 @@ function renderToolbar(mm: Markmap, wrapper: HTMLElement) {
 
 type MarkmapHooksProps = {
   initValue: string;
+  editable: boolean;
 };
  
-export default function MarkmapHooks({ initValue }: MarkmapHooksProps) {
+export default function MarkmapHooks({ initValue, editable }: MarkmapHooksProps) {
   const [value, setValue] = useState(initValue);
   // Ref for SVG element
   const refSvg = useRef<SVGSVGElement>();
@@ -60,16 +62,39 @@ export default function MarkmapHooks({ initValue }: MarkmapHooksProps) {
   };
 
   return (
-    <React.Fragment>
-      <div className="flex-1 w-100">
+    <div style={{
+      display: 'flex',
+      height: '100%',
+      width: '100%',
+      gap: '1rem',
+    }}>
+      <Card className="w-100 p-3" style={{
+        display: editable ? 'flex' : 'none',
+      }}>
+        <h3>Definición del Mapa Conceptual</h3>
+        <hr />
         <textarea
-          className="w-100 h-full border border-gray-400"
+          className="w-100 generated-content"
           value={value}
           onChange={handleChange}
+          style={{
+            resize: 'none',
+            border: '0',
+            outline: 'none',
+            borderColor: 'transparent',
+            overflowY: 'scroll', 
+            scrollbarColor: 'transparent transparent',
+            fontSize: '0.9rem',
+            flex: '1',
+          }}
         />
-      </div>
-      <svg className="flex-1 flex-grow-1 w-100" ref={refSvg as React.RefObject<SVGSVGElement>} />
-      <div className="absolute bottom-1 right-1" ref={refToolbar as React.RefObject<HTMLDivElement>}></div>
-    </React.Fragment>
+      </Card>
+      <Card className="flex-1 flex-grow-1 w-100 h-100 p-3">
+        <h3>Mapa Conceptual</h3>
+        <hr />
+        <svg className="flex-1 flex-grow-1 w-100 h-100" ref={refSvg as React.RefObject<SVGSVGElement>} />
+        <div className="absolute bottom-1 right-1" ref={refToolbar as React.RefObject<HTMLDivElement>}></div>
+      </Card>
+    </div>
   );
 }

@@ -34,6 +34,7 @@ export const StudentDashboardPage = () => {
       <Card style={{ width: '100%', paddingInline: '2rem', paddingBlock: '1rem', height: '100%' }}>
         <h2>Estudiantes</h2>
         <hr />
+        <div style={{ overflow: 'auto'}}>
         <Table>
           <thead>
             <tr>
@@ -53,6 +54,7 @@ export const StudentDashboardPage = () => {
           </tbody>
 
         </Table>
+        </div>
       </Card>
     </div>
   </div>

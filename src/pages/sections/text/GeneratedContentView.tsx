@@ -4,10 +4,15 @@ import { Card } from "reactstrap";
 import { get } from "../../../utils/network";
 import './GeneratedContentView.css';
 
+interface IGenerated {
+  type: string;
+  content: string;
+}
+
 export interface IContent {
   id: string;
   title: string;
-  generated: any;
+  generated: IGenerated[];
 }
 
 export const GeneratedContentView = () => {

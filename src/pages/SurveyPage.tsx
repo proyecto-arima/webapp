@@ -160,14 +160,11 @@ export const SurveyPage = () => {
 
     await post('/survey', surveyAnswers)
       .then((res) => {
-        console.log("RES");
-        console.log(res);
         return res;
       })
       .then((res) => {
         if(res.ok) {
-          // TODO
-          // el post tiene que desactivar user.surveyAvailable para que no la vuelva a ver el usuario despues de un tiempo o dada otra condición
+          // TODO: el post tiene que desactivar user.surveyAvailable para que no la vuelva a ver la encuesta de nuevo
           SwalUtils.successSwal(
             "Gracias por tu tiempo",
             "Encuesta enviada 🚀. Gracias por tu opinión, estamos trabajando permanentemente para mejorar AdaptarIA",

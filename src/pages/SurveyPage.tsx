@@ -7,7 +7,7 @@ import { Card, CardBody, CardGroup } from "reactstrap";
 import { SwalUtils } from "../utils/SwalUtils";
 import { post } from "../utils/network";
 import { useNavigate } from "react-router";
-import { redirect } from "react-router-dom";
+
 
 interface SurveyQuestion {
   question: string;
@@ -155,19 +155,16 @@ export const SurveyPage = () => {
         return null;
       }
       }).filter(answer => answer !== null),
-      free: (document.querySelector('textarea[name="opinion"]') as HTMLTextAreaElement)?.value || null
+      free: (document.querySelector('textarea[name="opinion"]') as HTMLTextAreaElement)?.value || ''
     };
 
     await post('/survey', surveyAnswers)
       .then((res) => {
-        console.log("RES");
-        console.log(res);
         return res;
       })
       .then((res) => {
         if(res.ok) {
-          // TODO
-          // el post tiene que desactivar user.surveyAvailable para que no la vuelva a ver el usuario despues de un tiempo o dada otra condición
+          // TODO: el post tiene que desactivar user.surveyAvailable para que no la vuelva a ver la encuesta de nuevo
           SwalUtils.successSwal(
             "Gracias por tu tiempo",
             "Encuesta enviada 🚀. Gracias por tu opinión, estamos trabajando permanentemente para mejorar AdaptarIA",
@@ -262,7 +259,6 @@ export const SurveyPage = () => {
             <button
               className="btn-purple-1"
               style={{
-                width: '200px',
                 height: '50px',
                 marginTop: '20px',
                 marginBottom: '20px',
@@ -279,8 +275,10 @@ export const SurveyPage = () => {
           <>
             <CardGroup
               style={{
-                flexDirection: 'column',
-                height: '90%',
+                overflowY: 'scroll',
+                display: 'flex',
+                flexDirection: 'row',
+                alignItems: 'flex-start',
               }}
             >
               {questions.map((q, questionIndex) => (
@@ -292,6 +290,7 @@ export const SurveyPage = () => {
                       backgroundColor: '#f6eff',
                       borderRadius: '10px',
                       marginLeft: '10px',
+                      width: '1000px',
                     }}
                   >
                     <CardBody>
@@ -300,7 +299,6 @@ export const SurveyPage = () => {
                         style={{
                           display: 'flex',
                           flexDirection: 'column',
-                          alignItems: 'flex-start',
                           marginTop: '10px',
                         }}
                       >

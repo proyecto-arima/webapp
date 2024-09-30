@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { get, patch } from '../../utils/network';
 import { Card, Input } from 'reactstrap';
+
 import '../../assets/styles/CourseDetailPage.css';
 import { ConfirmDialog } from '../../components/ConfirmDialog';
+import { get, patch } from '../../utils/network';
 
 interface IContent {
   id: string;

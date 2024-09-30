@@ -1,6 +1,7 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Generic validator
-const validator = (validations: any) => Object.values(validations).every((validation) => validation);
+type Validations = { [key: string]: boolean };
+const validator = (validations: Validations) => Object.values(validations).every((validation) => validation);
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 interface PasswordValidations {
@@ -19,7 +20,7 @@ const passwordValidations: PasswordValidations = (password) => ({
   hasAtLeastOneUppercase: /[A-Z]+/.test(password)
 });
 
-export const isSecurePassword = (password: string) => {
+const isSecurePassword = (password: string) => {
   return validator(passwordValidations(password));
 }
 
@@ -34,21 +35,40 @@ const emailValidations: EmailValidator = (email) => ({
   isEmail: /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/.test(email)
 });
 
-export const isValidEmail = (email: string) => {
+const isValidEmail = (email: string) => {
   return validator(emailValidations(email));
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-export const isPhoneNumber = (phoneNumber: string) => {
-  return /^\d{10}$/.test(phoneNumber);
+const phoneValidations = (phoneNumber: string) => ({
+  isPhoneNumber: /^\d{10}$/.test(phoneNumber)
+});
+
+const isPhoneNumber = (phoneNumber: string) => {
+  return validator(phoneValidations(phoneNumber));
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+const nameValidations = (name: string) => {
+  return {
+    hasMinLength: name.length >= 3,
+    hasMaxLength: name.length <= 30,
+    onlyLettersOrSpaces: /^[a-zA-Z\s]*$/.test(name)
+  };
+}
+
+const isAName = (name: string) => {
+  return validator(nameValidations(name));
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 const dniValidations = (dni: string) => ({
-  isNumber: /^\d{8}$/.test(dni),
+  isNumber: /^\d+$/.test(dni),
+  hasMinLength: dni.length >= 7,
+  hasMaxLength: dni.length <= 9
 });
 
-export const isDNI = (dni: string) => {
+const isDNI = (dni: string) => {
   return validator(dniValidations(dni));
 }
 
@@ -77,9 +97,15 @@ const addressValidations: AddressValidator = (address) => ({
   isCountry: ['AR'].includes(address.country)
 });
 
-export const isAddress= (address: Address) => {
+const isAddress= (address: Address) => {
   return validator(addressValidations(address));
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-
+export const FormValidators = {
+  isSecurePassword,
+  isValidEmail,
+  isPhoneNumber,
+  isAName,
+  isDNI,
+  isAddress
+}

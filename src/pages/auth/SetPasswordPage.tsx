@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 import logo from '../../assets/images/logo_black.png';
 import SetPasswordForm from "../../components/SetPasswordForm";
 
-import { isSecurePassword } from "../../utils/FormValidators";
+import { FormValidators } from "../../utils/FormValidators";
 import { post } from "../../utils/network";
 
 const SetPasswordPage = () => {
@@ -22,7 +22,7 @@ const SetPasswordPage = () => {
       }, 2000);
       return;
     }
-    const passwordValidation = isSecurePassword(newPassword);
+    const passwordValidation = FormValidators.isSecurePassword(newPassword);
     if (!passwordValidation) {
       setMessage('La contraseña no es segura');
       setTimeout(() => {

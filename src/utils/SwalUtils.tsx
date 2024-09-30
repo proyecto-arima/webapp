@@ -5,7 +5,7 @@ import withReactContent from "sweetalert2-react-content";
 const SWAL_TIMEOUTS = {
   DEFAULT: 6000,
   SUCCESS: 5000,
-  ERROR: 5000,
+  ERROR: 6000,
 };
 
 const SWAL_ICONS = {

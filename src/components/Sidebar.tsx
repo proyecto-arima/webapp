@@ -11,10 +11,9 @@ import { RootState } from "../redux/store";
 import { del } from "../utils/network";
 
 const coursesManagmentSection = [
-  { to: '/courses/create', label: 'Crear curso' },
+  { to: '/courses/create', label: 'Nuevo curso' },
   { to: '/courses/dashboard', label: 'Ver Cursos' },
 ];
-
 
 
 export default function Sidebar() {
@@ -93,7 +92,7 @@ export default function Sidebar() {
                     width: '0.6rem',
                     color: '#49454f',
                   }} />
-                  <span>Crear Institución</span>
+                  <span>Nueva Institución</span>
                 </NavItem>
               </NavLink>
               <span className='sidebar-section-title'>Directivos</span>
@@ -103,7 +102,7 @@ export default function Sidebar() {
                     width: '0.6rem',
                     color: '#49454f',
                   }} />
-                  <span>Directivos</span>
+                  <span>Directivos registrados</span>
                 </NavItem>
               </NavLink>
               <NavLink to={'/directors/new'} end className={({ isActive }) => isActive ? 'sidebar-navlink-active' : 'sidebar-navlink-inactive'}>
@@ -112,7 +111,7 @@ export default function Sidebar() {
                     width: '0.6rem',
                     color: '#49454f',
                   }} />
-                  <span>Crear Directivo</span>
+                  <span>Nuevo Directivo</span>
                 </NavItem>
               </NavLink>
             </div>
@@ -127,7 +126,7 @@ export default function Sidebar() {
                     width: '0.6rem',
                     color: '#49454f',
                   }} />
-                  <span>Estudiantes</span>
+                  <span>Estudiantes registrados</span>
                 </NavItem>
               </NavLink>
               <NavLink to={'/students/new'} end className={({ isActive }) => isActive ? 'sidebar-navlink-active' : 'sidebar-navlink-inactive'}>
@@ -136,7 +135,7 @@ export default function Sidebar() {
                     width: '0.6rem',
                     color: '#49454f',
                   }} />
-                  <span>Crear Estudiante</span>
+                  <span>Nuevo Estudiante</span>
                 </NavItem>
               </NavLink>
               <span className='sidebar-section-title'>Docentes</span>
@@ -146,7 +145,7 @@ export default function Sidebar() {
                     width: '0.6rem',
                     color: '#49454f',
                   }} />
-                  <span>Docentes</span>
+                  <span>Docentes registrados</span>
                 </NavItem>
               </NavLink>
               <NavLink to={'/teachers/new'} end className={({ isActive }) => isActive ? 'sidebar-navlink-active' : 'sidebar-navlink-inactive'}>
@@ -155,7 +154,7 @@ export default function Sidebar() {
                     width: '0.6rem',
                     color: '#49454f',
                   }} />
-                  <span>Crear Docente</span>
+                  <span>Nuevo Docente</span>
                 </NavItem>
               </NavLink>
             </div>

@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { Card, Input } from "reactstrap";
 
 import { post } from "../../utils/network";
-import { isPhoneNumber } from "../../utils/FormValidators";
+import { FormValidators } from "../../utils/FormValidators";
 import { SwalUtils } from "../../utils/SwalUtils";
 
 interface IInstituteCreationFormValues {
@@ -45,7 +45,7 @@ export const InstitutesCreationPage = () => {
       return;
     }
 
-    if(!isPhoneNumber(formValues?.phone || '')) {
+    if(!FormValidators.isPhoneNumber(formValues?.phone || '')) {
       SwalUtils.warningSwal(
         "El número de telefono ingresado es inválido.",
         "Por favor, asegurate de que el número de teléfono ingresado sea correcto.",

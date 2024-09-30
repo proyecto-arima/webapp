@@ -7,6 +7,9 @@ WORKDIR /app
 ARG REACT_APP_API_URL
 ENV REACT_APP_API_URL=$REACT_APP_API_URL
 
+ARG GENERATE_SOURCEMAP=false
+ENV GENERATE_SOURCEMAP=$GENERATE_SOURCEMAP
+
 # Copy package.json and package-lock.json
 COPY package.json package-lock.json ./
 

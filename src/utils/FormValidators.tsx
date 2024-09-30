@@ -11,7 +11,7 @@ interface PasswordValidations {
     hasNumbers: boolean;
     hasAtLeastOneUppercase: boolean;
   };
-}
+};
 
 const passwordValidations: PasswordValidations = (password) => ({
   hasMinLength: password.length >= 8,
@@ -22,14 +22,14 @@ const passwordValidations: PasswordValidations = (password) => ({
 
 const isSecurePassword = (password: string) => {
   return validator(passwordValidations(password));
-}
+};
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 interface EmailValidator {
   (email: string): {
     isEmail: boolean;
   };
-}
+};
 
 const emailValidations: EmailValidator = (email) => ({
   isEmail: /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/.test(email)
@@ -37,16 +37,22 @@ const emailValidations: EmailValidator = (email) => ({
 
 const isValidEmail = (email: string) => {
   return validator(emailValidations(email));
-}
+};
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-const phoneValidations = (phoneNumber: string) => ({
-  isPhoneNumber: /^\d{10}$/.test(phoneNumber)
+interface PhoneValidator {
+  (number: string): {
+    isNumber: boolean;
+  };
+};
+
+const phoneValidations: PhoneValidator = (phoneNumber) => ({
+  isNumber: /^\d{10}$/.test(phoneNumber)
 });
 
 const isPhoneNumber = (phoneNumber: string) => {
   return validator(phoneValidations(phoneNumber));
-}
+};
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 const nameValidations = (name: string) => {
@@ -55,11 +61,11 @@ const nameValidations = (name: string) => {
     hasMaxLength: name.length <= 30,
     onlyLettersOrSpaces: /^[a-zA-Z\s]*$/.test(name)
   };
-}
+};
 
 const isAName = (name: string) => {
   return validator(nameValidations(name));
-}
+};
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 const dniValidations = (dni: string) => ({
@@ -70,7 +76,7 @@ const dniValidations = (dni: string) => ({
 
 const isDNI = (dni: string) => {
   return validator(dniValidations(dni));
-}
+};
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // TODO: Mejorar
@@ -79,7 +85,7 @@ interface Address {
   number: number;
   city: string;
   country: string;
-}
+};
 
 interface AddressValidator {
   (address: Address): {
@@ -88,7 +94,7 @@ interface AddressValidator {
     isCity: boolean;
     isCountry: boolean;
   };
-}
+};
 
 const addressValidations: AddressValidator = (address) => ({
   isStreet: address.street.length > 0 && address.street.length < 100,
@@ -97,7 +103,7 @@ const addressValidations: AddressValidator = (address) => ({
   isCountry: ['AR'].includes(address.country)
 });
 
-const isAddress= (address: Address) => {
+const isAddress = (address: Address) => {
   return validator(addressValidations(address));
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -108,4 +114,4 @@ export const FormValidators = {
   isAName,
   isDNI,
   isAddress
-}
+};

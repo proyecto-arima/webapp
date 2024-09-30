@@ -7,7 +7,7 @@ import './GeneratedContentView.css';
 export interface IContent {
   id: string;
   title: string;
-  generated: string;
+  generated: any;
 }
 
 export const GeneratedContentView = () => {
@@ -16,7 +16,7 @@ export const GeneratedContentView = () => {
   const [content, setContent] = useState<IContent>();
 
   useEffect(() => {
-    get(`/content/${contentId}`).then(res => res.json()).then(res => res.data).then((data: IContent) => setContent(data));
+    get(`/contents/${contentId}`).then(res => res.json()).then(res => res.data).then((data: IContent) => setContent(data));
   }, []);
 
 
@@ -53,7 +53,7 @@ export const GeneratedContentView = () => {
           gap: '1rem',
         }}>
           <h3>{content?.title}</h3>
-        <textarea className="generated-content" value={content?.generated} style={{ 
+        <textarea className="generated-content" value={content?.generated?.[0]} style={{ 
           width: '  0%', 
           height: '100%' ,
           border: 'none',

@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { Card, CardBody, CardTitle, CardText, CardFooter, Button } from 'reactstrap';
+import { Card, CardBody, CardTitle, CardText, CardFooter } from 'reactstrap';
 import { useDispatch } from 'react-redux';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -96,7 +96,9 @@ export const CourseDashboardPage = () => {
                     gap: '0.5rem',
                   }}>
                     <button className='btn-purple-1' onClick={() => handleViewCourse(course.id)}>Ver Curso</button>
-                    {user.role === 'TEACHER' && <Button color="danger" onClick={() => handleDeleteCourse(course.id)}><FontAwesomeIcon icon={faTrash} /></Button>}
+                    {user.role === 'TEACHER' && 
+                      <button className='btn-purple-2' onClick={() => handleDeleteCourse(course.id)}><FontAwesomeIcon icon={faTrash} /></button>
+                    }
                   </CardFooter>
                 </Card>
               ))}

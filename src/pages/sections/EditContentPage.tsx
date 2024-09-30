@@ -16,11 +16,10 @@ export const EditContentPage: React.FC = () => {
     id: '',
     title: '',
   });
-  const [editConfirmOpen, setEditConfirmOpen] = useState(false); // Estado para el diálogo
-  const [loading, setLoading] = useState(true); // Estado de carga
+  const [editConfirmOpen, setEditConfirmOpen] = useState(false);
+  const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
-  // Fetch content data when the page loads
   useEffect(() => {
     if (contentId) {
       get(`/courses/${courseId}/sections/${sectionId}/content/${contentId}`)
@@ -28,18 +27,17 @@ export const EditContentPage: React.FC = () => {
         .then(data => {
           setFormData({
             id: data.id,
-            title: data.title || '', // Evitar que sea undefined
+            title: data.title || '',
           });
-          setLoading(false); // Desactivar el estado de carga cuando los datos estén listos
+          setLoading(false);
         })
         .catch(err => {
           console.error('Error fetching content data:', err);
-          setLoading(false); // Asegurar que el estado de carga se desactive en caso de error
+          setLoading(false);
         });
     }
   }, [courseId, sectionId, contentId]);
 
-  // Manejar cambios en el formulario
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData(prevState => ({
@@ -55,14 +53,14 @@ export const EditContentPage: React.FC = () => {
   const confirmEdit = async () => {
     if (contentId) {
       await patch(`/contents/${contentId}/title`, formData);
-      navigate(`/courses/${courseId}/sections/${sectionId}`); // Redirigir de nuevo a la página de detalles de la sección
+      navigate(`/courses/${courseId}/sections/${sectionId}`);
     }
   };
   
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    toggleEditConfirm(); // Mostrar el diálogo de confirmación
+    toggleEditConfirm();
   };
 
   if (loading) {
@@ -103,7 +101,7 @@ export const EditContentPage: React.FC = () => {
         </form>
       </Card>
 
-      {/* Confirmación para editar el contenido */}
+      {/* TODO: Reemplazar por swal utils */}
       <ConfirmDialog
         isOpen={editConfirmOpen}
         toggle={toggleEditConfirm}

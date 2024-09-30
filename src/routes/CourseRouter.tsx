@@ -1,17 +1,19 @@
 import React from 'react';
 import { Route, Routes } from 'react-router-dom';
 
-import { CourseCreationPage } from '../pages/courses/CourseCreationPage';
 import { CourseDashboardPage } from '../pages/courses/CourseDashboardPage';
+import { CourseCreationPage } from '../pages/courses/CourseCreationPage';
 import { CourseDetailPage } from '../pages/courses/CourseDetailPage';
 import { SectionCreationPage } from '../pages/courses/SectionCreationPage';
 import { StudentLinkingPage } from '../pages/courses/StudentLinkingPage';
+import { EditSectionPage } from '../pages/courses/EditSectionPage';
+
+import { SectionContentDashboard } from '../pages/sections/SectionContentDashboard';
+import { SectionContentCreation } from '../pages/sections/SectionContentCreation';
+import { EditContentPage } from '../pages/sections/EditContentPage';
 import { GeneratedContentView } from '../pages/sections/text/GeneratedContentView';
 import { GeneratedContentView as MarkmapView } from '../pages/sections/markmap/GeneratedContentView';
 import { RawContentView } from '../pages/sections/RawContentView';
-import { SectionContentCreation } from '../pages/sections/SectionContentCreation';
-import { SectionContentDashboard } from '../pages/sections/SectionContentDashboard';
-import { EditContentPage } from '../pages/sections/EditContentPage';
 
 const CourseRoutes: React.FC = () => {
   return (

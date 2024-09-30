@@ -1,9 +1,11 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { Card, Table, Button } from "reactstrap";
+import { Card, Table } from "reactstrap";
 import { useSelector } from "react-redux";
+
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEdit } from '@fortawesome/free-solid-svg-icons';
+
 import { get } from "../../utils/network";
 import { RootState } from "../../redux/store";
 
@@ -39,7 +41,6 @@ export const SectionContentDashboard = () => {
   };
 
   const handleEditTitle = (contentId: string) => {
-    // Aquí puedes redirigir a la página de edición del título
     navigate(`/courses/${courseId}/sections/${sectionId}/contents/${contentId}/edit-title`);
   };
 
@@ -66,7 +67,9 @@ export const SectionContentDashboard = () => {
           <div className="course-detail-header">
             <h1>{section?.name}</h1>
             <div className='d-flex flex-row gap-3'>
-              <button onClick={handleNewContent} className="btn-purple-1">Subir contenido</button>
+              {user.role === 'TEACHER' &&
+                <button onClick={handleNewContent} className="btn-purple-1">Subir contenido</button>
+              }
             </div>
           </div>
           <hr />
@@ -84,7 +87,12 @@ export const SectionContentDashboard = () => {
               {content.map(c => (
                 <tr key={c.id}>
                   <td>{c.title}</td>
-                  <td>{c.publicationType}</td>
+                  <td>
+                    {
+                      c.publicationType === 'AUTOMATIC' ? 'Automático' :
+                        c.publicationType === 'DEFERRED' ? 'Diferido' : 'Default'
+                    }
+                  </td>
                   {user.role === 'STUDENT' &&
                     <td>
                       <div style={{
@@ -100,10 +108,13 @@ export const SectionContentDashboard = () => {
                     justifyContent: 'flex-end',
                     gap: '1rem',
                   }}>
-                    <Button color="primary" onClick={() => handleEditTitle(c.id)}>
+                    <button
+                      className="btn-purple-2"
+                      onClick={() => handleEditTitle(c.id)}>
                       <FontAwesomeIcon icon={faEdit} />
-                    </Button>
-                    <button className="btn-purple-1"
+                    </button>
+                    <button
+                      className="btn-purple-2"
                       onClick={() => {
                         navigate(`/courses/${courseId}/sections/${sectionId}/content/${c.id}?url=${encodeURIComponent(c.presignedUrl)}`);
                       }}

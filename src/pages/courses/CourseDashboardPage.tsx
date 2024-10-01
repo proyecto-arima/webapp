@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { Card, CardBody, CardTitle, CardText, CardFooter, Button } from 'reactstrap';
+import { Card, CardBody, CardTitle, CardText, CardFooter } from 'reactstrap';
 import { useDispatch } from 'react-redux';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -102,12 +102,12 @@ export const CourseDashboardPage = () => {
                     <button className='btn-purple-1' onClick={() => handleViewCourse(course.id)}>Ver Curso</button>
                     {user.role === 'TEACHER' && (
                       <>
-                        <Button color="primary" onClick={() => handleEditCourse(course.id)}> {/* Botón de edición */}
+                        <button className='btn-purple-2' onClick={() => handleEditCourse(course.id)}> {/* Botón de edición */}
                           <FontAwesomeIcon icon={faEdit} />
-                        </Button>
-                        <Button color="danger" onClick={() => handleDeleteCourse(course.id)}>
+                        </button>
+                        <button className='btn-purple-2' onClick={() => handleDeleteCourse(course.id)}>
                           <FontAwesomeIcon icon={faTrash} />
-                        </Button>
+                        </button>
                       </>
                     )}
                   </CardFooter>

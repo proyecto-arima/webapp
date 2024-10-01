@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { Card } from 'reactstrap';
+import { Card, Progress } from 'reactstrap';
 import DragDropAgreement from './Kolb';
 import Swal from 'sweetalert2';
 import { post } from '../../utils/network';
@@ -166,6 +166,8 @@ export const StudentLearningTypeForm = () => {
             flex: '1',
           }}>
             <DragDropAgreement
+              current={current}
+              total={questions.length}
               answers={questions[current].answers} question={questions[current].question} next={(responses) => {
                 if (current < questions.length - 1) {
                   setCurrent(current + 1);

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Card, CardBody, CardHeader, CardTitle } from 'reactstrap'
+import { Card, CardBody, CardHeader, CardTitle, Progress } from 'reactstrap'
 import Swal from 'sweetalert2'
 
 interface Item {
@@ -16,10 +16,39 @@ interface Column {
 export interface DragDropAgreementProps {
   answers: string[],
   question: string,
+  current: number,
+  total: number,
   next: (answers: number[]) => void
 }
 
-export default function DragDropAgreement({ answers, question, next }: DragDropAgreementProps) {
+const progressMessages = (current: number, total: number) => {
+  if(current === 0){
+    return 'Comenzando...'
+  }
+
+  if(current < 5){
+    return "¡Vamos bien!"
+  }
+
+  if(current === 5){
+    return "¡Ya hicimos la mitad! ¿Viste que no era tanto?"
+  }
+
+  if(current < 9){
+    return 'Vas por buen camino... ¡Falta menos!'
+  }
+
+  if(current < 11){
+    return 'Ya casi terminamos!'
+  }
+
+  if(current === 11){
+    return '¡Última pregunta!'
+  }
+  
+}
+
+export default function DragDropAgreement({ answers, question, next, current, total }: DragDropAgreementProps) {
   const [columns, setColumns] = useState<{ [key: string]: Column }>({
     totallyAgree: {
       id: 'totallyAgree',
@@ -224,6 +253,16 @@ export default function DragDropAgreement({ answers, question, next }: DragDropA
         display: 'flex',
         flex: '1',
       }}></div>
+
+      <Progress animated className="my-3" value={Math.round(((current + 1) / total) * 100)}>{progressMessages(current, total)}</Progress>
+      <span
+        style={{
+          textAlign: 'center',
+          color: '#6b7280'
+        }}
+      >
+        Pregunta {current + 1} de {total}
+      </span>
 
 
       <div className='d-flex flex-row justify-content-end mt-5'>

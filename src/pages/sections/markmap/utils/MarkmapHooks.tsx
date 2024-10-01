@@ -5,9 +5,10 @@ import { transformer } from './markmap';
 import { Toolbar } from 'markmap-toolbar';
 import 'markmap-toolbar/dist/style.css';
 import { Card, CardTitle } from 'reactstrap';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 
-function renderToolbar(mm: Markmap, wrapper: HTMLElement) {
+function renderToolbar(mm: Markmap, wrapper: HTMLElement, goToSummary: () => void) {
   while (wrapper?.firstChild) wrapper.firstChild.remove();
   if (mm && wrapper) {
     const toolbar = new Toolbar();
@@ -16,8 +17,8 @@ function renderToolbar(mm: Markmap, wrapper: HTMLElement) {
     toolbar.register({
       id: 'alert',
       title: 'Click to show an alert',
-      content: 'Alert',
-      onClick: () => alert('You made it!'),
+      content: 'Ver Resumen',
+      onClick: () => goToSummary(),
     });
     toolbar.setItems([...Toolbar.defaultItems, 'alert']);
     wrapper.append(toolbar.render());
@@ -28,7 +29,7 @@ type MarkmapHooksProps = {
   initValue: string;
   editable: boolean;
 };
- 
+
 export default function MarkmapHooks({ initValue, editable }: MarkmapHooksProps) {
   const [value, setValue] = useState(initValue);
   // Ref for SVG element
@@ -38,14 +39,20 @@ export default function MarkmapHooks({ initValue, editable }: MarkmapHooksProps)
   // Ref for toolbar wrapper
   const refToolbar = useRef<HTMLDivElement>();
 
+  const navigate = useNavigate();
+  const location = useLocation();
+
+
   useEffect(() => {
     // Create markmap and save to refMm
     if (refMm.current || refSvg.current === undefined) return;
-    if(refToolbar.current === undefined) return;
+    if (refToolbar.current === undefined) return;
     const mm = Markmap.create(refSvg.current);
     console.log('create', refSvg.current);
     refMm.current = mm;
-    renderToolbar(refMm.current, refToolbar.current);
+    renderToolbar(refMm.current, refToolbar.current, () => {
+      navigate(`${location.pathname.replace('map', 'summary')}`);
+    });
   }, [refSvg.current]);
 
   useEffect(() => {
@@ -60,6 +67,11 @@ export default function MarkmapHooks({ initValue, editable }: MarkmapHooksProps)
   const handleChange = (e: any) => {
     setValue(e.target.value);
   };
+
+  const buildMarkmap = () => <>
+    <svg className="flex-1 flex-grow-1 w-100 h-100" ref={refSvg as React.RefObject<SVGSVGElement>} />
+    <div className="absolute bottom-1 right-1" ref={refToolbar as React.RefObject<HTMLDivElement>}></div>
+  </>
 
   return (
     <div style={{
@@ -82,19 +94,18 @@ export default function MarkmapHooks({ initValue, editable }: MarkmapHooksProps)
             border: '0',
             outline: 'none',
             borderColor: 'transparent',
-            overflowY: 'scroll', 
+            overflowY: 'scroll',
             scrollbarColor: 'transparent transparent',
             fontSize: '0.9rem',
             flex: '1',
           }}
         />
       </Card>
-      <Card className="flex-1 flex-grow-1 w-100 h-100 p-3">
-        <h3>Mapa Conceptual</h3>
-        <hr />
-        <svg className="flex-1 flex-grow-1 w-100 h-100" ref={refSvg as React.RefObject<SVGSVGElement>} />
-        <div className="absolute bottom-1 right-1" ref={refToolbar as React.RefObject<HTMLDivElement>}></div>
-      </Card>
+      {editable ? <Card className="flex-1 flex-grow-1 w-100 h-100 p-3">
+          <h3>Mapa Conceptual</h3>
+          <hr />
+          {buildMarkmap()}
+      </Card> : <div className='flex-1 flex-grow-1 w-100 h-100 p-3'>{buildMarkmap()}</div>}
     </div>
   );
 }

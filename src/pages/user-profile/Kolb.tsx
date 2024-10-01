@@ -39,7 +39,7 @@ const progressMessages = (current: number, total: number) => {
   }
 
   if(current < 11){
-    return 'Ya casi terminamos!'
+    return '¡Ya casi terminamos!'
   }
 
   if(current === 11){

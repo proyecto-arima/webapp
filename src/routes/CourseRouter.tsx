@@ -8,12 +8,12 @@ import { SectionCreationPage } from '../pages/courses/SectionCreationPage';
 import { StudentLinkingPage } from '../pages/courses/StudentLinkingPage';
 import { EditSectionPage } from '../pages/courses/EditSectionPage';
 
-import { SectionContentDashboard } from '../pages/sections/SectionContentDashboard';
 import { SectionContentCreation } from '../pages/sections/SectionContentCreation';
 import { EditContentPage } from '../pages/sections/EditContentPage';
 import { GeneratedContentView } from '../pages/sections/text/GeneratedContentView';
 import { GeneratedContentView as MarkmapView } from '../pages/sections/markmap/GeneratedContentView';
 import { RawContentView } from '../pages/sections/RawContentView';
+import { SectionContentDashboard } from '../pages/sections/SectionContentDashboardPage';
 
 const CourseRoutes: React.FC = () => {
   return (

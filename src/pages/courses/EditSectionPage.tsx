@@ -3,10 +3,9 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { get, patch, post } from '../../utils/network';
 import { Card, Input, Label } from 'reactstrap';
 import Swal from 'sweetalert2';
-import { ConfirmDialog } from '../../components/ConfirmDialog';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faWandMagicSparkles } from '@fortawesome/free-solid-svg-icons';
-
+import { SwalUtils } from '../../utils/SwalUtils';
 interface ISection {
   id: string;
   name: string;
@@ -24,9 +23,8 @@ export const EditSectionPage: React.FC = () => {
     visible: true,
     image: ''
   });
-  const [editConfirmOpen, setEditConfirmOpen] = useState(false); // Estado para el diálogo
-  const [loading, setLoading] = useState(true); // Estado de carga
-  const [autoGenerateImage, setAutoGenerateImage] = useState<boolean>(true);
+  const [loading, setLoading] = useState(true);
+  const [autoGenerateImage, setAutoGenerateImage] = useState<boolean>(false);
   const [generatedImage, setGeneratedImage] = useState<string | null>(null);
   const [imageLoading, setImageLoading] = useState<boolean>(false);
   const navigate = useNavigate();
@@ -36,7 +34,7 @@ export const EditSectionPage: React.FC = () => {
     if (sectionId) {
       get(`/courses/${courseId}/sections/${sectionId}`)
         .then(res => res.json())
-        .then(data => {
+        .then(({data}) => {
           setFormData({
             id: data.id,
             name: data.name,
@@ -53,7 +51,7 @@ export const EditSectionPage: React.FC = () => {
     }
   }, [courseId, sectionId]);
 
-  // Manejar cambios en el formulario
+  // Handle input changes
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value, type, checked } = e.target as HTMLInputElement;
     setFormData(prevState => ({
@@ -62,26 +60,44 @@ export const EditSectionPage: React.FC = () => {
     }));
   };
 
-  const toggleEditConfirm = () => {
-    setEditConfirmOpen(!editConfirmOpen);
-  };
-
+  // Confirm edit
   const confirmEdit = async () => {
     if (sectionId) {
       const updatedData = {
         ...formData,
         ...(autoGenerateImage ? { image: generatedImage } : {})
       };
-      await patch(`/courses/${courseId}/sections/${sectionId}`, updatedData);
-      navigate(`/courses/${courseId}`);
+      
+        await patch(`/courses/${courseId}/sections/${sectionId}`, updatedData);
+
+        navigate(`/courses/${courseId}`);
     }
   };
 
+  // Handle submit
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    toggleEditConfirm();
+
+    if (!formData.name?.trim()) {
+      SwalUtils.errorSwal(
+        'Error en Editar la Sección',
+        'El título no puede estar vacío. Por favor, ingresa un título para la sección.',
+        'Aceptar',
+        () => navigate(`/courses/${courseId}/sections/${sectionId}/edit`)
+      );
+      return;
+    }
+
+    SwalUtils.infoSwal(
+      '¿Estás seguro de que quieres modificar esta sección?',
+      'Esta acción modificará los datos de la sección.',
+      'Sí',
+      'No',
+      confirmEdit
+    );
   };
 
+  // Generate image
   const generateImage = () => {
     if (!formData.name || !formData.description) {
       return Swal.fire({
@@ -134,7 +150,7 @@ export const EditSectionPage: React.FC = () => {
             color: '#6b7280'
           }}>
             Aquí podrás editar la sección en la plataforma <br />
-            Cada sección tendrá diferentes contenidos agrupados por temas, franjas de tiempo, etc.  
+            Cada sección tendrá diferentes contenidos agrupados por temas, franjas de tiempo, etc.
             Opcionalmente podrás cargar una imagen de portada, sino, nosotros la crearemos por tí.<br />
           </p>
           <h3>Detalles de la sección</h3>
@@ -245,15 +261,6 @@ export const EditSectionPage: React.FC = () => {
           </div>
         </Card>
       </div>
-
-      {/* Confirmación para editar la sección */}
-      <ConfirmDialog
-        isOpen={editConfirmOpen}
-        toggle={toggleEditConfirm}
-        onConfirm={confirmEdit}
-        onCancel={toggleEditConfirm}
-        message="¿Estás seguro de que quieres modificar esta sección?"
-      />
     </div>
   );
 };

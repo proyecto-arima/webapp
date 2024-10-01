@@ -139,7 +139,7 @@ export const CourseDetailPage: React.FC = () => {
                     flexDirection: 'column',
                     justifyContent: 'center',
                     alignItems: 'center',
-                    height: '30rem',
+                    height: '60vh',
                   }}>
                     <img src={section.image ? section.image : placeholder}
                       alt="Section"
@@ -163,9 +163,16 @@ export const CourseDetailPage: React.FC = () => {
                       width: '80%',
                       flexGrow: 1,
                       marginRight: '1rem',
+                      height: '6rem'
                     }}>
                       <h2>{section.name}</h2>
-                      <div>
+                      <div style={{
+                        textOverflow: 'ellipsis',
+                        overflow: 'hidden',
+                        display: '-webkit-box',
+                        WebkitLineClamp: 2,
+                        WebkitBoxOrient: 'vertical',
+                      }}>
                         <span>{section.description}</span>
                       </div>
                     </div>

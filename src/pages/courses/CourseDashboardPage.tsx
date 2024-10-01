@@ -5,7 +5,7 @@ import { Card, CardBody, CardTitle, CardText, CardFooter, Button } from 'reactst
 import { useDispatch } from 'react-redux';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faTrash } from '@fortawesome/free-solid-svg-icons';
+import { faTrash, faEdit } from '@fortawesome/free-solid-svg-icons';
 
 import { ConfirmDialog } from '../../components/ConfirmDialog';
 import { SwalUtils } from '../../utils/SwalUtils';
@@ -44,6 +44,10 @@ export const CourseDashboardPage = () => {
   };
 
   const toggleConfirm = () => setConfirmOpen(!confirmOpen);
+
+  const handleEditCourse = (courseId: string) => {
+    navigate(`/courses/${courseId}/edit`);
+  };
 
   const handleDeleteCourse = async (courseId: string) => {
     toggleConfirm();
@@ -96,7 +100,16 @@ export const CourseDashboardPage = () => {
                     gap: '0.5rem',
                   }}>
                     <button className='btn-purple-1' onClick={() => handleViewCourse(course.id)}>Ver Curso</button>
-                    {user.role === 'TEACHER' && <Button color="danger" onClick={() => handleDeleteCourse(course.id)}><FontAwesomeIcon icon={faTrash} /></Button>}
+                    {user.role === 'TEACHER' && (
+                      <>
+                        <Button color="primary" onClick={() => handleEditCourse(course.id)}> {/* Botón de edición */}
+                          <FontAwesomeIcon icon={faEdit} />
+                        </Button>
+                        <Button color="danger" onClick={() => handleDeleteCourse(course.id)}>
+                          <FontAwesomeIcon icon={faTrash} />
+                        </Button>
+                      </>
+                    )}
                   </CardFooter>
                 </Card>
               ))}
@@ -105,9 +118,8 @@ export const CourseDashboardPage = () => {
         </Card>
       </div>
 
-
-
       {/* TODO: Cambiar x SwalUtils  */}
+      {/* Cuadro de confirmación */}
       <ConfirmDialog
         isOpen={confirmOpen}
         toggle={toggleConfirm}
@@ -118,3 +130,5 @@ export const CourseDashboardPage = () => {
     </div>
   );
 };
+
+      

@@ -12,12 +12,11 @@ import { RootState } from '../../redux/store';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrash, faEdit } from '@fortawesome/free-solid-svg-icons';
-import { ConfirmDialog } from '../../components/ConfirmDialog';
 
 import placeholder from '../../assets/images/placeholder.webp';
 import empty from '../../assets/images/empty.svg';
 import '../../assets/styles/CourseDetailPage.css';
-
+import { SwalUtils } from '../../utils/SwalUtils'; // Importa tus utilidades de Swal
 
 interface ISection {
   id: string;
@@ -44,8 +43,6 @@ export const CourseDetailPage: React.FC = () => {
 
   const { courseId } = useParams<{ courseId: string }>();
   const [course, setCourse] = useState<ICourse | null>(null);
-  const [selectedSection, setSelectedSection] = useState<string | null>(null);
-  const [confirmOpen, setConfirmOpen] = useState(false);
 
   useEffect(() => {
     fetchCourses();
@@ -57,23 +54,20 @@ export const CourseDetailPage: React.FC = () => {
     navigate(`/courses/${courseId}/new-section`);
   };
 
-  const toggleConfirm = () => setConfirmOpen(!confirmOpen);
-
-  const handleDeleteSection = (sectionId: string) => {
-    setSelectedSection(sectionId);
-    toggleConfirm();
-  };
-
-  const confirmDelete = async () => {
-    if (selectedSection) {
-      await del(`/courses/${courseId}/sections/${selectedSection}`);
-      await fetchCourses();
-    }
-    toggleConfirm();
+  const handleDeleteSection = async (sectionId: string) => {
+    SwalUtils.infoSwal(
+      '¿Estás seguro de que quieres eliminar esta sección?',
+      'Esta acción eliminará la sección y no podrá deshacerse.',
+      'Sí',
+      'No',
+      async () => {
+        await del(`/courses/${courseId}/sections/${sectionId}`);
+        await fetchCourses();
+      }
+    );
   };
 
   const handleEditSection = (sectionId: string) => {
-    setSelectedSection(sectionId);
     navigate(`/courses/${courseId}/sections/${sectionId}/edit`);
   };
 
@@ -201,15 +195,6 @@ export const CourseDetailPage: React.FC = () => {
           </div>
         </Card>
       </div>
-
-      {/* TODO: Reemplazar con swal utils */}
-      <ConfirmDialog
-        isOpen={confirmOpen}
-        toggle={toggleConfirm}
-        onConfirm={confirmDelete}
-        onCancel={toggleConfirm}
-        message="¿Estás seguro de que quieres eliminar esta sección?"
-      />
     </div>
   );
 };

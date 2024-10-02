@@ -11,6 +11,10 @@ interface IInstitute {
   name: string,
 }
 
+interface IInstituteHttp {
+  id: string
+}
+
 interface IDocument {
   type?: string,
   number?: string,
@@ -21,7 +25,7 @@ interface IUserCreationFormValues {
   lastName?: string,
   email?: string,
   document?: IDocument,
-  institute?: string,
+  institute?: IInstituteHttp,
 }
 
 interface UserCreationFormProps {
@@ -109,12 +113,21 @@ const UserCreationForm: React.FC<UserCreationFormProps> = ({ entityToCreate, act
     })
   }
 
+  const setInstitute = (instituteID?: string): void => {
+    setFormValues({
+      ...formValues,
+      institute: {
+        id: instituteID || ''
+      },
+    });
+  };
+
   const checkFormData = (): boolean => {
     if (entityToCreate !== 'DIRECTOR') {
       const { institute, ...newFormValues } = formValues || {};
       setFormValues(newFormValues);
     } else {
-      if (!formValues?.institute || formValues?.institute?.length > 2) {
+      if (!formValues?.institute) {
         SwalUtils.warningSwal(
           "La institución no fue seleccionada",
           "Por favor, selecciona una institución para el director",
@@ -234,12 +247,7 @@ const UserCreationForm: React.FC<UserCreationFormProps> = ({ entityToCreate, act
             className="mb-3"
             placeholder="Institución"
             name="institute"
-            onChange={(e) => {
-              setFormValues({
-                ...formValues,
-                institute: e?.name,
-              })
-            }}
+            onChange={(e) => { setInstitute(e?.id) }}
           />
         }
         <ReactSelect

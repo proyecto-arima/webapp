@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { Card, CardBody, CardTitle, CardText, CardFooter } from 'reactstrap';
@@ -7,7 +7,6 @@ import { useDispatch } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrash, faEdit } from '@fortawesome/free-solid-svg-icons';
 
-import { ConfirmDialog } from '../../components/ConfirmDialog';
 import { setCourses } from '../../redux/slices/courses';
 import { RootState } from '../../redux/store';
 import { SwalUtils } from '../../utils/SwalUtils';
@@ -18,6 +17,7 @@ import '../../assets/styles/CourseDashboardPage.css';
 export const CourseDashboardPage = () => {
   const { courses } = useSelector((state: RootState) => state.courses);
   const user = useSelector((state: RootState) => state.user);
+  const navigate = useNavigate();
   
   const dispatch = useDispatch();
   const history = useNavigate();

@@ -15,6 +15,7 @@ import { GeneratedContentView as MarkmapView } from '../pages/sections/markmap/G
 import { RawContentView } from '../pages/sections/RawContentView';
 import { SectionContentDashboard } from '../pages/sections/SectionContentDashboardPage';
 import Game from '../pages/sections/game/GeneratedContentView';
+import GeneratedContentViewAudio from '../pages/sections/audio/GeneratedContentView';
 
 const CourseRoutes: React.FC = () => {
   return (
@@ -33,6 +34,7 @@ const CourseRoutes: React.FC = () => {
         <Route path=":courseId/sections/:sectionId/content/:contentId/summary" element={<GeneratedContentView/>} />
         <Route path=":courseId/sections/:sectionId/content/:contentId/map" element={<MarkmapView/>} />
         <Route path=":courseId/sections/:sectionId/content/:contentId/game" element={<Game/>} />
+        <Route path=":courseId/sections/:sectionId/content/:contentId/audio" element={<GeneratedContentViewAudio/>} />
         <Route path=":courseId/sections/:sectionId/contents/:contentId/edit-title" element={<EditContentPage />} />
       </Routes>
   );

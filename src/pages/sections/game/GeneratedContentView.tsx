@@ -7,6 +7,7 @@ import {
 } from 'reactstrap';
 import Swal from 'sweetalert2';
 import AnimatedStar from './Star';
+import { useNavigate, useParams } from 'react-router-dom';
 
 interface Answer { answer: string, justification: string }
 
@@ -238,6 +239,8 @@ export default function Game() {
   const [currenttext, setCurrenttext] = useState(0);
   const [score, setScore] = useState(0);
   const [gameOver, setGameOver] = useState(false);
+  const { courseId, sectionId } = useParams<{ courseId: string, sectionId: string }>();
+  const navigate = useNavigate();
 
   const handleAnswer = (option: Answer, selectedAnswer: number) => {
     const correct = levels[currentLevel].questions[currenttext].correctAnswer === selectedAnswer;
@@ -255,10 +258,27 @@ export default function Game() {
         if (currenttext < 2) {
           setCurrenttext(currenttext + 1);
         } else if (currentLevel < 2) {
-          setCurrentLevel(currentLevel + 1);
-          setCurrenttext(0);
+          Swal.fire({
+            icon: 'success',
+            title: '¡Felicidades!',
+            showConfirmButton: true,
+            text: `Pasaste al siguiente nivel! Continuemos jugando`,
+            confirmButtonText: 'Siguiente nivel'
+          }).then(() => {
+            setCurrentLevel(currentLevel + 1);
+            setCurrenttext(0);
+          });
         } else {
           setGameOver(true);
+          Swal.fire({
+            icon: 'success',
+            title: '¡Felicidades!',
+            showConfirmButton: true,
+            text: `¡Has completado el juego!`,
+            confirmButtonText: 'Continuar con otro contenido'
+          }).then(() => {
+            navigate(`/courses/${courseId}/sections/${sectionId}`);
+          });
         }
       });
     } else {
@@ -317,9 +337,9 @@ export default function Game() {
               alignItems: 'flex-end',
             }}
           >
-            <AnimatedStar fillProgress={currentLevel === 0 ? currenttext / 3 : 1} size={150} id='star1' />
-            <AnimatedStar fillProgress={currentLevel === 2 ? (gameOver ? 1 : currenttext / 3) : 0} size={200} id='star2' />
-            <AnimatedStar fillProgress={currentLevel === 1 ? currenttext / 3 : currentLevel === 0 ? 0 : 1} size={150} id='star3' />
+            <AnimatedStar fillProgress={currentLevel === 0 ? currenttext / 3 : 1} size={150} id='star1' shouldShowConfeti={false} />
+            <AnimatedStar fillProgress={currentLevel === 2 ? (gameOver ? 1 : currenttext / 3) : 0} size={200} id='star2' shouldShowConfeti />
+            <AnimatedStar fillProgress={currentLevel === 1 ? currenttext / 3 : currentLevel === 0 ? 0 : 1} size={150} id='star3' shouldShowConfeti={false} />
           </div>
           <Card style={{ width: '90%' }}>
             <CardBody>

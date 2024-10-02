@@ -7,10 +7,12 @@ import Confetti from 'react-confetti'
 interface StarProps {
   fillProgress: number,
   size: number,
-  id: string
+  id: string,
+  shouldShowConfeti: boolean
+  
 }
 
-export default function Star({fillProgress, size, id}: StarProps) {
+export default function Star({fillProgress, size, id, shouldShowConfeti}: StarProps) {
   const [showConfetti, setShowConfetti] = useState(false)
 
   useEffect(() => {
@@ -23,7 +25,7 @@ export default function Star({fillProgress, size, id}: StarProps) {
   // }
 
   useEffect(() => {
-    if (fillProgress === 1) {
+    if (fillProgress === 1 && shouldShowConfeti) {
       setShowConfetti(true)
       const timer = setTimeout(() => setShowConfetti(false), 5000)
       return () => clearTimeout(timer)

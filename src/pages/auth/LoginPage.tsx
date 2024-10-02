@@ -1,74 +1,21 @@
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { Card } from "reactstrap";
 
 import logo from '../../assets/images/logo_black.png';
 import LoginForm from "../../components/LoginForm";
-import { RootState } from "../../redux/store";
 
 import { login } from "../../redux/slices/auth";
 import { setUser } from "../../redux/slices/user";
 import { get, post } from "../../utils/network";
 import { setCourses } from "../../redux/slices/courses";
-import { useEffect } from "react";
+
+import { DEFAULT_PAGE_ROLE } from "../../config";
 
 
 const LoginPage = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const isAuthenticated = useSelector((state: RootState) => state.auth.isAuthenticated);
-
-  const fetchSession = async () => {
-    if (isAuthenticated) return;
-    const userSession = await get('/auth')
-      .then(async (res) => {
-        if (res.ok) {
-          const dataResponse = await res.json();
-          return dataResponse;
-        } else {
-          console.error(`Status response failed. Status code ${res.status}`);
-          return { success: false };
-        }
-      })
-      .then((res) => {
-        if (res.success) {
-          dispatch(login());
-          return true;
-        } else {
-          console.error("User is not authenticated");
-          return false;
-        }
-      })
-      .then(() => get('/users/me'))
-      .then(res => res.json())
-      .then(res => {
-        const stateRes = dispatch(setUser(res.data));
-        return stateRes.payload;
-      })
-      .catch((error) => {
-        console.error(`An error occurred while retrieve user session: ${error}`);
-        return false;
-      });
-
-      if (userSession) {
-        if (userSession.role === 'STUDENT') {          
-          navigate('/courses/dashboard');
-        } else if (userSession.role === 'TEACHER') {
-          navigate('/courses/dashboard');
-        }
-        else {
-          if (userSession.role === 'ADMIN') {
-            navigate('/directors');
-          } else if (userSession.role === 'DIRECTOR') {
-            navigate('/students');
-          }
-        }
-      }
-  }
-
-  useEffect(() => {
-    fetchSession();
-  }, []);
 
   const signIn = async (email: string, password: string): Promise<boolean> => {
     const loginData = { email, password };
@@ -181,13 +128,13 @@ const LoginPage = () => {
           console.error(`An error occurred while trying to get courses data: ${error}`);
           return false;
         });
-      navigate('/courses/dashboard');
+        user.role === 'STUDENT' ? navigate(DEFAULT_PAGE_ROLE.STUDENT) : navigate(DEFAULT_PAGE_ROLE.TEACHER);
       return isLogged && isData && isCourses;
     } else {
       if (user.role === 'ADMIN') {
-        navigate('/directors');
+        navigate(DEFAULT_PAGE_ROLE.ADMIN);
       } else if (user.role === 'DIRECTOR') {
-        navigate('/students');
+        navigate(DEFAULT_PAGE_ROLE.DIRECTOR);
       } else {
         console.error("User role not found");
         return false;

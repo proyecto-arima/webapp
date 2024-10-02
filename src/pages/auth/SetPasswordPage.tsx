@@ -1,11 +1,11 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Card, } from "reactstrap";
 import { useNavigate } from "react-router-dom";
 
 import logo from '../../assets/images/logo_black.png';
 import SetPasswordForm from "../../components/SetPasswordForm";
 
-import { isSecurePassword } from "../../utils/FormValidators";
+import { FormValidators } from "../../utils/FormValidators";
 import { post } from "../../utils/network";
 
 const SetPasswordPage = () => {
@@ -13,6 +13,13 @@ const SetPasswordPage = () => {
   const [statusMessage, setMessage] = useState('');
   const navigate = useNavigate();
   const token = new URLSearchParams(window.location.search).get('token');
+
+  useEffect(() => {
+    if (!token) {
+      console.warn('No token provided');
+      navigate('/');
+    }
+  }, [token]);
 
   const handleSetPassword = async (newPassword: string, newPasswordConfirmation: string) => {
     if (newPassword !== newPasswordConfirmation) {
@@ -22,11 +29,11 @@ const SetPasswordPage = () => {
       }, 2000);
       return;
     }
-    const passwordValidation = isSecurePassword(newPassword);
+    const passwordValidation = FormValidators.isSecurePassword(newPassword);
     if (!passwordValidation) {
       setMessage('La contraseña no es segura');
       setTimeout(() => {
-      setMessage('');
+        setMessage('');
       }, 2000);
       return;
     }
@@ -39,7 +46,7 @@ const SetPasswordPage = () => {
         console.error(`An unexpected error occurred: ${err}`);
         return false;
       });
-    
+
     if (setPasswordResponse) {
       setStatusSended(true);
       setMessage('Se actualizó la contraseña correctamente');
@@ -67,20 +74,16 @@ const SetPasswordPage = () => {
         width: '100vw',
       }}
     >
-      {token ? (
-        <Card style={{ width: '35%', paddingInline: '2rem', paddingBlock: '1rem' }}>
-          <div className="text-center">
-            <img src={logo} alt="Proyecto Arima" style={{ height: '10rem' }} />
-          </div>
-          <SetPasswordForm
-            setPassword={handleSetPassword}
-            statusSended={statusSended}
-            statusMessage={statusMessage}
-          />
-        </Card>
-      ) : (
-        <h2>Ocurrio un error inesperado. Por favor, intenta de nuevo más tarde</h2>
-      )}
+      <Card style={{ width: '35%', paddingInline: '2rem', paddingBlock: '1rem' }}>
+        <div className="text-center">
+          <img src={logo} alt="Proyecto Arima" style={{ height: '10rem' }} />
+        </div>
+        <SetPasswordForm
+          setPassword={handleSetPassword}
+          statusSended={statusSended}
+          statusMessage={statusMessage}
+        />
+      </Card>
     </div>
   );
 };

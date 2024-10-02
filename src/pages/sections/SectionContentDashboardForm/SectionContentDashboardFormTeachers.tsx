@@ -28,7 +28,12 @@ export default function SectionContentDashboardFormTeachers({ content, user, cou
       {content.map(c => (
         <tr key={c.id}>
           <td>{c.title}</td>
-          <td>{c.publicationType}</td>
+          <td>
+            {
+              c.publicationType === 'AUTOMATIC' ? 'Automático' :
+              c.publicationType === 'DEFERRED' ? 'Diferido' : 'Default'
+            }
+          </td>
           <td style={{
             display: 'flex',
             justifyContent: 'flex-end',

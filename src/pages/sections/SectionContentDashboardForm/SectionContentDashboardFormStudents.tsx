@@ -1,11 +1,13 @@
 import { useNavigate } from "react-router-dom";
 import { Table } from "reactstrap";
 
-import empty from '../../../assets/images/empty.svg';
-import { IContent } from "../SectionContentDashboardPage";
-import { UserState } from "../../../redux/slices/user";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMagicWandSparkles, faThumbsDown, faThumbsUp } from "@fortawesome/free-solid-svg-icons";
+
+import { IContent } from "../SectionContentDashboardPage";
+
+import empty from '../../../assets/images/empty.svg';
+import { UserState } from "../../../redux/slices/user";
 import { post } from "../../../utils/network";
 
 interface ISectionContentDashboardFormStudentsProps {
@@ -15,7 +17,7 @@ interface ISectionContentDashboardFormStudentsProps {
   sectionId: string;
 }
 
-export default function SectionContentDashboardFormStudents({ content, user, courseId, sectionId}: ISectionContentDashboardFormStudentsProps) {
+export default function SectionContentDashboardFormStudents({ content, user, courseId, sectionId }: ISectionContentDashboardFormStudentsProps) {
 
   const navigate = useNavigate();
 
@@ -35,7 +37,7 @@ export default function SectionContentDashboardFormStudents({ content, user, cou
 
 
   const urlByProfile = {
-    'DIVERGENTE': 'map', 
+    'DIVERGENTE': 'map',
     'ASIMILADOR': 'summary',
     'ACOMODADOR': 'summary',
     'CONVERGENTE': 'summary'
@@ -53,7 +55,12 @@ export default function SectionContentDashboardFormStudents({ content, user, cou
       {content.map(c => (
         <tr key={c.id}>
           <td>{c.title}</td>
-          {user.role === 'TEACHER' && <td>{c.publicationType}</td>}
+          {user.role === 'TEACHER' && <td>
+            {
+              c.publicationType === 'AUTOMATIC' ? 'Automático' :
+                c.publicationType === 'DEFERRED' ? 'Diferido' : 'Default'
+            }
+          </td>}
           {user.role === 'STUDENT' &&
             <td>
               <div style={

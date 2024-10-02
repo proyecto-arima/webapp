@@ -2,24 +2,21 @@ import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
 import Slider from 'react-slick';
-import { Card, Button } from 'reactstrap';
+import { Card } from 'reactstrap';
+
+import "slick-carousel/slick/slick-theme.css";
+import "slick-carousel/slick/slick.css";
 
 import { get, del } from '../../utils/network';
 import { RootState } from '../../redux/store';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-
-import { ConfirmDialog } from '../../components/ConfirmDialog';
-
-import "slick-carousel/slick/slick-theme.css";
-import "slick-carousel/slick/slick.css";
-import '../../assets/styles/CourseDetailPage.css';
-
-import placeholder from '../../assets/images/placeholder.webp';
 import { faTrash, faEdit } from '@fortawesome/free-solid-svg-icons';
 
+import placeholder from '../../assets/images/placeholder.webp';
 import empty from '../../assets/images/empty.svg';
-
+import '../../assets/styles/CourseDetailPage.css';
+import { SwalUtils } from '../../utils/SwalUtils'; // Importa tus utilidades de Swal
 
 interface ISection {
   id: string;
@@ -45,10 +42,7 @@ export const CourseDetailPage: React.FC = () => {
   const user = useSelector((state: RootState) => state.user);
 
   const { courseId } = useParams<{ courseId: string }>();
-
   const [course, setCourse] = useState<ICourse | null>(null);
-  const [selectedSection, setSelectedSection] = useState<string | null>(null);
-  const [confirmOpen, setConfirmOpen] = useState(false);
 
   useEffect(() => {
     fetchCourses();
@@ -60,24 +54,20 @@ export const CourseDetailPage: React.FC = () => {
     navigate(`/courses/${courseId}/new-section`);
   };
 
-  const toggleConfirm = () => setConfirmOpen(!confirmOpen);
-
-  const handleDeleteSection = (sectionId: string) => {
-    setSelectedSection(sectionId);
-    toggleConfirm();
-  };
-
-  const confirmDelete = async () => {
-    if (selectedSection) {
-      await del(`/courses/${courseId}/sections/${selectedSection}`);
-      await fetchCourses();
-    }
-    toggleConfirm();
+  const handleDeleteSection = async (sectionId: string) => {
+    SwalUtils.infoSwal(
+      '¿Estás seguro de que quieres eliminar esta sección?',
+      'Esta acción eliminará la sección y no podrá deshacerse.',
+      'Sí',
+      'No',
+      async () => {
+        await del(`/courses/${courseId}/sections/${sectionId}`);
+        await fetchCourses();
+      }
+    );
   };
 
   const handleEditSection = (sectionId: string) => {
-    // Redirigir a la pantalla de edición de sección con los datos precargados
-    setSelectedSection(sectionId);
     navigate(`/courses/${courseId}/sections/${sectionId}/edit`);
   };
 
@@ -94,14 +84,14 @@ export const CourseDetailPage: React.FC = () => {
     >
       <div className="course-detail-container">
         <Card style={{ width: '100%', paddingInline: '2rem', paddingBlock: '1rem', height: '100%', maxWidth: 'calc(100vw - 25rem)' }}>
-          
-          <div className="course-detail-header">  
+
+          <div className="course-detail-header">
             <h1>{course?.title}</h1>
-            { user.role === 'TEACHER' &&
-            <div className='d-flex flex-row gap-3'>
-              <button className="btn-purple-1" onClick={handleNewSection}>Nueva Sección</button>
-              <button className='btn-purple-2' onClick={() => navigate(`/courses/${courseId}/students`)}>Estudiantes</button>
-            </div>
+            {user.role === 'TEACHER' &&
+              <div className='d-flex flex-row gap-3'>
+                <button className="btn-purple-1" onClick={handleNewSection}>Nueva Sección</button>
+                <button className='btn-purple-2' onClick={() => navigate(`/courses/${courseId}/students`)}>Estudiantes</button>
+              </div>
             }
           </div>
 
@@ -176,38 +166,35 @@ export const CourseDetailPage: React.FC = () => {
                     <div
                       className='d-flex flex-row gap-3'
                     >
-                      {/* Botón Ver Sección */}
-                      <button className='btn-purple-1' onClick={() => navigate(`/courses/${courseId}/sections/${section.id}`)}>Ver Sección</button>
-                      {user.role === 'TEACHER' && <Button color="primary" onClick={() => handleEditSection(section.id)}><FontAwesomeIcon icon={faEdit} /></Button>}
-                      {user.role === 'TEACHER' && <Button color="danger" onClick={() => handleDeleteSection(section.id)}><FontAwesomeIcon icon={faTrash} /></Button>}
+                      <button className='btn-purple-1' style={{
+                        width: '8rem',
+                        height: '3rem',
+                      }} onClick={() => navigate(`/courses/${courseId}/sections/${section.id}`)}>Ver Sección</button>
+                      {user.role === 'TEACHER' &&
+                        <>
+                          <button className='btn-purple-2' onClick={() => handleEditSection(section.id)}><FontAwesomeIcon icon={faEdit} /></button>
+                          <button className='btn-purple-2' onClick={() => handleDeleteSection(section.id)}><FontAwesomeIcon icon={faTrash} /></button>
+                        </>
+                      }
                     </div>
                   </div>
                 </Card>
               ))}
             </Slider> : <div className='d-flex flex-column justify-content-center align-items-center'>
-                <img
-                  src={empty}
-                ></img>
-                {user.role === 'STUDENT' ? <>
-                  <h3>Parece que aún no hay secciones en este curso.</h3>
-                  <h4>Por favor intenta de nuevo más tarde</h4>
-                </> : <>
-                  <h3>Parece que aún no has creado ninguna sección en este curso.</h3>
-                  <h4>Por favor crea una sección para comenzar a añadir contenido.</h4>
-                </>}
-              </div>}
+              <img
+                src={empty}
+              ></img>
+              {user.role === 'STUDENT' ? <>
+                <h3>Parece que aún no hay secciones en este curso.</h3>
+                <h4>Por favor intenta de nuevo más tarde</h4>
+              </> : <>
+                <h3>Parece que aún no has creado ninguna sección en este curso.</h3>
+                <h4>Por favor crea una sección para comenzar a añadir contenido.</h4>
+              </>}
+            </div>}
           </div>
         </Card>
       </div>
-
-      {/* Confirmación para eliminar la sección */}
-      <ConfirmDialog
-        isOpen={confirmOpen}
-        toggle={toggleConfirm}
-        onConfirm={confirmDelete}
-        onCancel={toggleConfirm}
-        message="¿Estás seguro de que quieres eliminar esta sección?"
-      />
     </div>
   );
 };

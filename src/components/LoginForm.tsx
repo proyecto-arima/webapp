@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Input, Label } from "reactstrap";
 import { useNavigate } from "react-router-dom";
 
-import { isValidEmail } from "../utils/FormValidators";
+import { FormValidators } from "../utils/FormValidators";
 import '../App.css';
 
 interface ILoginFormProps {
@@ -40,7 +40,7 @@ export default function LoginForm({ login }: ILoginFormProps) {
           Olvidé mi contraseña
         </button>
         <button className="btn-purple-1" onClick={async () => {
-          if (!isValidEmail(email)) {
+          if (!FormValidators.isValidEmail(email)) {
             setShowAlert(true);
             setMessage('El email ingresado no es válido.');
             setTimeout(() => {

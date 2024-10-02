@@ -35,6 +35,12 @@ export const courseSlice = createSlice({
         courses: action.payload
       };
     },
+    editCourses: (state, action) => {
+      return {
+        ...state,
+        courses: state.courses?.map(course => course.id === action.payload.id ? action.payload : course)
+      };
+    },
     removeCourse: (state, action) => {
       return {
         ...state,
@@ -44,6 +50,6 @@ export const courseSlice = createSlice({
   },
 });
 
-export const { addCourse, reset, setCourses, removeCourse } = courseSlice.actions;
+export const { addCourse, reset, setCourses, editCourses, removeCourse } = courseSlice.actions;
 
 export default courseSlice.reducer;

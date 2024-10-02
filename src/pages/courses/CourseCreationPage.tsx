@@ -1,4 +1,3 @@
-// src/pages/courses/CourseCreationPage.tsx
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { Card, Input, Label } from 'reactstrap';
@@ -8,7 +7,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMagic, faWandMagicSparkles } from '@fortawesome/free-solid-svg-icons';
 import Swal from 'sweetalert2';
 import { useNavigate } from 'react-router-dom';
-
+import { SwalUtils } from '../../utils/SwalUtils'; // Asegúrate de importar SwalUtils
 
 interface ICourseCreationFormValues {
   title?: string;
@@ -18,7 +17,6 @@ interface ICourseCreationFormValues {
 }
 
 export const CourseCreationPage = () => {
-
   const [formValues, setFormValues] = useState<ICourseCreationFormValues>({ students: [] });
   const [autoGenerateImage, setAutoGenerateImage] = useState<boolean>(true);
   const [generatedImage, setGeneratedImage] = useState<string | null>(null);
@@ -34,16 +32,30 @@ export const CourseCreationPage = () => {
   };
 
   const createCourse = () => {
+    // Verificar si el título está vacío
+    if (!formValues.title) {
+      SwalUtils.errorSwal(
+        'Error al crear el curso',
+        'Debes ingresar un nombre para el curso antes de continuar.',
+        'Aceptar',
+        () => navigate(`/courses/create`)
+      );
+      return; // Detener la ejecución si el título está vacío
+    }
+
     const body = { 
       ...formValues,
       ...(autoGenerateImage ? { image: generatedImage } : {}),
     };
 
-    return post('/courses', { ...body }).then((res) => res.json()).then((res) => {
-      return dispatch(addCourse(res.data));
-    }).then(() => {
-      navigate('/courses/dashboard');
-    });
+    return post('/courses', { ...body })
+      .then((res) => res.json())
+      .then((res) => {
+        dispatch(addCourse(res.data));
+      })
+      .then(() => {
+        navigate('/courses/dashboard');
+      });
   };
 
   const generateImage = () => {
@@ -79,7 +91,7 @@ export const CourseCreationPage = () => {
       style={{
         display: 'flex',
         justifyContent: 'center',
-        alignItems: 'flex-start',  /* Alinea el contenido al inicio, en lugar de al centro */
+        alignItems: 'flex-start',
         height: '100vh',
         backgroundColor: '#f6effa',
         width: '100vw',
@@ -88,7 +100,7 @@ export const CourseCreationPage = () => {
       <div style={{
         display: 'flex',
         flexDirection: 'column',
-        alignItems: 'flex-start', /* Alinea el contenido al principio */
+        alignItems: 'flex-start',
         padding: '20px',
         width: '100%',
         height: '100%',

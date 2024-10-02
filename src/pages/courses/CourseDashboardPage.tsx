@@ -3,12 +3,16 @@ import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { Card, CardBody, CardTitle, CardText, CardFooter } from 'reactstrap';
 import { useDispatch } from 'react-redux';
+
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faTrash } from '@fortawesome/free-solid-svg-icons';
-import { SwalUtils } from '../../utils/SwalUtils';
+import { faTrash, faEdit } from '@fortawesome/free-solid-svg-icons';
+
+import { ConfirmDialog } from '../../components/ConfirmDialog';
 import { setCourses } from '../../redux/slices/courses';
 import { RootState } from '../../redux/store';
+import { SwalUtils } from '../../utils/SwalUtils';
 import { del } from '../../utils/network';
+
 import '../../assets/styles/CourseDashboardPage.css';
 
 export const CourseDashboardPage = () => {
@@ -34,6 +38,10 @@ export const CourseDashboardPage = () => {
     history(`/courses/${courseId}`);
   };
 
+  const handleEditCourse = (courseId: string) => {
+    navigate(`/courses/${courseId}/edit`);
+  };
+
   const handleDeleteCourse = async (courseId: string) => {
     SwalUtils.infoSwal(
       '¿Estás seguro de que quieres eliminar este curso?',
@@ -41,7 +49,6 @@ export const CourseDashboardPage = () => {
       'Sí',
       'No',
       async () => {
-        // Confirmación de eliminación
         await del(`/courses/${courseId}`);
         dispatch(setCourses(courses?.filter(course => course.id !== courseId)));
       }
@@ -86,11 +93,16 @@ export const CourseDashboardPage = () => {
                     gap: '0.5rem',
                   }}>
                     <button className='btn-purple-1' onClick={() => handleViewCourse(course.id)}>Ver Curso</button>
-                    {user.role === 'TEACHER' && 
-                      <button className='btn-purple-2' onClick={() => handleDeleteCourse(course.id)}>
-                        <FontAwesomeIcon icon={faTrash} />
-                      </button>
-                    }
+                    {user.role === 'TEACHER' && (
+                      <>
+                        <button className='btn-purple-2' onClick={() => handleEditCourse(course.id)}>
+                          <FontAwesomeIcon icon={faEdit} />
+                        </button>
+                        <button className='btn-purple-2' onClick={() => handleDeleteCourse(course.id)}>
+                          <FontAwesomeIcon icon={faTrash} />
+                        </button>
+                      </>
+                    )}
                   </CardFooter>
                 </Card>
               ))}

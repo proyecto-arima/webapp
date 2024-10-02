@@ -72,9 +72,9 @@ export const StudentLinkingPage = () => {
                 placeholder="Buscar estudiante"
                 isClearable
                 isSearchable
-                options={
-                  availableStudents.filter((student: any) => currentStudents.some((s: any) => s.id === student.id))
-                }
+                // BUG: Revisar de no traer todos los estudiantes, se repiten y no deja borrarlos despues
+                // options={ availableStudents && currentStudents ? availableStudents.filter((student: any) => currentStudents.some((s: any) => s.id === student.id)) : [] }
+                options={availableStudents}
                 noOptionsMessage={() => "No hay estudiantes disponibles para agregar"}
                 value={selectedStudent}
                 getOptionLabel={(option) => `${option.firstName} ${option.lastName} - ${option.email}`}
@@ -111,7 +111,7 @@ export const StudentLinkingPage = () => {
                         setCourse((course: any) => {
                           return {
                             ...course,
-                            students: course.students.filter((s: any) => s.id !== student.id)
+                            students: course.students
                           }
                         }
                         )

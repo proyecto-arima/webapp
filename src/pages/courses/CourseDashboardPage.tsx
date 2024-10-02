@@ -3,59 +3,49 @@ import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { Card, CardBody, CardTitle, CardText, CardFooter } from 'reactstrap';
 import { useDispatch } from 'react-redux';
-
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrash } from '@fortawesome/free-solid-svg-icons';
-
-import { ConfirmDialog } from '../../components/ConfirmDialog';
 import { SwalUtils } from '../../utils/SwalUtils';
 import { setCourses } from '../../redux/slices/courses';
 import { RootState } from '../../redux/store';
 import { del } from '../../utils/network';
-
 import '../../assets/styles/CourseDashboardPage.css';
 
 export const CourseDashboardPage = () => {
   const { courses } = useSelector((state: RootState) => state.courses);
   const user = useSelector((state: RootState) => state.user);
   
-  const [selectedCourse, setSelectedCourse] = useState<string | null>(null);
-  const [confirmOpen, setConfirmOpen] = useState(false);
-
   const dispatch = useDispatch();
   const history = useNavigate();
-  const navigate = useNavigate();
 
   useEffect(() => {
-    // TODO: DEBUG, por ahora solo muestra la encuesta segun redux
-    if(user.surveyAvailable) {
+    if (user.surveyAvailable) {
       SwalUtils.infoSwal(
         "Encuesta disponible",
         "Hay una encuesta disponible para evaluar el contenido de la plataforma. ¿Deseas realizarla?",
         "Si",
         "No",
-        () => navigate("/me/survey"),
+        () => history("/me/survey"),
       );
     }
-  }, [courses]);
+  }, [user.surveyAvailable, history]);
 
   const handleViewCourse = (courseId: string) => {
     history(`/courses/${courseId}`);
   };
 
-  const toggleConfirm = () => setConfirmOpen(!confirmOpen);
-
   const handleDeleteCourse = async (courseId: string) => {
-    toggleConfirm();
-    setSelectedCourse(courseId);
-  };
-
-  const confirmDelete = async () => {
-    if (selectedCourse) {
-      await del(`/courses/${selectedCourse}`);
-      dispatch(setCourses(courses?.filter(course => course.id !== selectedCourse)));
-    }
-    toggleConfirm();
+    SwalUtils.infoSwal(
+      '¿Estás seguro de que quieres eliminar este curso?',
+      'Esta acción eliminará el curso y no podrá deshacerse.',
+      'Sí',
+      'No',
+      async () => {
+        // Confirmación de eliminación
+        await del(`/courses/${courseId}`);
+        dispatch(setCourses(courses?.filter(course => course.id !== courseId)));
+      }
+    );
   };
 
   return (
@@ -97,7 +87,9 @@ export const CourseDashboardPage = () => {
                   }}>
                     <button className='btn-purple-1' onClick={() => handleViewCourse(course.id)}>Ver Curso</button>
                     {user.role === 'TEACHER' && 
-                      <button className='btn-purple-2' onClick={() => handleDeleteCourse(course.id)}><FontAwesomeIcon icon={faTrash} /></button>
+                      <button className='btn-purple-2' onClick={() => handleDeleteCourse(course.id)}>
+                        <FontAwesomeIcon icon={faTrash} />
+                      </button>
                     }
                   </CardFooter>
                 </Card>
@@ -106,17 +98,6 @@ export const CourseDashboardPage = () => {
           </div>
         </Card>
       </div>
-
-
-
-      {/* TODO: Cambiar x SwalUtils  */}
-      <ConfirmDialog
-        isOpen={confirmOpen}
-        toggle={toggleConfirm}
-        onConfirm={confirmDelete}
-        onCancel={() => toggleConfirm()}
-        message="¿Estás seguro de que quieres eliminar este curso?"
-      />
     </div>
   );
 };

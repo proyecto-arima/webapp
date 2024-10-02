@@ -5,8 +5,8 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { post } from '../../utils/network';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faWandMagicSparkles } from '@fortawesome/free-solid-svg-icons';
+import {SwalUtils} from '../../utils/SwalUtils';
 import Swal from 'sweetalert2';
-
 
 interface ISectionCreationFormValues {
   title?: string;
@@ -21,7 +21,6 @@ export const SectionCreationPage = () => {
   const [autoGenerateImage, setAutoGenerateImage] = useState<boolean>(true);
   const [generatedImage, setGeneratedImage] = useState<string | null>(null);
   const [imageLoading, setImageLoading] = useState<boolean>(false);
-  //const { addSection } = useSectionContext();
   const navigate = useNavigate();
 
   const handleFormChange = (label: keyof ISectionCreationFormValues) => (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -33,6 +32,16 @@ export const SectionCreationPage = () => {
   };
 
   const createSection = () => {
+    if (!formValues.title) {
+      SwalUtils.errorSwal(
+        'Error al crear la sección',
+        'Debes ingresar un nombre para la sección antes de continuar.',
+        'Aceptar',
+        () => navigate(`/courses/${courseId}/new-section`)
+      );
+      return
+    }
+
     const body = {
       ...formValues,
       name: formValues.title,
@@ -43,15 +52,14 @@ export const SectionCreationPage = () => {
     return post(`/courses/${courseId}/section`, { ...body })
       .then((res) => res.json())
       .then(() => navigate(`/courses/${courseId}`));
-  }
-    
+  };
 
   const generateImage = () => {
     if (!formValues.title) {
       return Swal.fire({
         icon: 'error',
         title: 'Oops...',
-        text: 'Debes ingresar un nombre para el curso antes de generar la imagen',
+        text: 'Debes ingresar un nombre para la sección antes de generar la imagen.',
       });
     }
 
@@ -59,7 +67,7 @@ export const SectionCreationPage = () => {
       return Swal.fire({
         icon: 'error',
         title: 'Oops...',
-        text: 'Debes ingresar una descripción para el curso antes de generar la imagen',
+        text: 'Debes ingresar una descripción para la sección antes de generar la imagen.',
       });
     }
 
@@ -79,7 +87,7 @@ export const SectionCreationPage = () => {
       style={{
         display: 'flex',
         justifyContent: 'center',
-        alignItems: 'flex-start',  /* Alinea el contenido al inicio, en lugar de al centro */
+        alignItems: 'flex-start',
         height: '100vh',
         backgroundColor: '#f6effa',
         width: '100vw',
@@ -88,7 +96,7 @@ export const SectionCreationPage = () => {
       <div style={{
         display: 'flex',
         flexDirection: 'column',
-        alignItems: 'flex-start', /* Alinea el contenido al principio */
+        alignItems: 'flex-start',
         padding: '20px',
         width: '100%',
         height: '100%',
@@ -142,7 +150,6 @@ export const SectionCreationPage = () => {
             justifyContent: 'center',
             alignItems: 'center',
           }}>
-
             {imageLoading ? <button style={{
               backgroundColor: '#4d3a8e',
               color: 'white',
@@ -179,7 +186,6 @@ export const SectionCreationPage = () => {
               <FontAwesomeIcon icon={faWandMagicSparkles} />
               Generar Imagen
             </button>)}
-
           </div>) : <div style={{
             flex: '1',
           }}>

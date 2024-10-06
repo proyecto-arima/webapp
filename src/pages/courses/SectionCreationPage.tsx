@@ -42,6 +42,42 @@ export const SectionCreationPage = () => {
       return
     }
 
+    // Expresión regular para permitir caracteres alfanuméricos, espacios y letras con tildes
+    const alphanumericWithAccentsRegex = /^[a-zA-ZáéíóúÁÉÍÓÚñÑ0-9\s]+$/;
+  
+    const titleInvalid = !alphanumericWithAccentsRegex.test(formValues.title);
+    const descriptionInvalid = formValues.description && !alphanumericWithAccentsRegex.test(formValues.description);
+  
+    if (titleInvalid && descriptionInvalid) {
+      SwalUtils.errorSwal(
+        'Error en los campos',
+        'El título y la descripción solo pueden contener letras, números, espacios y tildes.',
+        'Aceptar',
+        () => navigate(`/courses/${courseId}/new-section`)
+      );
+      return;
+    }
+  
+    if (titleInvalid) {
+      SwalUtils.errorSwal(
+        'Error en el título',
+        'El título solo puede contener letras, números, espacios y tildes.',
+        'Aceptar',
+        () => navigate(`/courses/${courseId}/new-section`)
+      );
+      return;
+    }
+  
+    if (descriptionInvalid) {
+      SwalUtils.errorSwal(
+        'Error en la descripción',
+        'La descripción solo puede contener letras, números, espacios y tildes.',
+        'Aceptar',
+        () => navigate(`/courses/${courseId}/new-section`)
+      );
+      return;
+    }
+
     const body = {
       ...formValues,
       name: formValues.title,

@@ -4,6 +4,7 @@ import ReactSelect from "react-select";
 import { Card, Input } from "reactstrap";
 import { API_URL } from "../../config";
 import { post } from "../../utils/network";
+import { SwalUtils } from "../../utils/SwalUtils";
 
 interface IContentCreationFormValues {
   title?: string;
@@ -13,7 +14,7 @@ interface IContentCreationFormValues {
 
 export const SectionContentCreation = () => {
 
-  const [formValues, setFormValues] = useState<IContentCreationFormValues>();
+  const [formValues, setFormValues] = useState<IContentCreationFormValues>({});
   const { courseId, sectionId } = useParams<{ courseId: string, sectionId: string }>();
   const navigate = useNavigate();
 
@@ -25,6 +26,29 @@ export const SectionContentCreation = () => {
     formData.append('publicationType', formValues?.publicationType as string);
     formData.append('file', formValues?.file as string);
 
+      if (!formValues.title) {
+        SwalUtils.errorSwal(
+          'Error en la creación de contenido',
+          'El título no puede estar vacío. Por favor, ingresa un título válido.',
+          'Aceptar',
+          () => navigate(`/courses/${courseId}/sections/${sectionId}/new`)
+        );
+        return;
+      }
+  
+      // Expresión regular para permitir caracteres alfanuméricos, espacios y letras con tildes
+      const alphanumericWithAccentsRegex = /^[a-zA-ZáéíóúÁÉÍÓÚñÑ0-9\s]+$/;
+  
+      if (!alphanumericWithAccentsRegex.test(formValues.title)) {
+        SwalUtils.errorSwal(
+          'Error en el título',
+          'El título solo puede contener letras, números, espacios y tildes.',
+          'Aceptar',
+          () => navigate(`/courses/${courseId}/sections/${sectionId}/new`)
+        );
+        return;
+      }
+
     // TODO: Usar post de utils/network
     fetch(`${API_URL}/courses/${courseId}/sections/${sectionId}/contents`, {
       method: 'POST',
@@ -34,8 +58,7 @@ export const SectionContentCreation = () => {
       navigate(`/courses/${courseId}/sections/${sectionId}`);
     }
     );
-  }
-
+  };
 
   return (
     <div
@@ -87,4 +110,4 @@ export const SectionContentCreation = () => {
     </div>
   </div>
   );
-}
+};

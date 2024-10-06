@@ -66,11 +66,6 @@ export default function SectionContentDashboardFormTeachers({ content, user, cou
               justifyContent: 'flex-end',
               gap: '1rem',
             }}>
-              <button className='btn-purple-2' onClick={() => {
-                  navigate(`/courses/${courseId}/sections/${sectionId}/contents/${c.id}/edit-title`);
-                }}>
-                <FontAwesomeIcon icon={faEdit} />
-              </button>
               <button className="btn-purple-2"
                 onClick={() => {
                   navigate(`/courses/${courseId}/sections/${sectionId}/content/${c.id}?url=${encodeURIComponent(c.presignedUrl)}`);
@@ -81,7 +76,22 @@ export default function SectionContentDashboardFormTeachers({ content, user, cou
                   navigate(`/courses/${courseId}/sections/${sectionId}/content/${c.id}/map`);
                 }}
               >Ver contenido generado</button>
+
+              <div style={{
+                borderLeft: '1px solid #000000',
+                height: 'auto',
+                margin: '0 1rem',
+              }}></div>
+              
               {user.role === 'TEACHER' && (
+                <button className='btn-purple-2' onClick={() => {
+                  navigate(`/courses/${courseId}/sections/${sectionId}/contents/${c.id}/edit-title`);
+                }}>
+                <FontAwesomeIcon icon={faEdit} />
+              </button>
+              )}
+              {user.role === 'TEACHER' && (
+                
                 <button className='btn-purple-2' onClick={() => handleDeleteContent(c.id)}>
                   <FontAwesomeIcon icon={faTrash} />
                 </button>

@@ -69,6 +69,19 @@ export const EditContentPage: React.FC = () => {
       return;
     }
 
+    // Expresión regular para permitir caracteres alfanuméricos, espacios y letras con tildes
+    const alphanumericWithAccentsRegex = /^[a-zA-ZáéíóúÁÉÍÓÚñÑ0-9\s]+$/;
+  
+    if (!alphanumericWithAccentsRegex.test(formData.title)) {
+      SwalUtils.errorSwal(
+        'Error en el título',
+        'El título solo puede contener letras, números, espacios y tildes.',
+        'Aceptar',
+        () => navigate(`/courses/${courseId}/sections/${sectionId}/contents/${contentId}/edit-title`)
+      );
+      return;
+    }
+
     SwalUtils.infoSwal(
       '¿Estás seguro de que quieres modificar este contenido?',
       'Esta acción modificará los datos del contenido.',

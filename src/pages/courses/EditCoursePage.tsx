@@ -79,7 +79,42 @@ export const EditCoursePage: React.FC = () => {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
-    // Verificar si el título está vacío o indefinido
+    // Expresión regular para permitir caracteres alfanuméricos, espacios y letras con tildes
+    const alphanumericWithAccentsRegex = /^[a-zA-ZáéíóúÁÉÍÓÚñÑ0-9\s]+$/;
+  
+    const titleInvalid = !alphanumericWithAccentsRegex.test(formData.title);
+    const descriptionInvalid = formData.description && !alphanumericWithAccentsRegex.test(formData.description);
+  
+    if (titleInvalid && descriptionInvalid) {
+      SwalUtils.errorSwal(
+        'Error en los campos',
+        'El título y la descripción solo pueden contener letras, números, espacios y tildes.',
+        'Aceptar',
+        () => navigate(`/courses/${courseId}/edit`)
+      );
+      return;
+    }
+  
+    if (titleInvalid) {
+      SwalUtils.errorSwal(
+        'Error en el título',
+        'El título solo puede contener letras, números, espacios y tildes.',
+        'Aceptar',
+        () => navigate(`/courses/${courseId}/edit`)
+      );
+      return;
+    }
+  
+    if (descriptionInvalid) {
+      SwalUtils.errorSwal(
+        'Error en la descripción',
+        'La descripción solo puede contener letras, números, espacios y tildes.',
+        'Aceptar',
+        () => navigate(`/courses/${courseId}/edit`)
+      );
+      return;
+    }
+
   if (!formData.title?.trim()) {
     SwalUtils.errorSwal(
       'Error en Editar el Curso',

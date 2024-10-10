@@ -32,7 +32,6 @@ export const CourseCreationPage = () => {
   };
 
   const createCourse = () => {
-    // Verificar si el título está vacío
     if (!formValues.title) {
       SwalUtils.errorSwal(
         'Error al crear el curso',
@@ -40,14 +39,50 @@ export const CourseCreationPage = () => {
         'Aceptar',
         () => navigate(`/courses/create`)
       );
-      return; // Detener la ejecución si el título está vacío
+      return;
     }
-
+  
+    // Expresión regular para permitir caracteres alfanuméricos, espacios y letras con tildes
+    const alphanumericWithAccentsRegex = /^[a-zA-ZáéíóúÁÉÍÓÚñÑ0-9\s]+$/;
+  
+    const titleInvalid = !alphanumericWithAccentsRegex.test(formValues.title);
+    const descriptionInvalid = formValues.description && !alphanumericWithAccentsRegex.test(formValues.description);
+  
+    if (titleInvalid && descriptionInvalid) {
+      SwalUtils.errorSwal(
+        'Error en los campos',
+        'El título y la descripción solo pueden contener letras, números, espacios y tildes.',
+        'Aceptar',
+        () => navigate(`/courses/create`)
+      );
+      return;
+    }
+  
+    if (titleInvalid) {
+      SwalUtils.errorSwal(
+        'Error en el título',
+        'El título solo puede contener letras, números, espacios y tildes.',
+        'Aceptar',
+        () => navigate(`/courses/create`)
+      );
+      return;
+    }
+  
+    if (descriptionInvalid) {
+      SwalUtils.errorSwal(
+        'Error en la descripción',
+        'La descripción solo puede contener letras, números, espacios y tildes.',
+        'Aceptar',
+        () => navigate(`/courses/create`)
+      );
+      return;
+    }
+  
     const body = { 
       ...formValues,
       ...(autoGenerateImage ? { image: generatedImage } : {}),
     };
-
+  
     return post('/courses', { ...body })
       .then((res) => res.json())
       .then((res) => {

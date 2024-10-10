@@ -88,6 +88,42 @@ export const EditSectionPage: React.FC = () => {
       return;
     }
 
+    // Expresión regular para permitir caracteres alfanuméricos, espacios y letras con tildes
+    const alphanumericWithAccentsRegex = /^[a-zA-ZáéíóúÁÉÍÓÚñÑ0-9\s]+$/;
+  
+    const titleInvalid = !alphanumericWithAccentsRegex.test(formData.name);
+    const descriptionInvalid = formData.description && !alphanumericWithAccentsRegex.test(formData.description);
+  
+    if (titleInvalid && descriptionInvalid) {
+      SwalUtils.errorSwal(
+        'Error en los campos',
+        'El título y la descripción solo pueden contener letras, números, espacios y tildes.',
+        'Aceptar',
+        () => navigate(`/courses/${courseId}/sections/${sectionId}/edit`)
+      );
+      return;
+    }
+  
+    if (titleInvalid) {
+      SwalUtils.errorSwal(
+        'Error en el título',
+        'El título solo puede contener letras, números, espacios y tildes.',
+        'Aceptar',
+        () => navigate(`/courses/${courseId}/sections/${sectionId}/edit`)
+      );
+      return;
+    }
+  
+    if (descriptionInvalid) {
+      SwalUtils.errorSwal(
+        'Error en la descripción',
+        'La descripción solo puede contener letras, números, espacios y tildes.',
+        'Aceptar',
+        () => navigate(`/courses/${courseId}/sections/${sectionId}/edit`)
+      );
+      return;
+    }
+
     SwalUtils.infoSwal(
       '¿Estás seguro de que quieres modificar esta sección?',
       'Esta acción modificará los datos de la sección.',
@@ -250,7 +286,7 @@ export const EditSectionPage: React.FC = () => {
             </div>
           ) : (
             <div style={{ flex: '1' }}>
-              <Input name="image" type="text" placeholder="URL de la imagen" className="mb-3" onChange={handleChange} />
+              <Input name="image" type="text" value={formData.image} placeholder="URL de la imagen" className="mb-3" onChange={handleChange} />
             </div>
           )}
 

@@ -116,11 +116,11 @@ export const SurveyPage = () => {
   const user = useSelector((state: RootState) => state.user);
   const navigate = useNavigate();
 
-  const questions = user.surveyAvailable && user.role === 'STUDENT' ? questionsStudent : user.role === 'TEACHER' ? questionsTeacher : undefined;
+  const questions = user.requiresSurvey && user.role === 'STUDENT' ? questionsStudent : user.role === 'TEACHER' ? questionsTeacher : undefined;
   const [showSurvey, setShowSurvey] = useState(false);
 
-  useEffect(() => {
-    if (!user.surveyAvailable) {
+  useEffect(() => {   
+    if (!user.requiresSurvey) {
       navigate('/courses/dashboard', { replace: true });
     };
   }, [user]); 

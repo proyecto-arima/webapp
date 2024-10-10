@@ -23,7 +23,7 @@ export const CourseDashboardPage = () => {
   const history = useNavigate();
 
   useEffect(() => {
-    if (user.surveyAvailable) {
+    if (user.requiresSurvey) {
       SwalUtils.infoSwal(
         "Encuesta disponible",
         "Hay una encuesta disponible para evaluar el contenido de la plataforma. ¿Deseas realizarla?",
@@ -32,7 +32,7 @@ export const CourseDashboardPage = () => {
         () => history("/me/survey"),
       );
     }
-  }, [user.surveyAvailable, history]);
+  }, [user.requiresSurvey, history]);
 
   const handleViewCourse = (courseId: string) => {
     history(`/courses/${courseId}`);

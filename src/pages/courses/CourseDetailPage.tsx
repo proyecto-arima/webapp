@@ -166,10 +166,16 @@ export const CourseDetailPage: React.FC = () => {
                         />
                         {user.role === 'TEACHER' && (
                           <div style={{ position: 'absolute', top: '1rem', right: '1rem' }}>
-                            <Badge color={section.visible ? 'success' : 'danger'}>
-                              {section.visible ? 'Visible para los estudiantes' : 'No visible para los estudiantes'}
-                            </Badge>
-                          </div>
+                          <Badge 
+                            color={section.visible ? 'success' : 'danger'} 
+                            style={{
+                              boxShadow: '0px 4px 8px rgba(0, 0, 0, 0.2)',
+                              fontSize: '0.9rem', 
+                              padding: '0.5rem 1rem'
+                            }}>
+                            {section.visible ? 'Visible para los estudiantes' : 'No visible para los estudiantes'}
+                          </Badge>
+                        </div>
                         )}
                       </div>
                       <div style={{

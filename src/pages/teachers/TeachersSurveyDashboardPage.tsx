@@ -2,29 +2,26 @@ import { useEffect, useState } from "react";
 import { Card, Table } from "reactstrap";
 import { get } from "../../utils/network";
 
-interface ITeacher {
-  id: string;
-  firstName: string;
-  lastName: string;
-  email: string;
-}
+export const TeachersSurveyDashboardPage = () => {
 
-
-export const TeacherDashboardPage = () => {
-  const [teachers, setTeachers] = useState<ITeacher[]>([]);
+  const [students, setStudents] = useState<any[]>([]);
 
   useEffect(() => {
-    get('/teachers')
-      .then(res => res.json())
-      .then(res => res.data)
-      .then((data: any[]) => {
-        setTeachers(data.map(teacherObject => ({
-          id: teacherObject.id,
-          firstName: teacherObject.user.firstName,
-          lastName: teacherObject.user.lastName,
-          email: teacherObject.user.email,
-        })));
-      });
+    // get('/students').then(res => res.json()).then(res => res.data).then((data: any[]) => setStudents(data));
+    get('/teachers').then(res => res.json()).then(res => res.data).then((data: any[]) => {
+      // console.log(data);
+    });
+    get('/users/66e3abfd888691f9e9368663').then(res => res.json()).then(res => res.data).then((data: any[]) => {
+      console.log(data);
+    });
+    setStudents([
+      {
+        id: '1',
+        firstName: 'Ricardo',
+        lastName: 'Monzon',
+        email: 'rmongozn@gmail.com'
+      },
+    ]);
   }, []);
 
 
@@ -48,10 +45,10 @@ export const TeacherDashboardPage = () => {
         height: '100%',
       }}
     >
-      {/* BUG: NO MUESTRA LOS DOCENTES */}
       <Card style={{ width: '100%', paddingInline: '2rem', paddingBlock: '1rem', height: '100%' }}>
-        <h2>Docentes</h2>
+        <h2>Estudiantes</h2>
         <hr />
+        <div style={{ overflow: 'auto'}}>
         <Table>
           <thead>
             <tr>
@@ -61,16 +58,17 @@ export const TeacherDashboardPage = () => {
             </tr>
           </thead>
           <tbody>
-            {teachers?.map(teacher => (
-              <tr key={teacher.id}>
-                <td>{teacher.firstName}</td>
-                <td>{teacher.lastName}</td>
-                <td>{teacher.email}</td>
+            {students?.map(student => (
+              <tr key={student.id}>
+                <td>{student.firstName}</td>
+                <td>{student.lastName}</td>
+                <td>{student.email}</td>
               </tr>
             ))}
           </tbody>
 
         </Table>
+        </div>
       </Card>
     </div>
   </div>

@@ -15,12 +15,15 @@ import StudentRouter from '../routes/StudentRouter';
 import { TeacherRouter } from '../routes/TeacherRouter';
 
 import { TeacherStudentsSurveyDashboardPage } from "./teachers/TeacherStudentsSurveyDashboardPage";
+import { TeacherLearningTypeDashboardPage } from './teachers/TeacherLearningTypeDashboardPage';
 import { StudentsSurveyDashboardPage } from '../pages/directors/StudentsSurveyDashboardPage';
 import { TeachersSurveyDashboardPage } from '../pages/directors/TeachersSurveyDashboardPage';
+import { DirectorLearningTypeDashboardPage } from '../pages/directors/DirectorLearningTypeDashboardPage';
 
 import Sidebar from '../components/Sidebar';
 import { get, del } from '../utils/network';
 import { DEFAULT_PAGE_ROLE } from '../config';
+
 
 export const Index = () => {
   const isAuthenticated = useSelector((state: RootState) => state.auth.isAuthenticated);
@@ -134,6 +137,7 @@ export const Index = () => {
             <Route path='/teachers/*' element={<TeacherRouter />} />
             <Route path="/students-survey" element={<StudentsSurveyDashboardPage />} />
             <Route path="/teachers-survey" element={<TeachersSurveyDashboardPage />} />
+            <Route path="/students/profile" element={<DirectorLearningTypeDashboardPage />} />
             <Route path="*" element={<Navigate to={DEFAULT_PAGE_ROLE.DIRECTOR} replace />} />
           </>
         )}
@@ -143,6 +147,7 @@ export const Index = () => {
           <>
             <Route path='/courses/*' element={<CourseRoutes />} />
             <Route path="/students/survey" element={<TeacherStudentsSurveyDashboardPage />} />
+            <Route path="/students/profile" element={<TeacherLearningTypeDashboardPage />} />
             <Route path="*" element={<Navigate to={DEFAULT_PAGE_ROLE.TEACHER} replace />} />
           </>
         )}

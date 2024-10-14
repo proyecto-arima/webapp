@@ -61,6 +61,17 @@ export default function Sidebar() {
                   <span>Encuestas de satisfacción</span>
                 </NavItem>
               </NavLink>
+
+              <NavLink to={'/students/profile'} end className={({ isActive }) => isActive ? 'sidebar-navlink-active' : 'sidebar-navlink-inactive'}>
+                <NavItem className='sidebar-navlink-item'>
+                  <FontAwesomeIcon icon={faCircle} style={{
+                    width: '0.6rem',
+                    color: '#49454f',
+                  }} />
+                  <span>Tipos de Aprendizaje</span>
+                </NavItem>
+              </NavLink>
+
             </div>
           )}
 
@@ -186,6 +197,16 @@ export default function Sidebar() {
                     color: '#49454f',
                   }} />
                   <span>Encuestas de satisfacción - Docentes</span>
+                </NavItem>
+              </NavLink>
+
+              <NavLink to={'/students/profile'} end className={({ isActive }) => isActive ? 'sidebar-navlink-active' : 'sidebar-navlink-inactive'}>
+                <NavItem className='sidebar-navlink-item'>
+                  <FontAwesomeIcon icon={faCircle} style={{
+                    width: '0.6rem',
+                    color: '#49454f',
+                  }} />
+                  <span>Tipos de Aprendizaje</span>
                 </NavItem>
               </NavLink>
 

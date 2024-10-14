@@ -50,6 +50,17 @@ export default function Sidebar() {
                   </NavItem>
                 </NavLink>
               ))}
+
+              <span className='sidebar-section-title'>Reportes</span>
+              <NavLink to={'/students/survey'} end className={({ isActive }) => isActive ? 'sidebar-navlink-active' : 'sidebar-navlink-inactive'}>
+                <NavItem className='sidebar-navlink-item'>
+                  <FontAwesomeIcon icon={faCircle} style={{
+                    width: '0.6rem',
+                    color: '#49454f',
+                  }} />
+                  <span>Encuestas de satisfacción</span>
+                </NavItem>
+              </NavLink>
             </div>
           )}
 
@@ -157,6 +168,27 @@ export default function Sidebar() {
                   <span>Nuevo Docente</span>
                 </NavItem>
               </NavLink>
+
+              <span className='sidebar-section-title'>Reportes</span>
+              <NavLink to={'/students-survey'} end className={({ isActive }) => isActive ? 'sidebar-navlink-active' : 'sidebar-navlink-inactive'}>
+                <NavItem className='sidebar-navlink-item'>
+                  <FontAwesomeIcon icon={faCircle} style={{
+                    width: '0.6rem',
+                    color: '#49454f',
+                  }} />
+                  <span>Encuestas de satisfacción - Estudiantes</span>
+                </NavItem>
+              </NavLink>
+              <NavLink to={'/teachers-survey'} end className={({ isActive }) => isActive ? 'sidebar-navlink-active' : 'sidebar-navlink-inactive'}>
+                <NavItem className='sidebar-navlink-item'>
+                  <FontAwesomeIcon icon={faCircle} style={{
+                    width: '0.6rem',
+                    color: '#49454f',
+                  }} />
+                  <span>Encuestas de satisfacción - Docentes</span>
+                </NavItem>
+              </NavLink>
+
             </div>
           )}
         </div>

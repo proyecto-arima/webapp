@@ -2,16 +2,28 @@ import { useEffect, useState } from "react";
 import { Card, Table } from "reactstrap";
 import { get } from "../../utils/network";
 
+interface ITeacher {
+  id: string;
+  firstName: string;
+  lastName: string;
+  email: string;
+}
+
+
 export const TeacherDashboardPage = () => {
-  const [teachers, setTeachers] = useState<any[]>([]);
+  const [teachers, setTeachers] = useState<ITeacher[]>([]);
 
   useEffect(() => {
     get('/teachers')
       .then(res => res.json())
       .then(res => res.data)
       .then((data: any[]) => {
-        console.log(data);
-        setTeachers(data);
+        setTeachers(data.map(teacherObject => ({
+          id: teacherObject.id,
+          firstName: teacherObject.user.firstName,
+          lastName: teacherObject.user.lastName,
+          email: teacherObject.user.email,
+        })));
       });
   }, []);
 

@@ -14,6 +14,10 @@ import ProfileRouter from '../routes/ProfileRouter';
 import StudentRouter from '../routes/StudentRouter';
 import { TeacherRouter } from '../routes/TeacherRouter';
 
+import { TeacherStudentsSurveyDashboardPage } from "./teachers/TeacherStudentsSurveyDashboardPage";
+import { StudentsSurveyDashboardPage } from '../pages/directors/StudentsSurveyDashboardPage';
+import { TeachersSurveyDashboardPage } from '../pages/directors/TeachersSurveyDashboardPage';
+
 import Sidebar from '../components/Sidebar';
 import { get, del } from '../utils/network';
 import { DEFAULT_PAGE_ROLE } from '../config';
@@ -128,6 +132,8 @@ export const Index = () => {
           <>
             <Route path='/students/*' element={<StudentRouter />} />
             <Route path='/teachers/*' element={<TeacherRouter />} />
+            <Route path="/students-survey" element={<StudentsSurveyDashboardPage />} />
+            <Route path="/teachers-survey" element={<TeachersSurveyDashboardPage />} />
             <Route path="*" element={<Navigate to={DEFAULT_PAGE_ROLE.DIRECTOR} replace />} />
           </>
         )}
@@ -136,6 +142,7 @@ export const Index = () => {
         {user.role === 'TEACHER' && (
           <>
             <Route path='/courses/*' element={<CourseRoutes />} />
+            <Route path="/students/survey" element={<TeacherStudentsSurveyDashboardPage />} />
             <Route path="*" element={<Navigate to={DEFAULT_PAGE_ROLE.TEACHER} replace />} />
           </>
         )}

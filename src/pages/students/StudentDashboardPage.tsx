@@ -99,7 +99,7 @@ export const StudentDashboardPage = () => {
                   <th>Nombre</th>
                   <th>Apellido</th>
                   <th>Email</th>
-                  <th>Acción</th>
+                  <th>Editar Rol</th>
                 </tr>
               </thead>
               <tbody>

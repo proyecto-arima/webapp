@@ -35,19 +35,6 @@ export const SectionContentCreation = () => {
         );
         return;
       }
-  
-      // Expresión regular para permitir caracteres alfanuméricos, espacios y letras con tildes
-      const alphanumericWithAccentsRegex = /^[a-zA-ZáéíóúÁÉÍÓÚñÑ0-9\s]+$/;
-  
-      if (!alphanumericWithAccentsRegex.test(formValues.title)) {
-        SwalUtils.errorSwal(
-          'Error en el título',
-          'El título solo puede contener letras, números, espacios y tildes.',
-          'Aceptar',
-          () => navigate(`/courses/${courseId}/sections/${sectionId}/new`)
-        );
-        return;
-      }
 
     // TODO: Usar post de utils/network
     fetch(`${API_URL}/courses/${courseId}/sections/${sectionId}/contents`, {

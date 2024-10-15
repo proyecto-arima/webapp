@@ -42,42 +42,6 @@ export const SectionCreationPage = () => {
       return
     }
 
-    // Expresión regular para permitir caracteres alfanuméricos, espacios y letras con tildes
-    const alphanumericWithAccentsRegex = /^[a-zA-ZáéíóúÁÉÍÓÚñÑ0-9\s]+$/;
-  
-    const titleInvalid = !alphanumericWithAccentsRegex.test(formValues.title);
-    const descriptionInvalid = formValues.description && !alphanumericWithAccentsRegex.test(formValues.description);
-  
-    if (titleInvalid && descriptionInvalid) {
-      SwalUtils.errorSwal(
-        'Error en los campos',
-        'El título y la descripción solo pueden contener letras, números, espacios y tildes.',
-        'Aceptar',
-        () => navigate(`/courses/${courseId}/new-section`)
-      );
-      return;
-    }
-  
-    if (titleInvalid) {
-      SwalUtils.errorSwal(
-        'Error en el título',
-        'El título solo puede contener letras, números, espacios y tildes.',
-        'Aceptar',
-        () => navigate(`/courses/${courseId}/new-section`)
-      );
-      return;
-    }
-  
-    if (descriptionInvalid) {
-      SwalUtils.errorSwal(
-        'Error en la descripción',
-        'La descripción solo puede contener letras, números, espacios y tildes.',
-        'Aceptar',
-        () => navigate(`/courses/${courseId}/new-section`)
-      );
-      return;
-    }
-
     const body = {
       ...formValues,
       name: formValues.title,
@@ -109,13 +73,58 @@ export const SectionCreationPage = () => {
 
     setImageLoading(true);
 
-    post('/images', {
-      name: formValues.title,
-      description: formValues.description,
-    }).then((res) => res.json()).then((res) => {
+    // Show swal while loading, and confirmation message when finished:
+
+    Swal.fire({
+      title: 'Generar imagen con IA',
+      html: 'Tu imagen se generará utilizando IA a partir del nombre y descripción de la sección. Este proceso puede tardar unos segundos. Para continuar presione ok.',
+      icon: 'info',
+      showCancelButton: !imageLoading,
+      showCloseButton: false,
+      confirmButtonText: 'Ok',
+      cancelButtonText: 'Cancelar',
+      allowOutsideClick: false,
+      allowEscapeKey: false,
+      preConfirm: async () => {
+        Swal.showLoading();
+        Swal.getCancelButton()?.setAttribute('hidden', "true")
+        return post('/images', {
+          name: formValues.title,
+          description: formValues.description,
+        }).then((res) => res.json()).then((res) => {
+          setImageLoading(false);
+          setGeneratedImage(res.data);
+          return res;
+        });
+      }
+    }).then((result) => {
       setImageLoading(false);
-      setGeneratedImage(res.data);
-    });
+      if (result.isConfirmed) {
+        const generatedImage = result.value.data;
+        Swal.fire({
+          title: 'Imagen generada',
+          html: '<img src="' + generatedImage + '" style="width: 200px; border-radius: 0.5rem; object-fit: cover; overflow: hidden;" />',
+          icon: 'success',
+          confirmButtonText: '¡La quiero!',
+          cancelButtonText: 'Cancelar',
+          showCancelButton: true,
+          showDenyButton: true,
+          allowOutsideClick: false,
+          denyButtonText: 'Regenerar',
+        }).then((result) => {
+          if (result.isDenied) {
+            generateImage();
+          }
+          if(result.isConfirmed) {
+            return;
+          }
+          if(result.isDismissed) {
+            setGeneratedImage(null);
+          }
+        });
+      }
+    })
+
   };
 
   return (

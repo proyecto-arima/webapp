@@ -8,6 +8,7 @@ import { SwalUtils } from '../../utils/SwalUtils';
 import Swal from 'sweetalert2';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faWandMagicSparkles } from '@fortawesome/free-solid-svg-icons';
+import { API_URL } from '../../config';
 
 interface ICourse {
   id: string;
@@ -28,6 +29,7 @@ export const EditCoursePage: React.FC = () => {
   const [generatedImage, setGeneratedImage] = useState<string | null>(null);
   const [imageLoading, setImageLoading] = useState<boolean>(false);
   const [loading, setLoading] = useState(true);
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
@@ -61,9 +63,40 @@ export const EditCoursePage: React.FC = () => {
     }));
   };
 
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files) {
+      setSelectedFile(e.target.files[0]);
+    }
+  };
+
   const confirmEdit = async () => {
+
+    let imageUrl = generatedImage || formData.image;
+
+    // Cuando no se genera automáticamente la imagen y se sube un archivo:
+    if (!autoGenerateImage && selectedFile) {
+      const formData = new FormData();
+      formData.append('file', selectedFile);
+
+      const res = await fetch(`${API_URL}/images/url/`, {
+        method: 'POST',
+        credentials: 'include',
+        body: formData
+      })
+
+      const json = await res.json();
+      imageUrl = json.data;
+    }
+
+    const body = {
+      ...formData,
+      name: formData.title,
+      title: undefined,
+      image: imageUrl,
+    };
+
     const updatedData = { 
-      ...formData, 
+      ...body, 
       ...(autoGenerateImage ? { image: generatedImage } : {}) 
     };
 
@@ -227,7 +260,7 @@ export const EditCoursePage: React.FC = () => {
             color: '#6b7280'
           }}>
             Para generar una imagen automáticamente a partir del nombre y descripción del curso, clickea en Generar Imagen y espera que la magia ocurra.
-            También puedes utilizar una URL para elegir manualmente la imagen del curso.
+            También puedes subir un archivo con extensión .png para elegir manualmente la imagen del curso, si lo prefieres.
           </p>
           <div className='d-flex flex-row mb-3 gap-3'>
             <Input
@@ -278,13 +311,7 @@ export const EditCoursePage: React.FC = () => {
             </div>
           ) : (
             <div style={{ flex: '1' }}>
-              <Input 
-              name="image"
-              type="text" 
-              value={formData.image} 
-              placeholder="URL de la portada del curso" 
-              className="mb-3" 
-              onChange={handleChange} />
+              <Input type="file" accept=".png" onChange={handleFileChange} className="mb-3" />
             </div>
           )}
 

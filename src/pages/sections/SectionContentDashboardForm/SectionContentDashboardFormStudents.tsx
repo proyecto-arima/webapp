@@ -39,8 +39,8 @@ export default function SectionContentDashboardFormStudents({ content, user, cou
   const urlByProfile = {
     'DIVERGENTE': 'map',
     'ASIMILADOR': 'summary',
-    'ACOMODADOR': 'summary',
-    'CONVERGENTE': 'summary'
+    'ACOMODADOR': 'audio',
+    'CONVERGENTE': 'game'
   }
 
   return (content?.length ? <Table>

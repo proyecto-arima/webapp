@@ -2,7 +2,7 @@ import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { Card } from "reactstrap";
 
-import logo from '../../assets/images/logo_black.png';
+import logo from '../../assets/images/adaptaria_black.png';
 import LoginForm from "../../components/LoginForm";
 
 import { login } from "../../redux/slices/auth";

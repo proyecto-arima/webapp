@@ -8,6 +8,8 @@ import acomodador from '../../assets/images/acomodador.png';
 import asimilador from '../../assets/images/asimilador.png';
 import convergente from '../../assets/images/convergente.png';
 import divergente from '../../assets/images/divergente.png';
+import { useDispatch } from 'react-redux';
+import { setLearningProfile as setLearningProfileRedux } from '../../redux/slices/user';
 
 
 const result: { [key: string]: { description: string; image: string } } = {
@@ -37,6 +39,7 @@ export const StudentLearningTypeResult = () => {
   const [learningProfile, setLearningProfile] = useState<string | null>(null);
   const location = useLocation();
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   useEffect(() => {
     // get(`/students/${user.id}/learning-profile`).then((res) => {
@@ -44,6 +47,7 @@ export const StudentLearningTypeResult = () => {
     // });
     // console.log(location.state);
     setLearningProfile(location.state?.profile as string ?? 'SIN_PERFIL');
+    dispatch(setLearningProfileRedux(location.state?.profile as string));
   }, []);
 
   return (<div

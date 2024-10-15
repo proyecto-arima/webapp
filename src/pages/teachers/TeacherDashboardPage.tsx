@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Card, Table } from "reactstrap";
 import { get } from "../../utils/network";
+import { useNavigate } from "react-router-dom";
 
 interface ITeacher {
   id: string;
@@ -12,6 +13,7 @@ interface ITeacher {
 
 export const TeacherDashboardPage = () => {
   const [teachers, setTeachers] = useState<ITeacher[]>([]);
+  const navigate = useNavigate();
 
   useEffect(() => {
     get('/teachers')
@@ -50,7 +52,18 @@ export const TeacherDashboardPage = () => {
     >
       {/* BUG: NO MUESTRA LOS DOCENTES */}
       <Card style={{ width: '100%', paddingInline: '2rem', paddingBlock: '1rem', height: '100%' }}>
-        <h2>Docentes</h2>
+        <div style={{
+          display: 'flex',
+          flexDirection: 'row',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          width: '100%',
+        }}>
+          <h2>Docentes</h2>
+          <button className="btn-purple-1" onClick={() => {
+            navigate('/teachers/new');
+          }}>Crear docente</button>
+        </div>
         <hr />
         <Table>
           <thead>

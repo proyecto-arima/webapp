@@ -33,10 +33,14 @@ export const userSlice = createSlice({
     reset: () => {
       return {}
     },
+    setLearningProfile: (state, action) => {
+      state.learningProfile = action.payload
+      return state
+    },
   },
 })
 
 // Action creators are generated for each case reducer function
-export const { setUser, reset } = userSlice.actions
+export const { setUser, reset, setLearningProfile } = userSlice.actions
 
 export default userSlice.reducer

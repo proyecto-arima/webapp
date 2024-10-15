@@ -130,42 +130,23 @@ export default function Sidebar() {
           
           {( user?.role === 'DIRECTOR') && (
             <div className="w-100">
-              <span className='sidebar-section-title'>Estudiantes</span>
+              <span className='sidebar-section-title'>Gestionar usuarios</span>
               <NavLink to={'/students/'} end className={({ isActive }) => isActive ? 'sidebar-navlink-active' : 'sidebar-navlink-inactive'}>
                 <NavItem className='sidebar-navlink-item'>
                   <FontAwesomeIcon icon={faCircle} style={{
                     width: '0.6rem',
                     color: '#49454f',
                   }} />
-                  <span>Estudiantes registrados</span>
+                  <span>Estudiantes</span>
                 </NavItem>
               </NavLink>
-              <NavLink to={'/students/new'} end className={({ isActive }) => isActive ? 'sidebar-navlink-active' : 'sidebar-navlink-inactive'}>
-                <NavItem className='sidebar-navlink-item'>
-                  <FontAwesomeIcon icon={faCircle} style={{
-                    width: '0.6rem',
-                    color: '#49454f',
-                  }} />
-                  <span>Nuevo Estudiante</span>
-                </NavItem>
-              </NavLink>
-              <span className='sidebar-section-title'>Docentes</span>
               <NavLink to={'/teachers/'} end className={({ isActive }) => isActive ? 'sidebar-navlink-active' : 'sidebar-navlink-inactive'}>
                 <NavItem className='sidebar-navlink-item'>
                   <FontAwesomeIcon icon={faCircle} style={{
                     width: '0.6rem',
                     color: '#49454f',
                   }} />
-                  <span>Docentes registrados</span>
-                </NavItem>
-              </NavLink>
-              <NavLink to={'/teachers/new'} end className={({ isActive }) => isActive ? 'sidebar-navlink-active' : 'sidebar-navlink-inactive'}>
-                <NavItem className='sidebar-navlink-item'>
-                  <FontAwesomeIcon icon={faCircle} style={{
-                    width: '0.6rem',
-                    color: '#49454f',
-                  }} />
-                  <span>Nuevo Docente</span>
+                  <span>Docentes</span>
                 </NavItem>
               </NavLink>
 

@@ -1,10 +1,12 @@
 import { useEffect, useState } from "react";
 import { Card, Table } from "reactstrap";
 import { get } from "../../utils/network";
+import { useNavigate } from "react-router-dom";
 
 export const StudentDashboardPage = () => {
 
   const [students, setStudents] = useState<any[]>([]);
+  const navigate = useNavigate();
 
   useEffect(() => {
     get('/students').then(res => res.json()).then(res => res.data).then((data: any[]) => setStudents(data));
@@ -32,7 +34,18 @@ export const StudentDashboardPage = () => {
       }}
     >
       <Card style={{ width: '100%', paddingInline: '2rem', paddingBlock: '1rem', height: '100%' }}>
-        <h2>Estudiantes</h2>
+      <div style={{
+          display: 'flex',
+          flexDirection: 'row',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          width: '100%',
+        }}>
+          <h2>Estudiantes</h2>
+          <button className="btn-purple-1" onClick={() => {
+            navigate('/students/new');
+          }}>Crear estudiante</button>
+        </div>
         <hr />
         <div style={{ overflow: 'auto'}}>
         <Table>

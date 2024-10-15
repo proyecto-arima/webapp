@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
 import Slider from 'react-slick';
-import { Card } from 'reactstrap';
+import { Card, Badge } from 'reactstrap'; // Importa el componente Badge
 
 import "slick-carousel/slick/slick-theme.css";
 import "slick-carousel/slick/slick.css";
@@ -16,7 +16,7 @@ import { faTrash, faEdit } from '@fortawesome/free-solid-svg-icons';
 import placeholder from '../../assets/images/placeholder.webp';
 import empty from '../../assets/images/empty.svg';
 import '../../assets/styles/CourseDetailPage.css';
-import { SwalUtils } from '../../utils/SwalUtils'; // Importa tus utilidades de Swal
+import { SwalUtils } from '../../utils/SwalUtils';
 
 interface ISection {
   id: string;
@@ -34,7 +34,6 @@ interface ICourse {
   matriculationCode: string;
   teacherId: string;
   students: Array<{ id: string; firstName: string; lastName: string }>;
-  sections: ISection[];
 }
 
 export const CourseDetailPage: React.FC = () => {
@@ -43,12 +42,29 @@ export const CourseDetailPage: React.FC = () => {
 
   const { courseId } = useParams<{ courseId: string }>();
   const [course, setCourse] = useState<ICourse | null>(null);
+  const [sections, setSections] = useState<ISection[]>([]);
 
   useEffect(() => {
-    fetchCourses();
+    fetchCourse();
+    fetchSections();
   }, [courseId]);
 
-  const fetchCourses = () => get(`/courses/${courseId}`).then(res => res.json()).then(res => res.data).then((data: ICourse) => setCourse(data));
+  // Fetch course details
+  const fetchCourse = () => get(`/courses/${courseId}`)
+    .then(res => res.json())
+    .then(res => res.data)
+    .then((data: ICourse) => {
+      setCourse(data);
+    });
+
+  // Fetch sections details
+  const fetchSections = () => get(`/courses/${courseId}/sections`)
+    .then(res => res.json())
+    .then(res => res.data)
+    .then((data: ISection[]) => {
+      console.log(data);
+      setSections(data);
+    });
 
   const handleNewSection = () => {
     navigate(`/courses/${courseId}/new-section`);
@@ -62,7 +78,7 @@ export const CourseDetailPage: React.FC = () => {
       'No',
       async () => {
         await del(`/courses/${courseId}/sections/${sectionId}`);
-        await fetchCourses();
+        await fetchSections();
       }
     );
   };
@@ -104,101 +120,122 @@ export const CourseDetailPage: React.FC = () => {
             alignItems: 'center',
             height: '100%',
           }}>
-            {course?.sections?.length ? <Slider
-              dots
-              infinite={course?.sections && course?.sections.length > 1}
-              speed={500}
-              slidesToShow={1}
-              slidesToScroll={1}
-              arrows
-              autoplaySpeed={3000}
-              centerMode
-              className='section-slider'
-              useTransform={false}
-              variableWidth={false}
-            >
-              {course?.sections.map(section => (
-                <Card key={section.id} style={{
-                  display: 'flex',
-                  flexDirection: 'column',
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                  height: '100%',
-                  padding: '1rem',
-                }}
-                  className="section-card"
-                >
-                  <div style={{
-                    display: 'flex',
-                    flexDirection: 'column',
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                    height: '60vh',
-                  }}>
-                    <img src={section.image ? section.image : placeholder}
-                      alt="Section"
-                      style={{
-                        width: '100%',
-                        borderRadius: '0.5rem',
-                        objectFit: 'cover',
-                        overflow: 'hidden',
-                      }}
-                    />
-                  </div>
-                  <div style={{
-                    display: 'flex',
-                    flexDirection: 'row',
-                    justifyContent: 'space-between',
-                    alignItems: 'center',
-                    paddingInline: '1rem',
-                    paddingTop: '1rem',
-                  }}>
-                    <div style={{
-                      width: '80%',
-                      flexGrow: 1,
-                      marginRight: '1rem',
-                      height: '6rem'
-                    }}>
-                      <h2>{section.name}</h2>
-                      <div style={{
-                        textOverflow: 'ellipsis',
-                        overflow: 'hidden',
-                        display: '-webkit-box',
-                        WebkitLineClamp: 2,
-                        WebkitBoxOrient: 'vertical',
-                      }}>
-                        <span>{section.description}</span>
-                      </div>
-                    </div>
-                    <div
-                      className='d-flex flex-row gap-3'
+            {sections.length ? (
+              <Slider
+                dots
+                infinite={sections.length > 1}
+                speed={500}
+                slidesToShow={1}
+                slidesToScroll={1}
+                arrows
+                autoplaySpeed={3000}
+                centerMode
+                className='section-slider'
+                useTransform={false}
+                variableWidth={false}
+              >
+                {sections
+                  .filter(section => user.role !== 'STUDENT' || section.visible) // Filtrar las secciones para los estudiantes
+                  .map(section => (
+                    <Card key={section.id} style={{
+                      display: 'flex',
+                      flexDirection: 'column',
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                      height: '100%',
+                      padding: '1rem',
+                    }}
+                      className="section-card"
                     >
-                      <button className='btn-purple-1' style={{
-                        width: '8rem',
-                        height: '3rem',
-                      }} onClick={() => navigate(`/courses/${courseId}/sections/${section.id}`)}>Ver Sección</button>
-                      {user.role === 'TEACHER' &&
-                        <>
-                          <button className='btn-purple-2' onClick={() => handleEditSection(section.id)}><FontAwesomeIcon icon={faEdit} /></button>
-                          <button className='btn-purple-2' onClick={() => handleDeleteSection(section.id)}><FontAwesomeIcon icon={faTrash} /></button>
-                        </>
-                      }
-                    </div>
-                  </div>
-                </Card>
-              ))}
-            </Slider> : <div className='d-flex flex-column justify-content-center align-items-center'>
-              <img
-                src={empty}
-              ></img>
-              {user.role === 'STUDENT' ? <>
-                <h3>Parece que aún no hay secciones en este curso.</h3>
-                <h4>Por favor intenta de nuevo más tarde</h4>
-              </> : <>
-                <h3>Parece que aún no has creado ninguna sección en este curso.</h3>
-                <h4>Por favor crea una sección para comenzar a añadir contenido.</h4>
-              </>}
-            </div>}
+                      <div style={{
+                        display: 'flex',
+                        flexDirection: 'column',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        height: '60vh',
+                        position: 'relative', // Cambiado aquí
+                      }}>
+                        <img src={section.image ? section.image : placeholder}
+                          alt="Section"
+                          style={{
+                            width: '100%',
+                            borderRadius: '0.5rem',
+                            objectFit: 'cover',
+                            overflow: 'hidden',
+                          }}
+                        />
+                        {user.role === 'TEACHER' && (
+                          <div style={{ position: 'absolute', top: '1rem', right: '1rem' }}>
+                          <Badge 
+                            color={section.visible ? 'success' : 'danger'} 
+                            style={{
+                              boxShadow: '0px 4px 8px rgba(0, 0, 0, 0.2)',
+                              fontSize: '0.9rem', 
+                              padding: '0.5rem 1rem'
+                            }}>
+                            {section.visible ? 'Visible para los estudiantes' : 'No visible para los estudiantes'}
+                          </Badge>
+                        </div>
+                        )}
+                      </div>
+                      <div style={{
+                        display: 'flex',
+                        flexDirection: 'row',
+                        justifyContent: 'space-between',
+                        alignItems: 'center',
+                        paddingInline: '1rem',
+                        paddingTop: '1rem',
+                      }}>
+                        <div style={{
+                          width: '80%',
+                          flexGrow: 1,
+                          marginRight: '1rem',
+                          height: '6rem'
+                        }}>
+                          <h2>{section.name}</h2>
+                          <div style={{
+                            textOverflow: 'ellipsis',
+                            overflow: 'hidden',
+                            display: '-webkit-box',
+                            WebkitLineClamp: 2,
+                            WebkitBoxOrient: 'vertical',
+                          }}>
+                            <span>{section.description}</span>
+                          </div>
+                        </div>
+                        <div className='d-flex flex-row gap-3'>
+                          <button className='btn-purple-1' style={{
+                            width: '8rem',
+                            height: '3rem',
+                          }} onClick={() => navigate(`/courses/${courseId}/sections/${section.id}`)}>Ver Sección</button>
+                          {user.role === 'TEACHER' && (
+                            <>
+                              <button className='btn-purple-2' onClick={() => handleEditSection(section.id)}><FontAwesomeIcon icon={faEdit} /></button>
+                              <button className='btn-purple-2' onClick={() => handleDeleteSection(section.id)}><FontAwesomeIcon icon={faTrash} /></button>
+                            </>
+                          )}
+                        </div>
+                      </div>
+                    </Card>
+                  ))}
+
+              </Slider>
+            ) : (
+              <div className='d-flex flex-column justify-content-center align-items-center'>
+                <img src={empty} alt="No sections available" />
+                {user.role === 'STUDENT' ? (
+                  <>
+                    <h3>Parece que aún no hay secciones en este curso.</h3>
+                    <h4>Por favor intenta de nuevo más tarde</h4>
+                  </>
+                ) : (
+                  <>
+                    <h3>Parece que aún no has creado ninguna sección en este curso.</h3>
+                    <h4>Por favor crea una sección para comenzar a añadir contenido.</h4>
+                  </>
+                )}
+              </div>
+            )}
           </div>
         </Card>
       </div>

@@ -70,45 +70,62 @@ export const EditCoursePage: React.FC = () => {
   };
 
   const confirmEdit = async () => {
-
     let imageUrl = generatedImage || formData.image;
-
+  
     // Cuando no se genera automáticamente la imagen y se sube un archivo:
     if (!autoGenerateImage && selectedFile) {
       const formData = new FormData();
       formData.append('file', selectedFile);
-
+  
       const res = await fetch(`${API_URL}/images/url/`, {
         method: 'POST',
         credentials: 'include',
-        body: formData
-      })
-
+        body: formData,
+      });
+  
       const json = await res.json();
       imageUrl = json.data;
     }
-
+  
     const body = {
       ...formData,
       name: formData.title,
       title: undefined,
       image: imageUrl,
     };
-
+  
     const updatedData = { 
       ...body, 
       ...(autoGenerateImage ? { image: generatedImage } : {}) 
     };
-
+  
     if (courseId) {
-      const updatedCourse = await patch(`/courses/${courseId}`, updatedData);
-      const json = await updatedCourse.json();
-      console.log(json);
-      dispatch(editCourses(json.data));
-      navigate(`/courses/dashboard`);
+      try {
+        const updatedCourse = await patch(`/courses/${courseId}`, updatedData);
+        const json = await updatedCourse.json();
+        console.log(json);
+        dispatch(editCourses(json.data));
+  
+        // Mostrar el mensaje de éxito antes de la redirección
+        SwalUtils.successSwal(
+          'Curso actualizado',
+          'El curso ha sido modificado exitosamente.',
+          'Aceptar',
+          () => navigate(`/courses/dashboard`),
+          () => navigate(`/courses/dashboard`)
+        );
+      } catch (err) {
+        console.error('Error updating course:', err);
+        SwalUtils.errorSwal(
+          'Error',
+          'Hubo un problema al modificar el curso. Inténtalo nuevamente.',
+          'Aceptar',
+          () => navigate(`/courses/${courseId}/edit`)
+        );
+      }
     }
   };
-
+  
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 

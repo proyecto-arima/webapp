@@ -49,11 +49,32 @@ export const CourseDashboardPage = () => {
       'Sí',
       'No',
       async () => {
-        await del(`/courses/${courseId}`);
-        dispatch(setCourses(courses?.filter(course => course.id !== courseId)));
+        try {
+          await del(`/courses/${courseId}`);
+          dispatch(setCourses(courses?.filter(course => course.id !== courseId)));
+  
+          // Mensaje de éxito al eliminar el curso
+          SwalUtils.successSwal(
+            'Curso eliminado',
+            'El curso ha sido eliminado exitosamente.',
+            'Aceptar',
+            () => navigate('/courses'),
+            () => navigate('/courses')
+            
+          );
+        } catch (error) {
+          // Mensaje de error en caso de que algo falle
+          SwalUtils.errorSwal(
+            'Error',
+            'Hubo un problema al eliminar el curso. Inténtalo de nuevo más tarde.',
+            'Aceptar',
+            () => navigate('/courses')
+          );
+        }
       }
     );
   };
+  
 
   return (
     <div

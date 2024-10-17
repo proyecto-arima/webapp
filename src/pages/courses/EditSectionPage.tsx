@@ -31,7 +31,6 @@ export const EditSectionPage: React.FC = () => {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const navigate = useNavigate();
 
-  // Fetch section data when the page loads
   useEffect(() => {
     if (sectionId) {
       get(`/courses/${courseId}/sections/${sectionId}`)
@@ -53,7 +52,6 @@ export const EditSectionPage: React.FC = () => {
     }
   }, [courseId, sectionId]);
 
-  // Handle input changes
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value, type, checked } = e.target as HTMLInputElement;
     setFormData(prevState => ({
@@ -68,14 +66,9 @@ export const EditSectionPage: React.FC = () => {
     }
   };
 
-  
-
-  // Confirm edit
   const confirmEdit = async () => {
-
     let imageUrl = generatedImage || formData.image;
 
-    // Cuando no se genera automáticamente la imagen y se sube un archivo:
     if (!autoGenerateImage && selectedFile) {
       const formData = new FormData();
       formData.append('file', selectedFile);
@@ -84,29 +77,27 @@ export const EditSectionPage: React.FC = () => {
         method: 'POST',
         credentials: 'include',
         body: formData
-      })
+      });
 
       const json = await res.json();
       imageUrl = json.data;
     }
 
-    const body = {
+    const updatedData = {
       ...formData,
-      name: formData.name,
-      title: undefined,
       image: imageUrl,
     };
 
     if (sectionId) {
-      const updatedData = {
-        ...body,
-        ...(autoGenerateImage ? { image: generatedImage } : {})
+      await patch(`/courses/${courseId}/sections/${sectionId}`, updatedData);
+      SwalUtils.successSwal(
+        '¡Sección actualizada!',
+        'La sección fue modificada con éxito.',
+        'Aceptar',
+        () => navigate(`/courses/${courseId}`),
+        () => navigate(`/courses/${courseId}`)
+        )
       };
-      
-        await patch(`/courses/${courseId}/sections/${sectionId}`, updatedData);
-
-        navigate(`/courses/${courseId}`);
-    }
   };
 
   // Handle submit

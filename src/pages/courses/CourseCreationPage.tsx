@@ -7,7 +7,8 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMagic, faWandMagicSparkles } from '@fortawesome/free-solid-svg-icons';
 import Swal from 'sweetalert2';
 import { useNavigate } from 'react-router-dom';
-import { SwalUtils } from '../../utils/SwalUtils'; // Asegúrate de importar SwalUtils
+import { SwalUtils } from '../../utils/SwalUtils';
+import { API_URL } from '../../config';
 
 interface ICourseCreationFormValues {
   title?: string;
@@ -20,6 +21,7 @@ export const CourseCreationPage = () => {
   const [formValues, setFormValues] = useState<ICourseCreationFormValues>({ students: [] });
   const [autoGenerateImage, setAutoGenerateImage] = useState<boolean>(true);
   const [generatedImage, setGeneratedImage] = useState<string | null>(null);
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [imageLoading, setImageLoading] = useState<boolean>(false);
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -31,7 +33,13 @@ export const CourseCreationPage = () => {
     });
   };
 
-  const createCourse = () => {
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files) {
+      setSelectedFile(e.target.files[0]);
+    }
+  };
+
+  const createCourse = async () => {
     if (!formValues.title) {
       SwalUtils.errorSwal(
         'Error al crear el curso',
@@ -42,9 +50,63 @@ export const CourseCreationPage = () => {
       return;
     }
   
-    const body = { 
+    // Expresión regular para permitir caracteres alfanuméricos, espacios y letras con tildes
+    const alphanumericWithAccentsRegex = /^[a-zA-ZáéíóúÁÉÍÓÚñÑ0-9\s]+$/;
+  
+    const titleInvalid = !alphanumericWithAccentsRegex.test(formValues.title);
+    const descriptionInvalid = formValues.description && !alphanumericWithAccentsRegex.test(formValues.description);
+  
+    if (titleInvalid && descriptionInvalid) {
+      SwalUtils.errorSwal(
+        'Error en los campos',
+        'El título y la descripción solo pueden contener letras, números, espacios y tildes.',
+        'Aceptar',
+        () => navigate(`/courses/create`)
+      );
+      return;
+    }
+  
+    if (titleInvalid) {
+      SwalUtils.errorSwal(
+        'Error en el título',
+        'El título solo puede contener letras, números, espacios y tildes.',
+        'Aceptar',
+        () => navigate(`/courses/create`)
+      );
+      return;
+    }
+  
+    if (descriptionInvalid) {
+      SwalUtils.errorSwal(
+        'Error en la descripción',
+        'La descripción solo puede contener letras, números, espacios y tildes.',
+        'Aceptar',
+        () => navigate(`/courses/create`)
+      );
+      return;
+    }
+
+    let imageUrl = generatedImage || formValues.image;
+
+    // Cuando no se genera automáticamente la imagen y se sube un archivo:
+    if (!autoGenerateImage && selectedFile) {
+      const formData = new FormData();
+      formData.append('file', selectedFile);
+
+      const res = await fetch(`${API_URL}/images/url/`, {
+        method: 'POST',
+        credentials: 'include',
+        body: formData
+      })
+
+      const json = await res.json();
+      imageUrl = json.data;
+    }
+
+    const body = {
       ...formValues,
-      ...(autoGenerateImage ? { image: generatedImage } : {}),
+      name: formValues.title,
+      image: imageUrl,
     };
   
     return post('/courses', { ...body })
@@ -76,55 +138,13 @@ export const CourseCreationPage = () => {
 
     setImageLoading(true);
 
-    Swal.fire({
-      title: 'Generar imagen con IA',
-      html: 'Tu imagen se generará utilizando IA a partir del nombre y descripción de la sección. Este proceso puede tardar unos segundos. Para continuar presione ok.',
-      icon: 'info',
-      showCancelButton: !imageLoading,
-      showCloseButton: false,
-      confirmButtonText: 'Ok',
-      cancelButtonText: 'Cancelar',
-      allowOutsideClick: false,
-      allowEscapeKey: false,
-      preConfirm: async () => {
-        Swal.showLoading();
-        Swal.getCancelButton()?.setAttribute('hidden', "true")
-        return post('/images', {
-          name: formValues.title,
-          description: formValues.description,
-        }).then((res) => res.json()).then((res) => {
-          setImageLoading(false);
-          setGeneratedImage(res.data);
-          return res;
-        });
-      }
-    }).then((result) => {
+    post('/images', {
+      name: formValues.title,
+      description: formValues.description,
+    }).then((res) => res.json()).then((res) => {
       setImageLoading(false);
-      if (result.isConfirmed) {
-        const generatedImage = result.value.data;
-        Swal.fire({
-          title: 'Imagen generada',
-          html: '<img src="' + generatedImage + '" style="width: 200px; border-radius: 0.5rem; object-fit: cover; overflow: hidden;" />',
-          icon: 'success',
-          confirmButtonText: '¡La quiero!',
-          cancelButtonText: 'Cancelar',
-          showCancelButton: true,
-          showDenyButton: true,
-          allowOutsideClick: false,
-          denyButtonText: 'Regenerar',
-        }).then((result) => {
-          if (result.isDenied) {
-            generateImage();
-          }
-          if(result.isConfirmed) {
-            return;
-          }
-          if(result.isDismissed) {
-            setGeneratedImage(null);
-          }
-        });
-      }
-    })
+      setGeneratedImage(res.data);
+    });
   };
 
   return (
@@ -173,7 +193,7 @@ export const CourseCreationPage = () => {
             color: '#6b7280'
           }}>
             Para generar una imagen automáticamente a partir del nombre y descripción del curso, clickea en Generar Imagen y espera que la magia ocurra.<br />
-            También puedes utilizar una URL para elegir manualmente la imagen del curso
+            También puedes subir un archivo con extensión .png para elegir manualmente la imagen del curso, si lo prefieres.
           </p>
           <div className='d-flex flex-row mb-3 gap-3'>
             <Input type='checkbox' name='auto-generate' id='auto-generate' onClick={e => setAutoGenerateImage(!autoGenerateImage)} checked={autoGenerateImage} />
@@ -227,7 +247,7 @@ export const CourseCreationPage = () => {
           </div>) : <div style={{
             flex: '1',
           }}>
-            <Input name="image" type="text" placeholder="URL de la portada del curso" className="mb-3" onChange={handleFormChange('image')} />
+            <Input type="file" accept=".png" onChange={handleFileChange} className="mb-3" />
           </div>}
           <div className='d-flex flex-row justify-content-end'>
             <button className="btn-purple-1" onClick={createCourse}>

@@ -25,7 +25,6 @@ export const TeacherDashboardPage = () => {
         const data = await res.json();
 
         // Verifica la estructura de data
-        console.log(data); // Agrega un console.log para verificar la respuesta
         if (data && data.data) {
           setTeachers(data.data.map((teacherObject: any) => ({
             id: teacherObject.user._id,

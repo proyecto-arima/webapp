@@ -87,6 +87,10 @@ export const CourseDetailPage: React.FC = () => {
     navigate(`/courses/${courseId}/sections/${sectionId}/edit`);
   };
 
+  const visibleSections = sections.filter(
+    section => user.role !== 'STUDENT' || section.visible
+  );
+
   return (
     <div
       style={{
@@ -120,10 +124,10 @@ export const CourseDetailPage: React.FC = () => {
             alignItems: 'center',
             height: '100%',
           }}>
-            {sections.length ? (
+            {visibleSections.length ? (
               <Slider
                 dots
-                infinite={sections.length > 1}
+                infinite={visibleSections.length > 1}
                 speed={500}
                 slidesToShow={1}
                 slidesToScroll={1}
@@ -134,91 +138,88 @@ export const CourseDetailPage: React.FC = () => {
                 useTransform={false}
                 variableWidth={false}
               >
-                {sections
-                  .filter(section => user.role !== 'STUDENT' || section.visible) // Filtrar las secciones para los estudiantes
-                  .map(section => (
-                    <Card key={section.id} style={{
+                {visibleSections.map(section => (
+                  <Card key={section.id} style={{
+                    display: 'flex',
+                    flexDirection: 'column',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    height: '100%',
+                    padding: '1rem',
+                  }}
+                    className="section-card"
+                  >
+                    <div style={{
                       display: 'flex',
                       flexDirection: 'column',
                       justifyContent: 'center',
                       alignItems: 'center',
-                      height: '100%',
-                      padding: '1rem',
-                    }}
-                      className="section-card"
-                    >
-                      <div style={{
-                        display: 'flex',
-                        flexDirection: 'column',
-                        justifyContent: 'center',
-                        alignItems: 'center',
-                        height: '60vh',
-                        position: 'relative', // Cambiado aquí
-                      }}>
-                        <img src={section.image ? section.image : placeholder}
-                          alt="Section"
-                          style={{
-                            width: '100%',
-                            borderRadius: '0.5rem',
-                            objectFit: 'cover',
-                            overflow: 'hidden',
-                          }}
-                        />
-                        {user.role === 'TEACHER' && (
-                          <div style={{ position: 'absolute', top: '1rem', right: '1rem' }}>
-                          <Badge 
-                            color={section.visible ? 'success' : 'danger'} 
+                      height: '60vh',
+                      position: 'relative', // Cambiado aquí
+                    }}>
+                      <img src={section.image ? section.image : placeholder}
+                        alt="Section"
+                        style={{
+                          width: '100%',
+                          borderRadius: '0.5rem',
+                          objectFit: 'cover',
+                          overflow: 'hidden',
+                        }}
+                      />
+                      {user.role === 'TEACHER' && (
+                        <div style={{ position: 'absolute', top: '1rem', right: '1rem' }}>
+                          <Badge
+                            color={section.visible ? 'success' : 'danger'}
                             style={{
                               boxShadow: '0px 4px 8px rgba(0, 0, 0, 0.2)',
-                              fontSize: '0.9rem', 
+                              fontSize: '0.9rem',
                               padding: '0.5rem 1rem'
                             }}>
                             {section.visible ? 'Visible para los estudiantes' : 'No visible para los estudiantes'}
                           </Badge>
                         </div>
+                      )}
+                    </div>
+                    <div style={{
+                      display: 'flex',
+                      flexDirection: 'row',
+                      justifyContent: 'space-between',
+                      alignItems: 'center',
+                      paddingInline: '1rem',
+                      paddingTop: '1rem',
+                    }}>
+                      <div style={{
+                        width: '80%',
+                        flexGrow: 1,
+                        marginRight: '1rem',
+                        height: '6rem'
+                      }}>
+                        <h2>{section.name}</h2>
+                        <div style={{
+                          textOverflow: 'ellipsis',
+                          overflow: 'hidden',
+                          display: '-webkit-box',
+                          WebkitLineClamp: 2,
+                          WebkitBoxOrient: 'vertical',
+                        }}>
+                          <span>{section.description}</span>
+                        </div>
+                      </div>
+                      <div className='d-flex flex-row gap-3'>
+                        <button className='btn-purple-1' style={{
+                          width: '8rem',
+                          height: '3rem',
+                        }} onClick={() => navigate(`/courses/${courseId}/sections/${section.id}`)}>Ver Sección</button>
+                        {user.role === 'TEACHER' && (
+                          <>
+                            <button className='btn-purple-2' onClick={() => handleEditSection(section.id)}><FontAwesomeIcon icon={faEdit} /></button>
+                            <button className='btn-purple-2' onClick={() => handleDeleteSection(section.id)}><FontAwesomeIcon icon={faTrash} /></button>
+                          </>
                         )}
                       </div>
-                      <div style={{
-                        display: 'flex',
-                        flexDirection: 'row',
-                        justifyContent: 'space-between',
-                        alignItems: 'center',
-                        paddingInline: '1rem',
-                        paddingTop: '1rem',
-                      }}>
-                        <div style={{
-                          width: '80%',
-                          flexGrow: 1,
-                          marginRight: '1rem',
-                          height: '6rem'
-                        }}>
-                          <h2>{section.name}</h2>
-                          <div style={{
-                            textOverflow: 'ellipsis',
-                            overflow: 'hidden',
-                            display: '-webkit-box',
-                            WebkitLineClamp: 2,
-                            WebkitBoxOrient: 'vertical',
-                          }}>
-                            <span>{section.description}</span>
-                          </div>
-                        </div>
-                        <div className='d-flex flex-row gap-3'>
-                          <button className='btn-purple-1' style={{
-                            width: '8rem',
-                            height: '3rem',
-                          }} onClick={() => navigate(`/courses/${courseId}/sections/${section.id}`)}>Ver Sección</button>
-                          {user.role === 'TEACHER' && (
-                            <>
-                              <button className='btn-purple-2' onClick={() => handleEditSection(section.id)}><FontAwesomeIcon icon={faEdit} /></button>
-                              <button className='btn-purple-2' onClick={() => handleDeleteSection(section.id)}><FontAwesomeIcon icon={faTrash} /></button>
-                            </>
-                          )}
-                        </div>
-                      </div>
-                    </Card>
-                  ))}
-
+                    </div>
+                  </Card>
+                ))}
               </Slider>
             ) : (
               <div className='d-flex flex-column justify-content-center align-items-center'>

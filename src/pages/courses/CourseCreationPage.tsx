@@ -1,12 +1,15 @@
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { Card, Input, Label } from 'reactstrap';
-import { addCourse } from '../../redux/slices/courses';
-import { post } from '../../utils/network';
+import { useNavigate } from 'react-router-dom';
+
+import Swal from 'sweetalert2';
+
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faWandMagicSparkles } from '@fortawesome/free-solid-svg-icons';
-import Swal from 'sweetalert2';
-import { useNavigate } from 'react-router-dom';
+
+import { addCourse } from '../../redux/slices/courses';
+import { post } from '../../utils/network';
 import { SwalUtils } from '../../utils/SwalUtils';
 import { API_URL } from '../../config';
 
@@ -49,13 +52,13 @@ export const CourseCreationPage = () => {
       );
       return;
     }
-  
+
     // Expresión regular para permitir caracteres alfanuméricos, espacios y letras con tildes
     const alphanumericWithAccentsRegex = /^[a-zA-ZáéíóúÁÉÍÓÚñÑ0-9\s]+$/;
-  
+
     const titleInvalid = !alphanumericWithAccentsRegex.test(formValues.title);
     const descriptionInvalid = formValues.description && !alphanumericWithAccentsRegex.test(formValues.description);
-  
+
     if (titleInvalid && descriptionInvalid) {
       SwalUtils.errorSwal(
         'Error en los campos',
@@ -65,7 +68,7 @@ export const CourseCreationPage = () => {
       );
       return;
     }
-  
+
     if (titleInvalid) {
       SwalUtils.errorSwal(
         'Error en el título',
@@ -75,7 +78,7 @@ export const CourseCreationPage = () => {
       );
       return;
     }
-  
+
     if (descriptionInvalid) {
       SwalUtils.errorSwal(
         'Error en la descripción',
@@ -108,7 +111,7 @@ export const CourseCreationPage = () => {
       name: formValues.title,
       image: imageUrl,
     };
-  
+
     return post('/courses', { ...body })
       .then((res) => res.json())
       .then((res) => {
@@ -182,10 +185,10 @@ export const CourseCreationPage = () => {
           if (result.isDenied) {
             generateImage();
           }
-          if(result.isConfirmed) {
+          if (result.isConfirmed) {
             return;
           }
-          if(result.isDismissed) {
+          if (result.isDismissed) {
             setGeneratedImage(null);
           }
         });

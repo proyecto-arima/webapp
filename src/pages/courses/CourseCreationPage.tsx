@@ -4,10 +4,10 @@ import { Card, Input, Label } from 'reactstrap';
 import { addCourse } from '../../redux/slices/courses';
 import { post } from '../../utils/network';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faMagic, faWandMagicSparkles } from '@fortawesome/free-solid-svg-icons';
+import { faWandMagicSparkles } from '@fortawesome/free-solid-svg-icons';
 import Swal from 'sweetalert2';
 import { useNavigate } from 'react-router-dom';
-import { SwalUtils } from '../../utils/SwalUtils'; // Asegúrate de importar SwalUtils
+import { SwalUtils } from '../../utils/SwalUtils';
 
 interface ICourseCreationFormValues {
   title?: string;
@@ -51,6 +51,14 @@ export const CourseCreationPage = () => {
       .then((res) => res.json())
       .then((res) => {
         dispatch(addCourse(res.data));
+
+        Swal.fire({
+          title: 'Curso creado exitosamente',
+          html: `El curso ha sido creado correctamente. La clave de matriculación es: <strong>${res.data.matriculationCode}</strong>`,
+          confirmButtonText: 'Aceptar'
+        }).then(() => {
+          navigate('/courses/dashboard');
+        });
       })
       .then(() => {
         navigate('/courses/dashboard');
@@ -78,17 +86,15 @@ export const CourseCreationPage = () => {
 
     Swal.fire({
       title: 'Generar imagen con IA',
-      html: 'Tu imagen se generará utilizando IA a partir del nombre y descripción de la sección. Este proceso puede tardar unos segundos. Para continuar presione ok.',
+      html: 'Tu imagen se generará utilizando IA a partir del nombre y descripción del curso. Este proceso puede tardar unos segundos. Para continuar presione ok.',
       icon: 'info',
       showCancelButton: !imageLoading,
-      showCloseButton: false,
       confirmButtonText: 'Ok',
       cancelButtonText: 'Cancelar',
       allowOutsideClick: false,
       allowEscapeKey: false,
       preConfirm: async () => {
         Swal.showLoading();
-        Swal.getCancelButton()?.setAttribute('hidden', "true")
         return post('/images', {
           name: formValues.title,
           description: formValues.description,
@@ -104,13 +110,11 @@ export const CourseCreationPage = () => {
         const generatedImage = result.value.data;
         Swal.fire({
           title: 'Imagen generada',
-          html: '<img src="' + generatedImage + '" style="width: 200px; border-radius: 0.5rem; object-fit: cover; overflow: hidden;" />',
+          html: '<img src="' + generatedImage + '" style="width: 200px; border-radius: 0.5rem; object-fit: cover;" />',
           icon: 'success',
           confirmButtonText: '¡La quiero!',
           cancelButtonText: 'Cancelar',
           showCancelButton: true,
-          showDenyButton: true,
-          allowOutsideClick: false,
           denyButtonText: 'Regenerar',
         }).then((result) => {
           if (result.isDenied) {
@@ -230,9 +234,7 @@ export const CourseCreationPage = () => {
             <Input name="image" type="text" placeholder="URL de la portada del curso" className="mb-3" onChange={handleFormChange('image')} />
           </div>}
           <div className='d-flex flex-row justify-content-end'>
-            <button className="btn-purple-1" onClick={createCourse}>
-              Crear
-            </button>
+            <button className='btn-purple-1' onClick={createCourse}>Crear Curso</button>
           </div>
         </Card>
       </div>

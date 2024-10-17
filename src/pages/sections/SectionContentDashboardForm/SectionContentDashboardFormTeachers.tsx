@@ -73,7 +73,7 @@ export default function SectionContentDashboardFormTeachers({ content, user, cou
               >Ver PDF</button>
               <button className="btn-purple-1"
                 onClick={() => {
-                  navigate(`/courses/${courseId}/sections/${sectionId}/content/${c.id}/map`);
+                  navigate(`/courses/${courseId}/sections/${sectionId}/content/${c.id}/review`);
                 }}
               >Ver contenido generado</button>
 
@@ -82,20 +82,16 @@ export default function SectionContentDashboardFormTeachers({ content, user, cou
                 height: 'auto',
                 margin: '0 1rem',
               }}></div>
-              
-              {user.role === 'TEACHER' && (
-                <button className='btn-purple-2' onClick={() => {
-                  navigate(`/courses/${courseId}/sections/${sectionId}/contents/${c.id}/edit-title`);
-                }}>
+
+              <button className='btn-purple-2' onClick={() => {
+                navigate(`/courses/${courseId}/sections/${sectionId}/contents/${c.id}/edit-title`);
+              }}>
                 <FontAwesomeIcon icon={faEdit} />
               </button>
-              )}
-              {user.role === 'TEACHER' && (
-                
-                <button className='btn-purple-2' onClick={() => handleDeleteContent(c.id)}>
-                  <FontAwesomeIcon icon={faTrash} />
-                </button>
-              )}
+
+              <button className='btn-purple-2' onClick={() => handleDeleteContent(c.id)}>
+                <FontAwesomeIcon icon={faTrash} />
+              </button>
             </td>
           </tr>
         ))}

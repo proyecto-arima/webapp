@@ -23,6 +23,7 @@ export interface IContent {
   title: string;
   publicationType: string;
   presignedUrl: string;
+  status: string;
 }
 
 export const SectionContentDashboard = () => {

@@ -7,6 +7,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faWandMagicSparkles } from '@fortawesome/free-solid-svg-icons';
 import {SwalUtils} from '../../utils/SwalUtils';
 import Swal from 'sweetalert2';
+import { API_URL } from '../../config';
 
 interface ISectionCreationFormValues {
   title?: string;
@@ -20,6 +21,7 @@ export const SectionCreationPage = () => {
   const [formValues, setFormValues] = useState<ISectionCreationFormValues>({ visible: true });
   const [autoGenerateImage, setAutoGenerateImage] = useState<boolean>(true);
   const [generatedImage, setGeneratedImage] = useState<string | null>(null);
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [imageLoading, setImageLoading] = useState<boolean>(false);
   const navigate = useNavigate();
 
@@ -31,7 +33,13 @@ export const SectionCreationPage = () => {
     });
   };
 
-  const createSection = () => {
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files) {
+      setSelectedFile(e.target.files[0]);
+    }
+  };
+
+  const createSection = async () => {
     if (!formValues.title) {
       SwalUtils.errorSwal(
         'Error al crear la sección',
@@ -42,11 +50,28 @@ export const SectionCreationPage = () => {
       return
     }
 
+    let imageUrl = generatedImage || formValues.image;
+
+    // Cuando no se genera automáticamente la imagen y se sube un archivo:
+    if (!autoGenerateImage && selectedFile) {
+      const formData = new FormData();
+      formData.append('file', selectedFile);
+
+      const res = await fetch(`${API_URL}/images/url/`, {
+        method: 'POST',
+        credentials: 'include',
+        body: formData
+      })
+
+      const json = await res.json();
+      imageUrl = json.data;
+    }
+
     const body = {
       ...formValues,
       name: formValues.title,
       title: undefined,
-      ...(autoGenerateImage ? { image: generatedImage } : {}),
+      image: imageUrl,
     };
 
     return post(`/courses/${courseId}/section`, { ...body })
@@ -182,7 +207,7 @@ export const SectionCreationPage = () => {
             color: '#6b7280'
           }}>
             Para generar una imagen automáticamente a partir del nombre y descripción de la sección, clickea en Generar Imagen y espera que la magia ocurra.<br />
-            También puedes utilizar una URL para elegir manualmente la imagen de la sección.
+            También puedes subir un archivo con extensión .png para elegir manualmente la imagen de la sección, si lo prefieres.
           </p>
           <div className='d-flex flex-row mb-3 gap-3'>
             <Input type='checkbox' name='auto-generate' id='auto-generate' onClick={e => setAutoGenerateImage(!autoGenerateImage)} checked={autoGenerateImage} />
@@ -234,7 +259,7 @@ export const SectionCreationPage = () => {
           </div>) : <div style={{
             flex: '1',
           }}>
-            <Input name="image" type="text" placeholder="URL de la portada del curso" className="mb-3" onChange={handleFormChange('image')} />
+            <Input type="file" accept=".png" onChange={handleFileChange} className="mb-3" />
           </div>}
           <div className='d-flex flex-row justify-content-end'>
             <button className="btn-purple-1" onClick={createSection}>

@@ -79,6 +79,13 @@ export const CourseDetailPage: React.FC = () => {
       async () => {
         await del(`/courses/${courseId}/sections/${sectionId}`);
         await fetchSections();
+        SwalUtils.successSwal(
+          'Sección eliminada', 
+          'La sección se ha eliminado con éxito.',
+          'Aceptar',
+          () => navigate(`/courses/${courseId}`),
+          () => navigate(`/courses/${courseId}`)
+          );
       }
     );
   };

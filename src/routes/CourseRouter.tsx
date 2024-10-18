@@ -11,6 +11,7 @@ import { SectionContentCreation } from '../pages/sections/SectionContentCreation
 import { EditContentPage } from '../pages/sections/EditContentPage';
 import { EditCoursePage } from '../pages/courses/EditCoursePage';
 import { EditSectionPage } from '../pages/courses/EditSectionPage';
+import { CourseSearchPage } from '../pages/courses/CourseSearchPage';
 
 import { StudentLinkingPage } from '../pages/courses/StudentLinkingPage';
 
@@ -36,6 +37,7 @@ const CourseRoutes: React.FC = () => {
         <Route path=":courseId/sections/:sectionId" element={<SectionContentDashboard/>} />
         <Route path=":courseId/sections/:sectionId/new" element={<SectionContentCreation/>} /> {/* TODO: FIX */}
         <Route path="/courses/:courseId/sections/:sectionId/edit" element={<EditSectionPage />} />
+        <Route path="/search" element={<CourseSearchPage />} />
         <Route path=":courseId/sections/:sectionId/edit" element={<EditSectionPage />} />
         <Route path=":courseId/sections/:sectionId/content/:contentId" element={<RawContentView/>} />
         <Route path=":courseId/sections/:sectionId/content/:contentId/summary" element={<GeneratedContentView/>} />

@@ -15,6 +15,7 @@ const coursesManagmentSection = [
   { to: '/courses/dashboard', label: 'Ver Cursos' },
 ];
 
+
 export default function Sidebar() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -70,6 +71,7 @@ export default function Sidebar() {
                   <span>Tipos de Aprendizaje</span>
                 </NavItem>
               </NavLink>
+
             </div>
           )}
 
@@ -94,32 +96,101 @@ export default function Sidebar() {
             </div>
           )}
 
-          {/* Sección para estudiantes: Buscar Curso */}
-          {user?.role === 'STUDENT' && (
+          {(user?.role === 'ADMIN') && (
             <div className="w-100">
-              <span className='sidebar-section-title'>Buscar Curso</span>
-              <NavLink
-                end
-                to="/courses/search"
-                className={({ isActive }) => isActive ? 'sidebar-navlink-active' : 'sidebar-navlink-inactive'}
-              >
+              <span className='sidebar-section-title'>Instituciones</span>
+              <NavLink to={'/institutes'} end className={({ isActive }) => isActive ? 'sidebar-navlink-active' : 'sidebar-navlink-inactive'}>
                 <NavItem className='sidebar-navlink-item'>
-                  <FontAwesomeIcon icon={faCircle} style={{ width: '0.6rem', color: '#49454f' }} />
-                  <span>Buscar curso</span>
+                  <FontAwesomeIcon icon={faCircle} style={{
+                    width: '0.6rem',
+                    color: '#49454f',
+                  }} />
+                  <span>Instituciones</span>
+                </NavItem>
+              </NavLink>
+              <NavLink to={'/institutes/new'} end className={({ isActive }) => isActive ? 'sidebar-navlink-active' : 'sidebar-navlink-inactive'}>
+                <NavItem className='sidebar-navlink-item'>
+                  <FontAwesomeIcon icon={faCircle} style={{
+                    width: '0.6rem',
+                    color: '#49454f',
+                  }} />
+                  <span>Nueva Institución</span>
+                </NavItem>
+              </NavLink>
+              <span className='sidebar-section-title'>Directivos</span>
+              <NavLink to={'/directors'} end className={({ isActive }) => isActive ? 'sidebar-navlink-active' : 'sidebar-navlink-inactive'}>
+                <NavItem className='sidebar-navlink-item'>
+                  <FontAwesomeIcon icon={faCircle} style={{
+                    width: '0.6rem',
+                    color: '#49454f',
+                  }} />
+                  <span>Directivos registrados</span>
+                </NavItem>
+              </NavLink>
+              <NavLink to={'/directors/new'} end className={({ isActive }) => isActive ? 'sidebar-navlink-active' : 'sidebar-navlink-inactive'}>
+                <NavItem className='sidebar-navlink-item'>
+                  <FontAwesomeIcon icon={faCircle} style={{
+                    width: '0.6rem',
+                    color: '#49454f',
+                  }} />
+                  <span>Nuevo Directivo</span>
                 </NavItem>
               </NavLink>
             </div>
           )}
 
-          {(user?.role === 'ADMIN') && (
-            <div className="w-100">
-              {/* Sección de ADMIN ... */}
-            </div>
-          )}
-
           {(user?.role === 'DIRECTOR') && (
             <div className="w-100">
-              {/* Sección de DIRECTOR ... */}
+              <span className='sidebar-section-title'>Gestionar usuarios</span>
+              <NavLink to={'/students/'} end className={({ isActive }) => isActive ? 'sidebar-navlink-active' : 'sidebar-navlink-inactive'}>
+                <NavItem className='sidebar-navlink-item'>
+                  <FontAwesomeIcon icon={faCircle} style={{
+                    width: '0.6rem',
+                    color: '#49454f',
+                  }} />
+                  <span>Estudiantes</span>
+                </NavItem>
+              </NavLink>
+              <NavLink to={'/teachers/'} end className={({ isActive }) => isActive ? 'sidebar-navlink-active' : 'sidebar-navlink-inactive'}>
+                <NavItem className='sidebar-navlink-item'>
+                  <FontAwesomeIcon icon={faCircle} style={{
+                    width: '0.6rem',
+                    color: '#49454f',
+                  }} />
+                  <span>Docentes</span>
+                </NavItem>
+              </NavLink>
+
+              <span className='sidebar-section-title'>Reportes</span>
+              <NavLink to={'/students-survey'} end className={({ isActive }) => isActive ? 'sidebar-navlink-active' : 'sidebar-navlink-inactive'}>
+                <NavItem className='sidebar-navlink-item'>
+                  <FontAwesomeIcon icon={faCircle} style={{
+                    width: '0.6rem',
+                    color: '#49454f',
+                  }} />
+                  <span>Encuestas de satisfacción - Estudiantes</span>
+                </NavItem>
+              </NavLink>
+              <NavLink to={'/teachers-survey'} end className={({ isActive }) => isActive ? 'sidebar-navlink-active' : 'sidebar-navlink-inactive'}>
+                <NavItem className='sidebar-navlink-item'>
+                  <FontAwesomeIcon icon={faCircle} style={{
+                    width: '0.6rem',
+                    color: '#49454f',
+                  }} />
+                  <span>Encuestas de satisfacción - Docentes</span>
+                </NavItem>
+              </NavLink>
+
+              <NavLink to={'/students/profile'} end className={({ isActive }) => isActive ? 'sidebar-navlink-active' : 'sidebar-navlink-inactive'}>
+                <NavItem className='sidebar-navlink-item'>
+                  <FontAwesomeIcon icon={faCircle} style={{
+                    width: '0.6rem',
+                    color: '#49454f',
+                  }} />
+                  <span>Tipos de Aprendizaje</span>
+                </NavItem>
+              </NavLink>
+
             </div>
           )}
         </div>
@@ -135,20 +206,35 @@ export default function Sidebar() {
               <span>Datos personales</span>
             </NavItem>
           </NavLink>
-
           {user?.role === 'STUDENT' && (
             <div className="w-100">
-              <NavLink
-                end
+
+              <NavLink end
                 to={user.learningProfile ? '/me/learning-type/result' : '/me/learning-type'}
                 className={({ isActive }) => isActive ? 'sidebar-navlink-active' : 'sidebar-navlink-inactive'}
                 state={{ profile: user.learningProfile }}
               >
                 <NavItem className='sidebar-navlink-item'>
-                  <FontAwesomeIcon icon={faCircle} style={{ width: '0.6rem', color: '#49454f' }} />
+                  <FontAwesomeIcon icon={faCircle} style={{
+                    width: '0.6rem',
+                    color: '#49454f',
+                  }} />
                   <span>Test de Aprendizaje</span>
                 </NavItem>
               </NavLink>
+
+              <span className='sidebar-section-title'>Buscar Curso</span>
+              <NavLink
+                end
+                to="/courses/search"
+                className={({ isActive }) => isActive ? 'sidebar-navlink-active' : 'sidebar-navlink-inactive'}
+              >
+                <NavItem className='sidebar-navlink-item'>
+                  <FontAwesomeIcon icon={faCircle} style={{ width: '0.6rem', color: '#49454f' }} />
+                  <span>Buscar curso</span>
+                </NavItem>
+              </NavLink>
+
             </div>
           )}
 
@@ -162,6 +248,7 @@ export default function Sidebar() {
             </NavItem>
           </NavLink>
         </div>
+
       </div>
     </Nav>
   )

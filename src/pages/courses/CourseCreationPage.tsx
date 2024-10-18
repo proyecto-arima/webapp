@@ -1,12 +1,15 @@
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { Card, Input, Label } from 'reactstrap';
+import { useNavigate } from 'react-router-dom';
+
+import Swal from 'sweetalert2';
+
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faWandMagicSparkles } from '@fortawesome/free-solid-svg-icons';
+
 import { addCourse } from '../../redux/slices/courses';
 import { post } from '../../utils/network';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faMagic, faWandMagicSparkles } from '@fortawesome/free-solid-svg-icons';
-import Swal from 'sweetalert2';
-import { useNavigate } from 'react-router-dom';
 import { SwalUtils } from '../../utils/SwalUtils';
 import { API_URL } from '../../config';
 
@@ -49,13 +52,13 @@ export const CourseCreationPage = () => {
       );
       return;
     }
-  
+
     // Expresión regular para permitir caracteres alfanuméricos, espacios y letras con tildes
     const alphanumericWithAccentsRegex = /^[a-zA-ZáéíóúÁÉÍÓÚñÑ0-9\s]+$/;
-  
+
     const titleInvalid = !alphanumericWithAccentsRegex.test(formValues.title);
     const descriptionInvalid = formValues.description && !alphanumericWithAccentsRegex.test(formValues.description);
-  
+
     if (titleInvalid && descriptionInvalid) {
       SwalUtils.errorSwal(
         'Error en los campos',
@@ -65,7 +68,7 @@ export const CourseCreationPage = () => {
       );
       return;
     }
-  
+
     if (titleInvalid) {
       SwalUtils.errorSwal(
         'Error en el título',
@@ -75,7 +78,7 @@ export const CourseCreationPage = () => {
       );
       return;
     }
-  
+
     if (descriptionInvalid) {
       SwalUtils.errorSwal(
         'Error en la descripción',
@@ -108,11 +111,19 @@ export const CourseCreationPage = () => {
       name: formValues.title,
       image: imageUrl,
     };
-  
+
     return post('/courses', { ...body })
       .then((res) => res.json())
       .then((res) => {
         dispatch(addCourse(res.data));
+
+        Swal.fire({
+          title: 'Curso creado exitosamente',
+          html: `El curso ha sido creado correctamente. La clave de matriculación es: <strong>${res.data.matriculationCode}</strong>`,
+          confirmButtonText: 'Aceptar'
+        }).then(() => {
+          navigate('/courses/dashboard');
+        });
       })
       .then(() => {
         navigate('/courses/dashboard');
@@ -138,6 +149,51 @@ export const CourseCreationPage = () => {
 
     setImageLoading(true);
 
+    Swal.fire({
+      title: 'Generar imagen con IA',
+      html: 'Tu imagen se generará utilizando IA a partir del nombre y descripción del curso. Este proceso puede tardar unos segundos. Para continuar presione ok.',
+      icon: 'info',
+      showCancelButton: !imageLoading,
+      confirmButtonText: 'Ok',
+      cancelButtonText: 'Cancelar',
+      allowOutsideClick: false,
+      allowEscapeKey: false,
+      preConfirm: async () => {
+        Swal.showLoading();
+        return post('/images', {
+          name: formValues.title,
+          description: formValues.description,
+        }).then((res) => res.json()).then((res) => {
+          setImageLoading(false);
+          setGeneratedImage(res.data);
+          return res;
+        });
+      }
+    }).then((result) => {
+      setImageLoading(false);
+      if (result.isConfirmed) {
+        const generatedImage = result.value.data;
+        Swal.fire({
+          title: 'Imagen generada',
+          html: '<img src="' + generatedImage + '" style="width: 200px; border-radius: 0.5rem; object-fit: cover;" />',
+          icon: 'success',
+          confirmButtonText: '¡La quiero!',
+          cancelButtonText: 'Cancelar',
+          showCancelButton: true,
+          denyButtonText: 'Regenerar',
+        }).then((result) => {
+          if (result.isDenied) {
+            generateImage();
+          }
+          if (result.isConfirmed) {
+            return;
+          }
+          if (result.isDismissed) {
+            setGeneratedImage(null);
+          }
+        });
+      }
+    })
     post('/images', {
       name: formValues.title,
       description: formValues.description,
@@ -250,9 +306,7 @@ export const CourseCreationPage = () => {
             <Input type="file" accept=".png" onChange={handleFileChange} className="mb-3" />
           </div>}
           <div className='d-flex flex-row justify-content-end'>
-            <button className="btn-purple-1" onClick={createCourse}>
-              Crear
-            </button>
+            <button className='btn-purple-1' onClick={createCourse}>Crear Curso</button>
           </div>
         </Card>
       </div>

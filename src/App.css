@@ -55,6 +55,19 @@
   background-color: #4d3a8e;
 }
 
+.btn-red-1 {
+  background-color: red;
+  color: #fff;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 0.25rem;
+  cursor: pointer;
+}
+
+.btn-red-1:hover {
+  background-color: rgb(255, 59, 59);
+}
+
 /* Secondary */
 .btn-purple-2 {
   color: #6650a4;

@@ -11,6 +11,7 @@ import { SectionContentCreation } from '../pages/sections/SectionContentCreation
 import { EditContentPage } from '../pages/sections/EditContentPage';
 import { EditCoursePage } from '../pages/courses/EditCoursePage';
 import { EditSectionPage } from '../pages/courses/EditSectionPage';
+import { CourseSearchPage } from '../pages/courses/CourseSearchPage';
 
 import { StudentLinkingPage } from '../pages/courses/StudentLinkingPage';
 
@@ -21,6 +22,7 @@ import { SectionContentDashboard } from '../pages/sections/SectionContentDashboa
 import Game from '../pages/sections/game/GeneratedContentView';
 import GeneratedContentViewAudio from '../pages/sections/audio/GeneratedContentView';
 import ContentSelectionForTeacher from '../pages/sections/ContentSelectionForTeacher';
+import GameEditionPage from '../pages/sections/game/GameEdition';
 
 const CourseRoutes: React.FC = () => {
   return (
@@ -35,6 +37,7 @@ const CourseRoutes: React.FC = () => {
         <Route path=":courseId/sections/:sectionId" element={<SectionContentDashboard/>} />
         <Route path=":courseId/sections/:sectionId/new" element={<SectionContentCreation/>} /> {/* TODO: FIX */}
         <Route path="/courses/:courseId/sections/:sectionId/edit" element={<EditSectionPage />} />
+        <Route path="/search" element={<CourseSearchPage />} />
         <Route path=":courseId/sections/:sectionId/edit" element={<EditSectionPage />} />
         <Route path=":courseId/sections/:sectionId/content/:contentId" element={<RawContentView/>} />
         <Route path=":courseId/sections/:sectionId/content/:contentId/summary" element={<GeneratedContentView/>} />
@@ -43,6 +46,7 @@ const CourseRoutes: React.FC = () => {
         <Route path=":courseId/sections/:sectionId/content/:contentId/audio" element={<GeneratedContentViewAudio/>} />
         <Route path=":courseId/sections/:sectionId/content/:contentId/review" element={<ContentSelectionForTeacher/>} />
         <Route path=":courseId/sections/:sectionId/contents/:contentId/edit-title" element={<EditContentPage />} />
+        <Route path=":courseId/sections/:sectionId/content/:contentId/game/edit" element={<GameEditionPage/>} />
       </Routes>
   );
 };

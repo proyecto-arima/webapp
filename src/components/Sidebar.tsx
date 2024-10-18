@@ -138,8 +138,8 @@ export default function Sidebar() {
               </NavLink>
             </div>
           )}
-          
-          {( user?.role === 'DIRECTOR') && (
+
+          {(user?.role === 'DIRECTOR') && (
             <div className="w-100">
               <span className='sidebar-section-title'>Gestionar usuarios</span>
               <NavLink to={'/students/'} end className={({ isActive }) => isActive ? 'sidebar-navlink-active' : 'sidebar-navlink-inactive'}>
@@ -208,7 +208,7 @@ export default function Sidebar() {
           </NavLink>
           {user?.role === 'STUDENT' && (
             <div className="w-100">
-              
+
               <NavLink end
                 to={user.learningProfile ? '/me/learning-type/result' : '/me/learning-type'}
                 className={({ isActive }) => isActive ? 'sidebar-navlink-active' : 'sidebar-navlink-inactive'}
@@ -222,7 +222,19 @@ export default function Sidebar() {
                   <span>Test de Aprendizaje</span>
                 </NavItem>
               </NavLink>
-              
+
+              <span className='sidebar-section-title'>Buscar Curso</span>
+              <NavLink
+                end
+                to="/courses/search"
+                className={({ isActive }) => isActive ? 'sidebar-navlink-active' : 'sidebar-navlink-inactive'}
+              >
+                <NavItem className='sidebar-navlink-item'>
+                  <FontAwesomeIcon icon={faCircle} style={{ width: '0.6rem', color: '#49454f' }} />
+                  <span>Buscar curso</span>
+                </NavItem>
+              </NavLink>
+
             </div>
           )}
 

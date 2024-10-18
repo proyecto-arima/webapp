@@ -26,12 +26,13 @@ function renderToolbar(mm: Markmap, wrapper: HTMLElement, goToSummary: () => voi
 }
 
 type MarkmapHooksProps = {
-  initValue: string;
+  text: string;
   editable: boolean;
+  onChange: (text: string) => void;
 };
 
-export default function MarkmapHooks({ initValue, editable }: MarkmapHooksProps) {
-  const [value, setValue] = useState(initValue);
+export default function MarkmapHooks({ text, editable, onChange }: MarkmapHooksProps) {
+  
   // Ref for SVG element
   const refSvg = useRef<SVGSVGElement>();
   // Ref for markmap object
@@ -59,13 +60,13 @@ export default function MarkmapHooks({ initValue, editable }: MarkmapHooksProps)
     // Update data for markmap once value is changed
     const mm = refMm.current;
     if (!mm) return;
-    const { root } = transformer.transform(value);
+    const { root } = transformer.transform(`${text}`);
     mm.setData(root);
     mm.fit();
-  }, [refMm.current, value]);
+  }, [refMm.current, text]);
 
   const handleChange = (e: any) => {
-    setValue(e.target.value);
+    onChange(e.target.value);
   };
 
   const buildMarkmap = () => <>
@@ -87,7 +88,7 @@ export default function MarkmapHooks({ initValue, editable }: MarkmapHooksProps)
         <hr />
         <textarea
           className="w-100 generated-content"
-          value={value}
+          value={text}
           onChange={handleChange}
           style={{
             resize: 'none',
@@ -95,9 +96,12 @@ export default function MarkmapHooks({ initValue, editable }: MarkmapHooksProps)
             outline: 'none',
             borderColor: 'transparent',
             overflowY: 'scroll',
-            scrollbarColor: 'transparent transparent',
+            
             fontSize: '0.9rem',
             flex: '1',
+            textWrap: 'nowrap',
+            overflowX: 'scroll',
+            scrollbarWidth: 'thin',
           }}
         />
       </Card>

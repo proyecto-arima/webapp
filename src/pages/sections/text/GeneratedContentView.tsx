@@ -1,12 +1,18 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { Card } from "reactstrap";
-import { get } from "../../../utils/network";
+import { get, patch } from "../../../utils/network";
 import './GeneratedContentView.css';
+import { useSelector } from "react-redux";
+import { RootState } from "../../../redux/store";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faSave } from "@fortawesome/free-solid-svg-icons";
+import Swal from "sweetalert2";
 
 interface IGenerated {
   type: string;
   content: string;
+  title: string;
 }
 
 export interface IContent {
@@ -18,12 +24,32 @@ export interface IContent {
 export const GeneratedContentView = () => {
 
   const { contentId } = useParams<{ contentId: string }>();
-  const [content, setContent] = useState<IContent>();
+  const [content, setContent] = useState<IGenerated>();
+  const user = useSelector((state: RootState) => state.user);
 
   useEffect(() => {
-    get(`/contents/${contentId}`).then(res => res.json()).then(res => res.data).then((data: IContent) => setContent(data));
+    get(`/contents/${contentId}/summary`).then(res => res.json()).then(res => res.data).then((data: IGenerated) => setContent(data));
   }, []);
 
+  const saveChanges = () => {
+    patch(`/contents/${contentId}/summary`, {
+      newContent: content?.content,
+    }).then(res => res.json()).then(res => {
+      if(res.success) {
+        Swal.fire({
+          icon: 'success',
+          title: 'Contenido actualizado',
+          text: 'El contenido fue actualizado correctamente'
+        });
+      } else {
+        Swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: 'Ocurrió un error al actualizar el contenido'
+        })
+      }
+    });
+  }
 
   return <div
     style={{
@@ -58,14 +84,38 @@ export const GeneratedContentView = () => {
           gap: '1rem',
         }}>
           <h3>{content?.title}</h3>
-        <textarea className="generated-content" value={content?.generated?.[0]?.content} style={{ 
+        <textarea className="generated-content" value={content?.content} style={{ 
           width: '80%', 
-          height: '100%' ,
+          flex: 1,
           border: 'none',
           scrollbarWidth: 'none',
           
-          }} readOnly></textarea>
+          }} 
+          readOnly={user?.role === 'STUDENT'}
+          onChange={e => {
+            if(!content) return;
+            setContent({ ...content, content: e.target.value ?? "" })
+          }}
+          ></textarea>
         </div>
+        
+        {/** FAB Button to save changes only for teachers */}
+
+        {user?.role === 'TEACHER' && <div style={{
+          display: 'flex',
+          justifyContent: 'flex-end',
+          paddingBlock: '1rem',
+          width: '100%',
+        }}>
+          <button
+          className="btn-purple-1"
+          onClick={saveChanges}>
+            <FontAwesomeIcon icon={faSave} />
+            {' '}
+            Guardar
+          </button>
+        </div>}
+
       </Card>
     </div>
   </div>

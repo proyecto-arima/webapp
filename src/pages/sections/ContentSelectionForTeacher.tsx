@@ -104,7 +104,9 @@ export default function ContentSelectionForTeacher() {
               justifyContent: 'flex-end',
             }}>
               <button className="btn-purple-1"
-                onClick={() => navigate(`/courses/${courseId}/sections/${sectionId}/content/${contentId}/game`)}
+                onClick={() => {
+                  navigate(`/courses/${courseId}/sections/${sectionId}/content/${contentId}/game/edit`);
+                }}
               >Ver contenido</button>
             </CardFooter>
           </Card>

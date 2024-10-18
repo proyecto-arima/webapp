@@ -21,6 +21,7 @@ import { SectionContentDashboard } from '../pages/sections/SectionContentDashboa
 import Game from '../pages/sections/game/GeneratedContentView';
 import GeneratedContentViewAudio from '../pages/sections/audio/GeneratedContentView';
 import ContentSelectionForTeacher from '../pages/sections/ContentSelectionForTeacher';
+import GameEditionPage from '../pages/sections/game/GameEdition';
 
 const CourseRoutes: React.FC = () => {
   return (
@@ -43,6 +44,7 @@ const CourseRoutes: React.FC = () => {
         <Route path=":courseId/sections/:sectionId/content/:contentId/audio" element={<GeneratedContentViewAudio/>} />
         <Route path=":courseId/sections/:sectionId/content/:contentId/review" element={<ContentSelectionForTeacher/>} />
         <Route path=":courseId/sections/:sectionId/contents/:contentId/edit-title" element={<EditContentPage />} />
+        <Route path=":courseId/sections/:sectionId/content/:contentId/game/edit" element={<GameEditionPage/>} />
       </Routes>
   );
 };

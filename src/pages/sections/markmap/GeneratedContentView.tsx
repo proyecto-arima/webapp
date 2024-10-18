@@ -1,17 +1,21 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { Card, Progress } from "reactstrap";
-import { get } from "../../../utils/network";
+import { get, patch } from "../../../utils/network";
 import './GeneratedContentView.css';
 import MarkmapHooks from './utils/MarkmapHooks';
 import { useSelector } from "react-redux";
 import { RootState } from "../../../redux/store";
 
 import processing from '../../../assets/images/processing.gif';
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faSave } from "@fortawesome/free-solid-svg-icons";
+import Swal from "sweetalert2";
 
 interface IGenerated {
   type: string;
   content: string;
+  title: string;
 }
 
 export interface IContent {
@@ -23,14 +27,38 @@ export interface IContent {
 export const GeneratedContentView = () => {
 
   const { contentId } = useParams<{ contentId: string }>();
-  const [content, setContent] = useState<IContent>();
+  const [markmap, setMarkmap] = useState<IGenerated>();
   const user = useSelector((state: RootState) => state.user);
 
   useEffect(() => {
-    get(`/contents/${contentId}`).then(res => res.json()).then(res => res.data).then((data: IContent) => setContent(data));
+    get(`/contents/${contentId}/mindmap`).then(res => res.json()).then(res => res.data).then((data: IGenerated) => setMarkmap(data));
   }, []);
 
-  const markmap = content?.generated[1].content;
+  const onChange = (newContent: string) => {
+    if(!newContent || !markmap) return;
+    setMarkmap({ ...markmap, content: newContent });
+  };
+
+  const saveChanges = () => {
+    patch(`/contents/${contentId}/mindmap`, {
+      newContent: markmap?.content,
+    }).then(res => res.json()).then(res => {
+      if(res.success) {
+        Swal.fire({
+          icon: 'success',
+          title: 'Contenido actualizado',
+          text: 'El contenido fue actualizado correctamente'
+        });
+      } else {
+        Swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: 'Ocurrió un error al actualizar el contenido'
+        })
+      }
+    }
+    );
+  };
 
 
   return <div
@@ -65,8 +93,8 @@ export const GeneratedContentView = () => {
           height: '100%',
           gap: '1rem',
         }}>
-          <h3>{content?.title}</h3>
-          {markmap ? <MarkmapHooks initValue={markmap} editable={user.role === 'TEACHER'} /> : <div style={{ flex: 1, display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'column', width: '100%' }}>
+          <h3>{markmap?.title}</h3>
+          {markmap ? <MarkmapHooks onChange={onChange} text={markmap.content} editable={user.role === 'TEACHER'} /> : <div style={{ flex: 1, display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'column', width: '100%' }}>
             {/* <img src={processing} alt="processing" height={600}/> */}
             <Progress animated value={100}
               style={{ width: '90%', marginBottom: '1rem' }}
@@ -77,6 +105,17 @@ export const GeneratedContentView = () => {
 
           }
 
+
+
+        </div>
+        <div
+          className="d-flex justify-content-end w-100 mt-3"
+        >
+          <button className="btn-purple-1" onClick={saveChanges}>
+            <FontAwesomeIcon icon={faSave} />
+            {' '}
+            Guardar
+          </button>
 
 
         </div>

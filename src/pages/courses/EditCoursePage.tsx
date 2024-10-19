@@ -89,8 +89,7 @@ export const EditCoursePage: React.FC = () => {
   
     const body = {
       ...formData,
-      name: formData.title,
-      title: undefined,
+      title: formData.title,
       image: imageUrl,
     };
   

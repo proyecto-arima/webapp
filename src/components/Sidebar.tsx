@@ -75,6 +75,24 @@ export default function Sidebar() {
             </div>
           )}
 
+          {user?.role === 'STUDENT' && (
+            <div className="w-100">
+              <span className='sidebar-section-title'>Explorar Cursos</span>
+              <NavLink to="/courses/search" end className={({ isActive }) => isActive ? 'sidebar-navlink-active' : 'sidebar-navlink-inactive'}>
+                <NavItem className='sidebar-navlink-item'>
+                  <FontAwesomeIcon icon={faCircle} style={{ width: '0.6rem', color: '#49454f' }} />
+                  <span>Buscar curso</span>
+                </NavItem>
+              </NavLink>
+              <NavLink to="/courses/dashboard" end className={({ isActive }) => isActive ? 'sidebar-navlink-active' : 'sidebar-navlink-inactive'}>
+                <NavItem className='sidebar-navlink-item'>
+                  <FontAwesomeIcon icon={faCircle} style={{ width: '0.6rem', color: '#49454f' }} />
+                  <span>Ver mis cursos</span>
+                </NavItem>
+              </NavLink>
+            </div>
+          )}
+
           {user?.role && ['STUDENT', 'TEACHER'].includes(user.role) && (
             <div className="w-100">
               <span className='sidebar-section-title'>Mis Cursos</span>
@@ -222,19 +240,6 @@ export default function Sidebar() {
                   <span>Test de Aprendizaje</span>
                 </NavItem>
               </NavLink>
-
-              <span className='sidebar-section-title'>Buscar Curso</span>
-              <NavLink
-                end
-                to="/courses/search"
-                className={({ isActive }) => isActive ? 'sidebar-navlink-active' : 'sidebar-navlink-inactive'}
-              >
-                <NavItem className='sidebar-navlink-item'>
-                  <FontAwesomeIcon icon={faCircle} style={{ width: '0.6rem', color: '#49454f' }} />
-                  <span>Buscar curso</span>
-                </NavItem>
-              </NavLink>
-
             </div>
           )}
 

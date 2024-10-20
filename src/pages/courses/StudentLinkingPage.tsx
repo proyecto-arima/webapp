@@ -61,6 +61,8 @@ export const StudentLinkingPage = () => {
                 placeholder="Buscar estudiante"
                 isClearable
                 isSearchable
+                // BUG: Revisar de no traer todos los estudiantes, se repiten y no deja borrarlos despues
+                // options={ availableStudents && currentStudents ? availableStudents.filter((student: any) => currentStudents.some((s: any) => s.id === student.id)) : [] }
                 options={availableStudents}
                 noOptionsMessage={() => "No hay estudiantes disponibles para agregar"}
                 value={selectedStudent}

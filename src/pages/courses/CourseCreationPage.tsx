@@ -54,7 +54,7 @@ export const CourseCreationPage = () => {
     }
 
     // Expresión regular para permitir caracteres alfanuméricos, espacios y letras con tildes
-    const alphanumericWithAccentsRegex = /^[a-zA-ZáéíóúÁÉÍÓÚñÑ0-9\s]+$/;
+    const alphanumericWithAccentsRegex = /^[a-zA-ZáéíóúÁÉÍÓÚñÑ0-9\s;°]+$/;
 
     const titleInvalid = !alphanumericWithAccentsRegex.test(formValues.title);
     const descriptionInvalid = formValues.description && !alphanumericWithAccentsRegex.test(formValues.description);

@@ -89,8 +89,7 @@ export const EditCoursePage: React.FC = () => {
   
     const body = {
       ...formData,
-      name: formData.title,
-      title: undefined,
+      title: formData.title,
       image: imageUrl,
     };
   
@@ -130,7 +129,7 @@ export const EditCoursePage: React.FC = () => {
     e.preventDefault();
 
     // Expresión regular para permitir caracteres alfanuméricos, espacios y letras con tildes
-    const alphanumericWithAccentsRegex = /^[a-zA-ZáéíóúÁÉÍÓÚñÑ0-9\s]+$/;
+    const alphanumericWithAccentsRegex = /^[a-zA-ZáéíóúÁÉÍÓÚñÑ0-9\s;°]+$/;
   
     const titleInvalid = !alphanumericWithAccentsRegex.test(formData.title);
     const descriptionInvalid = formData.description && !alphanumericWithAccentsRegex.test(formData.description);

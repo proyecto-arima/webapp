@@ -60,7 +60,6 @@ export const CourseDashboardPage = () => {
             'Aceptar',
             () => navigate('/courses'),
             () => navigate('/courses')
-            
           );
         } catch (error) {
           // Mensaje de error en caso de que algo falle
@@ -106,6 +105,12 @@ export const CourseDashboardPage = () => {
                   <CardBody>
                     <CardTitle tag="h5">{course.title}</CardTitle>
                     <CardText>{course.description}</CardText>
+                    
+                    {user.role === 'TEACHER' && (
+                      <CardText>
+                        Clave de Matriculación: <span style={{ fontWeight: 'bold' }}>{course.matriculationCode}</span>
+                      </CardText>
+                    )}
                   </CardBody>
                   <CardFooter style={{
                     display: 'flex',

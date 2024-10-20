@@ -1,42 +1,31 @@
-import { Button, Card, Table } from "reactstrap";
+import { Card, Table } from "reactstrap";
 import { useEffect, useState } from "react";
 import Select from "react-select";
 import { useParams } from "react-router-dom";
-
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faListCheck, faTrash } from "@fortawesome/free-solid-svg-icons";
-
 import { get, post } from "../../utils/network";
+import { faTrash } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 export const StudentLinkingPage = () => {
-
   const { courseId } = useParams<'courseId'>();
   const [course, setCourse] = useState<any>(null);
   const [selectedStudent, setSelectedStudent] = useState<any>(null);
   const [availableStudents, setAvailableStudents] = useState<any>([]);
-  const [currentStudents, setCurrentStudents] = useState<any>([]);
 
   const addStudent = (student: any) => {
     post(`/courses/${courseId}/students`, { studentEmails: [selectedStudent.email] })
       .then(res => res.json()).then(res => {
-        setCourse((course: any) => {
-          return {
-            ...course,
-            students: [...course.students, selectedStudent]
-          }
-        }
-        )
-      })
-  }
+        setCourse((course: any) => ({
+          ...course,
+          students: [...course.students, selectedStudent]
+        }));
+      });
+  };
 
   useEffect(() => {
     get(`/courses/${courseId}`).then(res => res.json()).then(res => res.data).then(setCourse);
     get('/students').then(res => res.json()).then(res => res.data).then(setAvailableStudents);
   }, []);
-
-  useEffect(() => {
-    setCurrentStudents(course?.students);
-  }, [course]);
 
   return (
     <div
@@ -62,7 +51,7 @@ export const StudentLinkingPage = () => {
         <Card style={{ width: '100%', paddingInline: '2rem', paddingBlock: '1rem', height: '100%' }}>
           <h2>Estudiantes</h2>
           <hr />
-          <p>Aquí podrá agregar, eliminar o ver estudiantes al curso <b>{course?.title}</b>. Los alumnos podrán auto-matricularse utilizando el código: <b>{course?.matriculationCode}</b> </p>
+          <p>Aquí podrá agregar estudiantes al curso <b>{course?.title}</b>. Los alumnos podrán auto-matricularse utilizando el código: <b>{course?.matriculationCode}</b></p>
           <div className="d-flex flex-column">
             <h5 style={{ fontWeight: 'bold' }}>Agregar estudiante</h5>
             <hr />
@@ -72,8 +61,6 @@ export const StudentLinkingPage = () => {
                 placeholder="Buscar estudiante"
                 isClearable
                 isSearchable
-                // BUG: Revisar de no traer todos los estudiantes, se repiten y no deja borrarlos despues
-                // options={ availableStudents && currentStudents ? availableStudents.filter((student: any) => currentStudents.some((s: any) => s.id === student.id)) : [] }
                 options={availableStudents}
                 noOptionsMessage={() => "No hay estudiantes disponibles para agregar"}
                 value={selectedStudent}
@@ -99,23 +86,12 @@ export const StudentLinkingPage = () => {
               </thead>
               <tbody>
                 {course?.students?.map((student: any) => (
-                  <tr key={student.id}> {/* TODO: CHANGE */}
+                  <tr key={student.userId}>
                     <td style={{ verticalAlign: 'middle' }}>{student.firstName}</td>
                     <td style={{ verticalAlign: 'middle' }}>{student.lastName}</td>
                     <td style={{ verticalAlign: 'middle' }}>{student.email}</td>
                     <td className="d-flex flex-row justify-content-end">
-                      <button className='btn-purple-1 me-3'>
-                        <FontAwesomeIcon icon={faListCheck} />
-                      </button>
-                      <button className='btn-purple-2' onClick={() => {
-                        setCourse((course: any) => {
-                          return {
-                            ...course,
-                            students: course.students
-                          }
-                        }
-                        )
-                      }}>
+                      <button className='btn-purple-2'>
                         <FontAwesomeIcon icon={faTrash} />
                       </button>
                     </td>

@@ -44,7 +44,7 @@ const RecoverPassword = () => {
         width: '100vw',
       }}
     >
-      <Card style={{ width: '35%', paddingInline: '2rem', paddingBlock: '1rem' }}>
+      <Card style={{ width: '40%', paddingInline: '2rem', paddingBlock: '2rem' }}>
         <div className="text-center">
           <img src={logo} alt="Proyecto Arima" style={{ height: '10rem' }} />
         </div>

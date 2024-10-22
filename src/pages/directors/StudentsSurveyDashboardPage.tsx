@@ -3,11 +3,10 @@ import { Card, CardHeader, Table } from "reactstrap";
 import Select from 'react-select';
 
 import { get } from "../../utils/network";
-
+import { SwalUtils } from "../../utils/SwalUtils";
 
 interface ICourse {
   id: string;
-  teacherEmail: string;
   courseName: string;
 }
 
@@ -31,118 +30,130 @@ interface IQuestion {
 }
 
 const questionsOptions = [
-  "Totalmente de acuerdo",
-  "Algo de acuerdo",
-  "Ni de acuerdo ni en desacuerdo",
+  "Totalmente en desacuerdo",
   "Algo en desacuerdo",
-  "Totalmente en desacuerdo"
+  "Ni de acuerdo ni en desacuerdo",
+  "Algo de acuerdo",
+  "Totalmente de acuerdo"
 ];
 
 export const StudentsSurveyDashboardPage = () => {
-  const [courses, setCourses] = useState<ICourse[]>();
-  const [answers, setAnswers] = useState<IAnswerData[]>([]);
-
+  const [studentsSurveyData, setStudentsSurveyData] = useState<IQuestion | null>(null);
+  const [courses, setCourses] = useState<ICourse[]>([]);
   const [courseId, setCourseId] = useState<string>('');
-  const [dateFrom, setDateFrom] = useState<any>('');
-  const [dateTo, setDateTo] = useState<any>('');
-
-  const [studentsSurveyData, setStudentsSurveyData] = useState<IQuestion>();
+  const [answers, setAnswers] = useState<IAnswerData[]>([]);
+  const [dateFrom, setDateFrom] = useState<any>(new Date().toISOString().split('T')[0].toString());
+  const [dateTo, setDateTo] = useState<any>(new Date().toISOString().split('T')[0].toString());
 
   useEffect(() => {
-    get('/teachers').then(res => res.json()).then(res => res.data).then((data: any[]) => {
-      setCourses(data.flatMap(teacherObject =>
-        teacherObject.courses.map((course: ICourse) => ({
+    get('/directors/courses/')
+      .then(res => res.json())
+      .then(res => res.data)
+      .then((data: ICourse[]) => {
+        const allCoursesOption = { id: '', courseName: 'Todos los cursos' };
+        setCourses([allCoursesOption, ...data.map((course: ICourse) => ({
           id: course.id,
-          teacherEmail: teacherObject.user.email,
           courseName: course.courseName,
-        }))
-      ));
-    });
-    fetchStudentsSurveyData();
+        }))]);
+      });
+      fetchStudentsSurveyData();
   }, []);
 
-  useEffect(() => {
-    // console.log(`Filters: courseId=${courseId}, dateFrom=${dateFrom}, dateTo=${dateTo}`);
-    updateFilter();
-  }, [courses, courseId, dateFrom && dateTo]);
-
   const fetchStudentsSurveyData = async () => {
-    let endpoint = '/survey/student-results';
-    if (courseId || dateFrom || dateTo) {
-      endpoint += '?';
-    }
-
-    if (courseId) {
-      endpoint += `courseId=${courseId}`;
-    }
-
-    if (dateFrom) {
-      endpoint += `&dateFrom=${dateFrom}`;
-    }
-
-    if (dateTo) {
-      endpoint += `&dateTo=${dateTo}`;
-    }
-
-    await get(endpoint)
+    await get('/survey/student-results')
       .then(res => res.json())
       .then(res => res.data)
       .then((data: IQuestion) => {
         setStudentsSurveyData(data);
-      });
+      }); 
   }
 
-  const updateFilter = () => {
-    fetchStudentsSurveyData();
-    if (studentsSurveyData) {
-      console.info('Found data for students survey');
-      setAnswers(
-        [
-          {
-            question: '1. La plataforma es fácil de usar',
-            answers: questionsOptions.map((option, index) => ({
-              id: index,
-              option: option,
-              value: studentsSurveyData.question1[index].toString()
-            }))
-          },
-          {
-            question: '2. La plataforma funciona de forma rápida',
-            answers: questionsOptions.map((option, index) => ({
-              id: index,
-              option: option,
-              value: studentsSurveyData?.question2[index].toString()
-            }))
-          },
-          {
-            question: '3. El material proporcionado es cómodo a la hora de estudiar',
-            answers: questionsOptions.map((option, index) => ({
-              id: index,
-              option: option,
-              value: studentsSurveyData?.question3[index].toString()
-            }))
-          },
-          {
-            question: '4. Usar el material de la plataforma me ha ayudado a obtener mejores resultados',
-            answers: questionsOptions.map((option, index) => ({
-              id: index,
-              option: option,
-              value: studentsSurveyData?.question4[index].toString()
-            }))
-          },
-          {
-            question: '5. El uso de la plataforma colabora en la mejora de la enseñanza de mis docentes',
-            answers: questionsOptions.map((option, index) => ({
-              id: index,
-              option: option,
-              value: studentsSurveyData?.question5[index].toString()
-            }))
-          },
-        ]
+  useEffect(() => {
+    fetchStudentsSurveyDataFiltered();
+  }, [courseId, dateFrom, dateTo]);
+
+  const fetchStudentsSurveyDataFiltered = async () => {
+    const tmpDateFrom = new Date(dateFrom);
+    const tmpDateTo = new Date(dateTo);
+
+    if(tmpDateTo < tmpDateFrom) {
+      SwalUtils.warningSwal(
+        "Rango de fechas inválido",
+        "La fecha final debe ser mayor o igual a la fecha inicial.",
+        "Continuar",
+        () => { console.warn('Invalid date range'); }
       );
     }
+    let endpoint = '/survey/student-results';
+    const queryParams: string[] = [];
 
-  };
+    if (courseId) {
+      queryParams.push(`courseId=${courseId}`);
+    }
+
+    if (dateFrom && dateTo) {
+      queryParams.push(`dateFrom=${dateFrom}`);
+      queryParams.push(`dateTo=${dateTo}`);
+    }
+    if (queryParams.length > 0) {
+      endpoint += `?${queryParams.join('&')}`;
+    }
+    
+    await get(endpoint)
+      .then(res => res.json())
+      .then(res => res.data)
+      .then((data: IQuestion | null) => {
+        if(!data) {
+          setStudentsSurveyData(null);
+          return;
+        }
+        setStudentsSurveyData(data);
+        setAnswers(
+          [
+            {
+              question: '1. La plataforma es fácil de usar',
+              answers: questionsOptions.map((option, index) => ({
+                id: index,
+                option: option,
+                value: data.question1[index].toString()
+              }))
+            },
+            {
+              question: '2. La plataforma funciona de forma rápida',
+              answers: questionsOptions.map((option, index) => ({
+                id: index,
+                option: option,
+                value: data.question2[index].toString()
+              }))
+            },
+            {
+              question: '3. El material proporcionado es cómodo a la hora de estudiar',
+              answers: questionsOptions.map((option, index) => ({
+                id: index,
+                option: option,
+                value: data.question3[index].toString()
+              }))
+            },
+            {
+              question: '4. Usar el material de la plataforma me ha ayudado a obtener mejores resultados',
+              answers: questionsOptions.map((option, index) => ({
+                id: index,
+                option: option,
+                value: data.question4[index].toString()
+              }))
+            },
+            {
+              question: '5. El uso de la plataforma colabora en la mejora de la enseñanza de mis docentes',
+              answers: questionsOptions.map((option, index) => ({
+                id: index,
+                option: option,
+                value: data.question5[index].toString()
+              }))
+            },
+          ]
+        );
+      });
+  }
 
   return <div
     style={{
@@ -174,6 +185,7 @@ export const StudentsSurveyDashboardPage = () => {
                   className="form-control"
                   placeholder="Fecha inicial"
                   value={dateFrom}
+                  max={new Date().toISOString().split('T')[0]}
                   onChange={(e) => setDateFrom(e.target.value)}
                 />
                 <input
@@ -181,6 +193,7 @@ export const StudentsSurveyDashboardPage = () => {
                   className="form-control"
                   placeholder="Fecha final"
                   value={dateTo}
+                  max={new Date().toISOString().split('T')[0]}
                   onChange={(e) => setDateTo(e.target.value)}
                 />
               </div>
@@ -190,32 +203,19 @@ export const StudentsSurveyDashboardPage = () => {
                 width: '50%',
               }}>
                 <Select
-                  options={[
-                    { value: '', label: 'Todos los cursos' },
-                    ...(courses?.map((course: ICourse) => ({
-                      value: course.id,
-                      label: `${course.teacherEmail} - ${course.courseName}`,
-                    })) || [])
-                  ]}
+                  options={courses.map(course => ({ value: course.id, label: course.courseName }))}
                   noOptionsMessage={() => 'No hay cursos disponibles'}
-                  placeholder="Curso"
+                  placeholder="Seleccionar curso"
+                  isClearable
+                  isSearchable
                   onChange={(selectedOption) => {
                     setCourseId(selectedOption ? selectedOption.value : '');
                   }}
                 />
-                {/* <button
-                  className="btn-purple-1"
-                  onClick={updateFilter}
-                  style={{
-                    marginBlockStart: '1rem',
-                  }}
-                >
-                  Filtrar
-                </button> */}
               </div>
               <hr />
 
-              {answers.map((answer: IAnswerData) => (
+              {studentsSurveyData && answers.map((answer: IAnswerData) => (
                 <Card key={answer.question} style={{ width: '100%', paddingInline: '2rem', paddingBlock: '1rem', marginBlock: '1rem' }}>
                   <CardHeader tag='h4'>
                     {answer.question}
@@ -241,9 +241,9 @@ export const StudentsSurveyDashboardPage = () => {
             </>
             }
 
-            {answers.length === 0 && <>
+            {!studentsSurveyData && <>
               <h2>Sin resultados</h2>
-              <span>Todavía no hay resultados para mostrar</span>
+              <span>No encontramos resultados para mostrarte</span>
               <div style={{
                 flex: '1',
                 display: 'flex',

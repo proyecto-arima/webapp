@@ -19,13 +19,22 @@ export const StudentLinkingPage = () => {
           ...course,
           students: [...course.students, selectedStudent]
         }));
+        setAvailableStudents((prevStudents: any) =>
+          prevStudents.filter((s: any) => s.id !== selectedStudent.id)
+        );
+        setSelectedStudent(null);
       });
   };
 
   useEffect(() => {
     get(`/courses/${courseId}`).then(res => res.json()).then(res => res.data).then(setCourse);
     get('/students').then(res => res.json()).then(res => res.data).then(setAvailableStudents);
-  }, []);
+  }, [courseId]);
+
+  // Filtrar estudiantes disponibles para eliminar los que ya están matriculados
+  const filteredStudents = availableStudents.filter((student: any) =>
+    !course?.students?.some((s: any) => s.userId === student.id)
+  );
 
   return (
     <div
@@ -63,7 +72,7 @@ export const StudentLinkingPage = () => {
                 isSearchable
                 // BUG: Revisar de no traer todos los estudiantes, se repiten y no deja borrarlos despues
                 // options={ availableStudents && currentStudents ? availableStudents.filter((student: any) => currentStudents.some((s: any) => s.id === student.id)) : [] }
-                options={availableStudents}
+                options={filteredStudents}
                 noOptionsMessage={() => "No hay estudiantes disponibles para agregar"}
                 value={selectedStudent}
                 getOptionLabel={(option) => `${option.firstName} ${option.lastName} - ${option.email}`}

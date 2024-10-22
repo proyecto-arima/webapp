@@ -1,34 +1,66 @@
 import { Card, Table } from "reactstrap";
 import { useEffect, useState } from "react";
 import Select from "react-select";
-import { useParams } from "react-router-dom";
-import { get, post } from "../../utils/network";
+import { useParams, useNavigate } from "react-router-dom";
+import { get, post, del } from "../../utils/network";
 import { faTrash } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { SwalUtils } from "../../utils/SwalUtils";
 
 export const StudentLinkingPage = () => {
   const { courseId } = useParams<'courseId'>();
+  const navigate = useNavigate();
   const [course, setCourse] = useState<any>(null);
   const [selectedStudent, setSelectedStudent] = useState<any>(null);
   const [availableStudents, setAvailableStudents] = useState<any>([]);
 
-  const addStudent = (student: any) => {
-    post(`/courses/${courseId}/students`, { studentEmails: [selectedStudent.email] })
-      .then(res => res.json()).then(res => {
-        setCourse((course: any) => ({
-          ...course,
-          students: [...course.students, selectedStudent]
-        }));
-        setAvailableStudents((prevStudents: any) =>
-          prevStudents.filter((s: any) => s.id !== selectedStudent.id)
-        );
-        setSelectedStudent(null);
-      });
+  const fetchCourse = async () => {
+    const updatedCourse = await get(`/courses/${courseId}`).then(res => res.json()).then(res => res.data);
+    setCourse(updatedCourse);
   };
 
+  const addStudent = async (student: any) => {
+    await post(`/courses/${courseId}/students`, { studentEmails: [student.email] });
+    // Re-obtener el curso después de agregar
+    await fetchCourse();
+    setAvailableStudents((prevStudents: any) =>
+      prevStudents.filter((s: any) => s.id !== student.id)
+    );
+    setSelectedStudent(null);
+  };
+
+  const removeStudent = async (userId: string) => {
+    const studentToRemove = course.students.find((student: any) => student.userId === userId);
+  
+    SwalUtils.infoSwal(
+      '¿Estás seguro de que quieres eliminar este estudiante?',
+      'Esta acción eliminará al estudiante del curso y no podrá deshacerse.',
+      'Sí',
+      'No',
+      async () => {
+        await del(`/courses/${courseId}/users/${userId}`);
+        // Agregar el estudiante de nuevo a la lista de disponibles
+        setAvailableStudents((prevStudents: any) => [...prevStudents, studentToRemove]);
+        // Re-obtener el curso después de eliminar
+        await fetchCourse();
+        SwalUtils.successSwal(
+          'Estudiante eliminado',
+          'El estudiante ha sido eliminado con éxito.',
+          'Aceptar',
+          () => navigate(`/courses/${courseId}/students`),
+          () => navigate(`/courses/${courseId}/students`)
+        );
+      }
+    );
+  };
+  
+
   useEffect(() => {
-    get(`/courses/${courseId}`).then(res => res.json()).then(res => res.data).then(setCourse);
-    get('/students').then(res => res.json()).then(res => res.data).then(setAvailableStudents);
+    fetchCourse();
+    get('/students')
+      .then(res => res.json())
+      .then(res => res.data)
+      .then(setAvailableStudents);
   }, [courseId]);
 
   // Filtrar estudiantes disponibles para eliminar los que ya están matriculados
@@ -70,8 +102,6 @@ export const StudentLinkingPage = () => {
                 placeholder="Buscar estudiante"
                 isClearable
                 isSearchable
-                // BUG: Revisar de no traer todos los estudiantes, se repiten y no deja borrarlos despues
-                // options={ availableStudents && currentStudents ? availableStudents.filter((student: any) => currentStudents.some((s: any) => s.id === student.id)) : [] }
                 options={filteredStudents}
                 noOptionsMessage={() => "No hay estudiantes disponibles para agregar"}
                 value={selectedStudent}
@@ -102,7 +132,7 @@ export const StudentLinkingPage = () => {
                     <td style={{ verticalAlign: 'middle' }}>{student.lastName}</td>
                     <td style={{ verticalAlign: 'middle' }}>{student.email}</td>
                     <td className="d-flex flex-row justify-content-end">
-                      <button className='btn-purple-2'>
+                      <button className='btn-purple-2' onClick={() => removeStudent(student.userId)}>
                         <FontAwesomeIcon icon={faTrash} />
                       </button>
                     </td>

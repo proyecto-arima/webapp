@@ -62,7 +62,20 @@ export const EditSectionPage: React.FC = () => {
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
-      setSelectedFile(e.target.files[0]);
+      const file = e.target.files[0];
+      const validFileTypes = ['image/png'];
+  
+      if (!validFileTypes.includes(file.type)) {
+        SwalUtils.errorSwal(
+          'Formato de archivo inválido',
+          'Solo se permiten archivos con extensión .png. Por favor, selecciona un archivo válido.',
+          'Aceptar',
+          () => navigate(`/courses/${courseId}/sections/${sectionId}/edit`))
+        setSelectedFile(null);
+        return;
+      }
+  
+      setSelectedFile(file);
     }
   };
 
@@ -312,7 +325,7 @@ export const EditSectionPage: React.FC = () => {
             </div>
           ) : (
             <div style={{ flex: '1' }}>
-              <Input type="file" accept=".png" onChange={handleFileChange} className="mb-3" />
+              <Input type="file" onChange={handleFileChange} className="mb-3" />
             </div>
           )}
 

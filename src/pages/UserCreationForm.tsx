@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { Card, Input } from "reactstrap";
-import ReactSelect from 'react-select';
 
 import { get, post } from "../utils/network";
 import { FormValidators } from "../utils/FormValidators";
@@ -36,7 +35,9 @@ interface UserCreationFormProps {
 }
 
 const UserCreationForm: React.FC<UserCreationFormProps> = ({ entityToCreate, actionAfterCreation, actionOnError, postHttp }) => {
-  const [formValues, setFormValues] = useState<IUserCreationFormValues>();
+  const [formValues, setFormValues] = useState<IUserCreationFormValues>({
+    document: { type: "DNI" } // Tipo de documento establecido como "DNI"
+  });
   const [institutes, setInstitutes] = useState<IInstitute[]>([]);
 
   useEffect(() => {
@@ -93,16 +94,6 @@ const UserCreationForm: React.FC<UserCreationFormProps> = ({ entityToCreate, act
     })
   }
 
-  const setDocumentType = (type?: string): void => {
-    setFormValues({
-      ...formValues,
-      document: {
-        ...formValues?.document,
-        type,
-      }
-    })
-  }
-
   const setDocumentNumber = (number?: string): void => {
     setFormValues({
       ...formValues,
@@ -134,7 +125,7 @@ const UserCreationForm: React.FC<UserCreationFormProps> = ({ entityToCreate, act
           "Esta bien",
           () => { console.warn('Institute not selected') },
         );
-        return false
+        return false;
       }
     }
 
@@ -161,10 +152,11 @@ const UserCreationForm: React.FC<UserCreationFormProps> = ({ entityToCreate, act
       return false;
     }
 
-    if (formValues?.document?.type === "DNI" && !FormValidators.isDNI(formValues?.document?.number || '')) {
+    const documentNumber = formValues?.document?.number || '';
+    if (formValues?.document?.type === "DNI" && (documentNumber.length < 7 || documentNumber.length > 8)) {
       SwalUtils.warningSwal(
-        "El documeto ingresado es inválido.",
-        "Por favor, asegurate de que el documeto ingresado sea un DNI válido.",
+        "El documento ingresado es inválido.",
+        "Por favor, asegurate de que el documento ingresado sea un DNI válido.",
         "Esta bien",
         () => { console.warn('Document not valid') },
       );
@@ -225,12 +217,11 @@ const UserCreationForm: React.FC<UserCreationFormProps> = ({ entityToCreate, act
         <h2 className="text-center mb-3">
           {`Nuevo ${entityToCreate === 'TEACHER' ? 'docente' :
             entityToCreate === 'STUDENT' ? 'estudiante' : 'directivo'
-            }`}
+          }`}
         </h2>
         <Input
           name="firstName"
           type="text"
-
           maxLength={30}
           placeholder="Nombre"
           className="mb-3"
@@ -239,43 +230,38 @@ const UserCreationForm: React.FC<UserCreationFormProps> = ({ entityToCreate, act
         <Input name="lastName" type="text" maxLength={30} placeholder="Apellido" className="mb-3" onChange={handleFormChange('lastName')} />
         <Input name="email" type="email" maxLength={256} placeholder="Correo Electrónico" className="mb-3" onChange={handleFormChange('email')} />
         {entityToCreate === 'DIRECTOR' &&
-          <ReactSelect
-            options={institutes}
-            getOptionLabel={(option) => option.name}
-            getOptionValue={(option) => option.id}
-            noOptionsMessage={() => 'No se encontraron instituciones'}
+          <Input
+            type="select"
             className="mb-3"
             placeholder="Institución"
             name="institute"
-            onChange={(e) => { setInstitute(e?.id) }}
-          />
+            onChange={(e) => setInstitute(e.target.value)}
+          >
+            <option value="">Seleccione una institución</option>
+            {institutes.map(institute => (
+              <option key={institute.id} value={institute.id}>{institute.name}</option>
+            ))}
+          </Input>
         }
-        <ReactSelect
-          options={[
-            { value: 'DNI', label: 'DNI' }
-          ]}
+         <Input
+          value="Tipo de documento: DNI"
           className="mb-3"
-          placeholder="Tipo de Documento"
-          name="documentType"
-          onChange={(e) => setDocumentType(e?.value)}
+          disabled
         />
         <Input
           type="number"
           placeholder="Número de Documento"
-          minLength={formValues?.document?.type === "DNI" ? 7 : 10}
-          maxLength={formValues?.document?.type === "DNI" ? 9 : 10}
           className="mb-3"
           onChange={(e) => setDocumentNumber(e.target.value)}
         />
         <button className="btn-purple-1 w-100" onClick={() => checkFormData() && onCreation()}>
-          {`Crear ${entityToCreate === 'TEACHER' ? 'docente' :
-            entityToCreate === 'STUDENT' ? 'estudiante' : 'directivo'
-            }`}
+          {`Crear ${entityToCreate === 'TEACHER' ? 'Docente' :
+            entityToCreate === 'STUDENT' ? 'Estudiante' : 'Directivo'
+          }`}
         </button>
       </Card>
-
     </div>
   );
-};
+}
 
 export default UserCreationForm;

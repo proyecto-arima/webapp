@@ -34,7 +34,20 @@ export const SectionCreationPage = () => {
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
-      setSelectedFile(e.target.files[0]);
+      const file = e.target.files[0];
+      const validFileTypes = ['image/png'];
+  
+      if (!validFileTypes.includes(file.type)) {
+        SwalUtils.errorSwal(
+          'Formato de archivo inválido',
+          'Solo se permiten archivos con extensión .png. Por favor, selecciona un archivo válido.',
+          'Aceptar',
+          () => navigate(`/courses/${courseId}/new-section`))
+        setSelectedFile(null);
+        return;
+      }
+  
+      setSelectedFile(file);
     }
   };
 
@@ -205,7 +218,6 @@ export const SectionCreationPage = () => {
             </div>
           ) : (
             <div>
-              <Label for="file">Cargar archivo</Label>
               <Input name="file" type="file" className="mb-3" onChange={handleFileChange} />
             </div>
           )}

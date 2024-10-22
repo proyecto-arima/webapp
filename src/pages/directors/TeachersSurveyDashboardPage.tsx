@@ -1,7 +1,13 @@
 import { useEffect, useState } from "react";
 import { Card, CardHeader, Table } from "reactstrap";
-import { get } from "../../utils/network";
 
+import { get } from "../../utils/network";
+import { SwalUtils } from "../../utils/SwalUtils";
+
+interface ICourse {
+  id: string;
+  title: string;
+}
 
 interface IAnswer {
   id: number;
@@ -23,95 +29,130 @@ interface IQuestion {
 }
 
 const questionsOptions = [
-  "Totalmente de acuerdo",
-  "Algo de acuerdo",
-  "Ni de acuerdo ni en desacuerdo",
+  "Totalmente en desacuerdo",
   "Algo en desacuerdo",
-  "Totalmente en desacuerdo"
+  "Ni de acuerdo ni en desacuerdo",
+  "Algo de acuerdo",
+  "Totalmente de acuerdo"
 ];
 
 export const TeachersSurveyDashboardPage = () => {
+  const [courses, setCourses] = useState<ICourse[]>([]);
+  const [courseId, setCourseId] = useState<string>('');
   const [answers, setAnswers] = useState<IAnswerData[]>([]);
-  const [dateFrom, setDateFrom] = useState<any>('');
-  const [dateTo, setDateTo] = useState<any>('');
-
-  const [studentsSurveyData, setStudentsSurveyData] = useState<IQuestion>();
+  const [dateFrom, setDateFrom] = useState<any>(new Date().toISOString().split('T')[0].toString());
+  const [dateTo, setDateTo] = useState<any>(new Date().toISOString().split('T')[0].toString());
+  const [teachersSurveyData, setTeachersSurveyData] = useState<IQuestion | null>(null);
 
   useEffect(() => {
-    fetchStudentsSurveyData();
+    get('/directors/courses/')
+      .then(res => res.json())
+      .then(res => res.data)
+      .then((data: ICourse[]) => {
+        const allCoursesOption = { id: '', title: 'Todos los cursos' };
+        setCourses([allCoursesOption, ...data.map((course: ICourse) => ({
+          id: course.id,
+          title: course.title,
+        }))]);
+      });
+      fetchStudentsSurveyData();
   }, []);
 
-  useEffect(() => {
-    // console.log(`Filters: courseId=${courseId}, dateFrom=${dateFrom}, dateTo=${dateTo}`);
-    updateFilter();
-  }, [dateFrom && dateTo]);
-
   const fetchStudentsSurveyData = async () => {
-    let endpoint = '/survey/teacher-results';
-    if (dateFrom && dateTo) {
-      endpoint += '?';
-      endpoint += `&dateFrom=${dateFrom}`;
-      endpoint += `&dateTo=${dateTo}`;
-    }
-
-    await get(endpoint)
+    await get('/survey/teacher-results')
       .then(res => res.json())
       .then(res => res.data)
       .then((data: IQuestion) => {
-        setStudentsSurveyData(data);
-      });
+        setTeachersSurveyData(data);
+      }); 
   }
 
-  const updateFilter = () => {
-    fetchStudentsSurveyData();
-    if (studentsSurveyData) {
-      console.info('Found data for students survey');
-      setAnswers(
-        [
-          {
-            question: '1. La plataforma es fácil de usar',
-            answers: questionsOptions.map((option, index) => ({
-              id: index,
-              option: option,
-              value: studentsSurveyData.question1[index].toString()
-            }))
-          },
-          {
-            question: '2. La plataforma funciona de forma rápida',
-            answers: questionsOptions.map((option, index) => ({
-              id: index,
-              option: option,
-              value: studentsSurveyData?.question2[index].toString()
-            }))
-          },
-          {
-            question: '3. A menudo debo modificar el contenido generado por la plataforma',
-            answers: questionsOptions.map((option, index) => ({
-              id: index,
-              option: option,
-              value: studentsSurveyData?.question3[index].toString()
-            }))
-          },
-          {
-            question: '4. El uso de la plataforma colabora con mi tarea docente',
-            answers: questionsOptions.map((option, index) => ({
-              id: index,
-              option: option,
-              value: studentsSurveyData?.question4[index].toString()
-            }))
-          },
-          {
-            question: '5. El uso de la plataforma colabora en la mejora del aprendizaje de mis alumnos.',
-            answers: questionsOptions.map((option, index) => ({
-              id: index,
-              option: option,
-              value: studentsSurveyData?.question5[index].toString()
-            }))
-          },
-        ]
+  useEffect(() => {
+    fetchStudentsSurveyDataFiltered();
+  }, [courseId, dateFrom, dateTo]);
+
+  const fetchStudentsSurveyDataFiltered = async () => {
+    const tmpDateFrom = new Date(dateFrom);
+    const tmpDateTo = new Date(dateTo);
+
+    if(tmpDateTo < tmpDateFrom) {
+      SwalUtils.warningSwal(
+        "Rango de fechas inválido",
+        "La fecha final debe ser mayor o igual a la fecha inicial.",
+        "Continuar",
+        () => { console.warn('Invalid date range'); }
       );
     }
-  };
+    let endpoint = '/survey/student-results';
+    const queryParams: string[] = [];
+
+    if (courseId) {
+      queryParams.push(`courseId=${courseId}`);
+    }
+
+    if (dateFrom && dateTo) {
+      queryParams.push(`dateFrom=${dateFrom}`);
+      queryParams.push(`dateTo=${dateTo}`);
+    }
+    if (queryParams.length > 0) {
+      endpoint += `?${queryParams.join('&')}`;
+    }
+    
+    await get(endpoint)
+      .then(res => res.json())
+      .then(res => res.data)
+      .then((data: IQuestion | null) => {
+        if(!data) {
+          setTeachersSurveyData(null);
+          return;
+        }
+        setTeachersSurveyData(data);
+        setAnswers(
+          [
+            {
+              question: '1. La plataforma es fácil de usar',
+              answers: questionsOptions.map((option, index) => ({
+                id: index,
+                option: option,
+                value: data.question1[index].toString()
+              }))
+            },
+            {
+              question: '2. La plataforma funciona de forma rápida',
+              answers: questionsOptions.map((option, index) => ({
+                id: index,
+                option: option,
+                value: data.question2[index].toString()
+              }))
+            },
+            {
+              question: '3. El material proporcionado es cómodo a la hora de estudiar',
+              answers: questionsOptions.map((option, index) => ({
+                id: index,
+                option: option,
+                value: data.question3[index].toString()
+              }))
+            },
+            {
+              question: '4. Usar el material de la plataforma me ha ayudado a obtener mejores resultados',
+              answers: questionsOptions.map((option, index) => ({
+                id: index,
+                option: option,
+                value: data.question4[index].toString()
+              }))
+            },
+            {
+              question: '5. El uso de la plataforma colabora en la mejora de la enseñanza de mis docentes',
+              answers: questionsOptions.map((option, index) => ({
+                id: index,
+                option: option,
+                value: data.question5[index].toString()
+              }))
+            },
+          ]
+        );
+      });
+  }
 
   return <div
     style={{
@@ -143,6 +184,7 @@ export const TeachersSurveyDashboardPage = () => {
                   className="form-control"
                   placeholder="Fecha inicial"
                   value={dateFrom}
+                  max={new Date().toISOString().split('T')[0]}
                   onChange={(e) => setDateFrom(e.target.value)}
                 />
                 <input
@@ -150,6 +192,7 @@ export const TeachersSurveyDashboardPage = () => {
                   className="form-control"
                   placeholder="Fecha final"
                   value={dateTo}
+                  max={new Date().toISOString().split('T')[0]}
                   onChange={(e) => setDateTo(e.target.value)}
                 />
               </div>
@@ -158,19 +201,10 @@ export const TeachersSurveyDashboardPage = () => {
                 alignItems: 'center',
                 width: '50%',
               }}>
-                {/* <button
-                  className="btn-purple-1"
-                  onClick={updateFilter}
-                  style={{
-                    marginBlockStart: '1rem',
-                  }}
-                >
-                  Filtrar
-                </button> */}
               </div>
               <hr />
 
-              {answers.map((answer: IAnswerData) => (
+              {teachersSurveyData && answers.map((answer: IAnswerData) => (
                 <Card key={answer.question} style={{ width: '100%', paddingInline: '2rem', paddingBlock: '1rem', marginBlock: '1rem' }}>
                   <CardHeader tag='h4'>
                     {answer.question}
@@ -196,9 +230,9 @@ export const TeachersSurveyDashboardPage = () => {
             </>
             }
 
-            {answers.length === 0 && <>
+            {!teachersSurveyData && <>
               <h2>Sin resultados</h2>
-              <span>Todavía no hay resultados para mostrar</span>
+              <span>No encontramos resultados para mostrarte</span>
               <div style={{
                 flex: '1',
                 display: 'flex',

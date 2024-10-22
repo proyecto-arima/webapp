@@ -87,7 +87,7 @@ const LoginPage = () => {
       });
 
     const isData = user ? true : false;
-    if(!isData) {
+    if (!isData) {
       console.error(`User data not found`);
       return false;
     };
@@ -128,7 +128,7 @@ const LoginPage = () => {
           console.error(`An error occurred while trying to get courses data: ${error}`);
           return false;
         });
-        user.role === 'STUDENT' ? navigate(DEFAULT_PAGE_ROLE.STUDENT) : navigate(DEFAULT_PAGE_ROLE.TEACHER);
+      user.role === 'STUDENT' ? navigate(DEFAULT_PAGE_ROLE.STUDENT) : navigate(DEFAULT_PAGE_ROLE.TEACHER);
       return isLogged && isData && isCourses;
     } else {
       if (user.role === 'ADMIN') {
@@ -138,7 +138,7 @@ const LoginPage = () => {
       } else {
         console.error("User role not found");
         return false;
-      }      
+      }
       return isLogged && isData;
     }
   };
@@ -154,7 +154,12 @@ const LoginPage = () => {
         width: '100vw',
       }}
     >
-      <Card style={{ width: '35%', paddingInline: '2rem', paddingBlock: '1rem' }}>
+      <Card style={{
+        width: '40%',
+        paddingInline: '2rem',
+        paddingBlock: '2rem',
+        borderRadius: '1rem'
+      }}>
         <div className="text-center">
           <img src={logo} alt="Proyecto Arima" style={{ height: '10rem' }} />
         </div>
@@ -162,7 +167,6 @@ const LoginPage = () => {
       </Card>
     </div>
   );
-
 };
 
 export default LoginPage;

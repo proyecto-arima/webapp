@@ -2,7 +2,12 @@ import { useState } from "react";
 import { Input, Label } from "reactstrap";
 import { useNavigate } from "react-router-dom";
 
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faGoogle } from '@fortawesome/free-brands-svg-icons';
+import { faEnvelope } from "@fortawesome/free-solid-svg-icons";
+
 import { FormValidators } from "../utils/FormValidators";
+import { API_URL } from "../config";
 import '../App.css';
 
 interface ILoginFormProps {
@@ -11,7 +16,7 @@ interface ILoginFormProps {
 
 export default function LoginForm({ login }: ILoginFormProps) {
   const navigate = useNavigate();
-  
+
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showAlert, setShowAlert] = useState(false);
@@ -27,18 +32,28 @@ export default function LoginForm({ login }: ILoginFormProps) {
         <Label htmlFor="password" className="form-label">Contraseña</Label>
         <Input type="password" id="password" placeholder="**************" onChange={(e) => setPassword(e.target.value)} />
       </div>
-      {showAlert && <div className="text-danger"> {message} </div>}
-      <div className="d-flex justify-content-between mt-4">
 
-        <button onClick={() => navigate("/forgotPassword")} style={{
-          backgroundColor: "transparent",
-          border: "none",
-          color: "#6c757d",
-          textDecoration: "underline",
-          cursor: "pointer",
-        }}>
-          Olvidé mi contraseña
-        </button>
+      {showAlert &&
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            color: "red",
+            marginBottom: "1rem",
+          }}
+        > {message}
+        </div>
+      }
+
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          width: "60%",
+          gap: "1rem",
+          margin: "auto",
+        }}
+      >
         <button className="btn-purple-1" onClick={async () => {
           if (!FormValidators.isValidEmail(email)) {
             setShowAlert(true);
@@ -50,7 +65,7 @@ export default function LoginForm({ login }: ILoginFormProps) {
             return;
           }
           const authStatus = await login(email, password);
-          if(!authStatus) {
+          if (!authStatus) {
             setShowAlert(true);
             setMessage('Usuario o contraseña incorrecto');
             setTimeout(() => {
@@ -59,7 +74,23 @@ export default function LoginForm({ login }: ILoginFormProps) {
             }, 3000);
           }
         }}>
-          Iniciar Sesión
+          <FontAwesomeIcon icon={faEnvelope} style={{ marginRight: "10px" }} />
+          Iniciar Sesión con email
+        </button>
+
+        <button className="btn-purple-2" onClick={() => { window.location.href = `${API_URL}/auth/google`; }}>
+          <FontAwesomeIcon icon={faGoogle} style={{ marginRight: "10px" }} />
+          Iniciar Sesión con Google
+        </button>
+
+        <button onClick={() => navigate("/forgotPassword")} style={{
+          backgroundColor: "transparent",
+          border: "none",
+          color: "#6c757d",
+          textDecoration: "none",
+          cursor: "pointer",
+        }}>
+          Olvidé mi contraseña
         </button>
 
       </div>

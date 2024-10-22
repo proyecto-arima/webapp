@@ -1,12 +1,16 @@
 import { useEffect, useRef, useState } from "react";
 import ReactAudioSpectrum from "react-audio-spectrum";
 import { Card, Progress } from "reactstrap";
-import * as tts from '@diffusionstudio/vits-web';
 import { get } from "../../../utils/network";
 import { useParams } from "react-router-dom";
-import { IContent } from "../text/GeneratedContentView";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPause, faPlay } from "@fortawesome/free-solid-svg-icons";
+import { faArrowLeft, faArrowRight, faBackward, faPause, faPlay, faRightToBracket } from "@fortawesome/free-solid-svg-icons";
+
+interface IGenerated{
+  type: string;
+  content: { text: string, audioUrl: string }[];
+  approved: boolean;
+}
 
 export default function AudioVisualizer() {
   const audioRef = useRef(new Audio());
@@ -17,44 +21,35 @@ export default function AudioVisualizer() {
   audioElement.crossOrigin = 'anonymous';
 
   const { contentId } = useParams<{ contentId: string }>();
-  const [content, setContent] = useState<IContent>();
+  const [content, setContent] = useState<IGenerated>();
 
-  const [current, setCurrent] = useState('');
+  const [current, setCurrent] = useState(0);
   const [playing, setPlaying] = useState(false);
 
   useEffect(() => {
-    get(`/contents/${contentId}`).then(res => res.json()).then(res => res.data).then((data: IContent) => setContent(data));
-  }, []);
-
-  useEffect(() => {
-    (async () => {
-      const voices = await tts.stored();
-      console.log("Stored voices: ", voices);
-      if (voices.length === 0) {
-        await tts.download('es_MX-claude-high', (progress) => {
-          console.log(`Downloading ${progress.url} - ${Math.round(progress.loaded * 100 / progress.total)}%`);
-        });
+    get(`/contents/${contentId}/speech`).then(res => res.json()).then(res => res.data).then((data) => {
+      setContent(data);
+      audioElement.src = data.content[0].audioUrl;
+      audioElement.load();
+      audioElement.onended = () => {
+        setCurrent((current + 1) % data.content.length);
       }
-      setLoading(false);
-    })()
+    });
 
+    return () => {
+      audioElement.pause();
+    };
   }, []);
 
   useEffect(() => {
-    if (loading) return;
-    const contents = content?.generated?.filter(g => g.type === 'SUMMARY').flatMap(g => g.content.split('\n'));
-    if (!contents?.length) return;
-    console.log("Contents: ", contents);
-    setTimeout(() => {
-      tts.predict({ text: contents[0], voiceId: 'es_MX-claude-high' }).then((wav) => {
-        setAudioLoading(false);
-        const src = URL.createObjectURL(new Blob([wav], { type: 'audio/wav' }));
-        audioElement.src = src;
-        setCurrent(contents[0]);
-        audioElement.load();
-      });
-    }, 1000);
-  }, [loading, content]);
+    if (!content) return;
+    audioElement.src = content?.content[current].audioUrl;
+    audioElement.load();
+    audioElement.play().then(() => setPlaying(true));
+    audioElement.onended = () => {
+      setCurrent((current + 1) % content.content.length);
+    }
+  }, [current]);
 
   useEffect(() => {
     console.log("Audio loading: ", audioLoading);
@@ -94,30 +89,15 @@ export default function AudioVisualizer() {
         }}
           ref={containerRef}
         >
-          {audioLoading ? <div
+          {(content?.content?.length ?? 0) > 0 && <>
+          <div
+            className="d-flex flex-row justify-content-end w-100"
             style={{
-              display: 'flex',
-              justifyContent: 'center',
-              alignItems: 'center',
-              width: '100%',
-              height: '100%',
+              color: 'gray',
             }}
           >
-            <Progress
-            animated
-            color="info"
-            value={100}
-            indeterminate
-            style={{
-                width: '100%',
-                display: 'flex',
-                justifyContent: 'center',
-                alignItems: 'center',
-              }}
-          >
-            Cargando audio...
-          </Progress>
-          </div> :<>
+            <span>Audio {current + 1}/{content?.content.length}</span>
+          </div>
             <span style={{
               "fontFamily": "Comic Neue",
               "fontWeight": 500,
@@ -125,8 +105,23 @@ export default function AudioVisualizer() {
               "textAlign": "center",
               "fontSize": "1.5rem",
             }}>
-              {current}
+              {content?.content[current].text}
             </span>
+            <div className="d-flex flex-row justify-content-center align-items-center gap-3 w-100">
+            <button
+              style={{
+                "backgroundColor": "#6650a4",
+                "border": "none",
+                "color": "white",
+                "padding": "0.5rem 1rem",
+                "borderRadius": "0.5rem",
+                "cursor": "pointer",
+                "alignSelf": "center",
+              }}
+              onClick={() => setCurrent((current - 1 + (content?.content?.length ?? 0)) % (content?.content?.length ?? 0))}
+            >
+              <FontAwesomeIcon icon={faArrowLeft} />
+            </button>
             <button
             style={{
               "backgroundColor": "#6650a4",
@@ -150,15 +145,31 @@ export default function AudioVisualizer() {
               <FontAwesomeIcon icon={playing ? faPause : faPlay} />
 
             </button>
+            <button
+              style={{
+                "backgroundColor": "#6650a4",
+                "border": "none",
+                "color": "white",
+                "padding": "0.5rem 1rem",
+                "borderRadius": "0.5rem",
+                "cursor": "pointer",
+                "alignSelf": "center",
+              }}
+              onClick={() => setCurrent((current + 1) % (content?.content?.length ?? 0))}
+            >
+              <FontAwesomeIcon icon={faArrowRight} />
+            </button>
+            </div>
+            
             <ReactAudioSpectrum
               id="audio-canvas"
               audioEle={audioElement}
               width={containerRef.current?.clientWidth || 0}
-              height={innerHeight / 3}
+              height={innerHeight / 4}
               // capColor={'blue'}
               capHeight={2}
               meterWidth={4}
-              meterCount={256}
+              meterCount={400}
               meterColor={[
                 { stop: 0, color: '#6650a4' },
                 { stop: 0.5, color: 'purple' },

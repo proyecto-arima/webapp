@@ -1,6 +1,6 @@
 import { API_URL } from "../config";
 
-const TIMEOUT = 30000; //10 second timeout
+const TIMEOUT = 30000;
 
 export const DEFAULT_HEADERS = {
   Accept: 'application/json',
@@ -8,7 +8,7 @@ export const DEFAULT_HEADERS = {
   'Access-Control-Allow-Origin': true,
 };
 
-const doFetch = (path, body, method, useAuthentication, headers, isForm, token) => {
+const doFetch = (path, body, method, useAuthentication, headers, isForm, token, useTimeout = true) => {
   let options = {
     method: method,
     headers,
@@ -27,7 +27,11 @@ const doFetch = (path, body, method, useAuthentication, headers, isForm, token) 
     options.body = body;
   }
 
-  return Promise.race([sleep(TIMEOUT, onTimeout(path)), fetch(getUrl(path), options)]);
+  if (useTimeout) {
+    return Promise.race([sleep(TIMEOUT, onTimeout(path)), fetch(getUrl(path), options)]);
+  }
+
+  return fetch(getUrl(path), options);
 };
 
 export const getUrl = path => API_URL + path;
@@ -50,8 +54,9 @@ export const patch = (
   useAuthentication = true,
   headers = DEFAULT_HEADERS,
   isForm = false,
-  token = false
-) => doFetch(path, body, HTTPMethods.PATCH, useAuthentication, headers, isForm, token);
+  token = false,
+  useTimeout = true
+) => doFetch(path, body, HTTPMethods.PATCH, useAuthentication, headers, isForm, token, useTimeout);
 
 export const del = (
   path,

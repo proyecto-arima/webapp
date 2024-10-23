@@ -42,7 +42,7 @@ export const InstitutesDashboardPage = () => {
               <td>{institute.address}</td>
               <td>{institute.phone}</td>
               <td className="d-flex flex-row justify-content-end">
-                <Button style={{ background: 'red', border: 'red' }}>
+                <Button className='btn-purple-2'>
                   <FontAwesomeIcon icon={faTrash} />
                 </Button>
               </td>

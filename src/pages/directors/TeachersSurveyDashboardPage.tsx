@@ -4,6 +4,8 @@ import { Card, CardHeader, Table } from "reactstrap";
 import { get } from "../../utils/network";
 import { SwalUtils } from "../../utils/SwalUtils";
 
+const MAX_DATE: string = (new Date(Date.now() - (new Date()).getTimezoneOffset())).toISOString().slice(0, -1).split('T')[0].toString();
+
 interface ICourse {
   id: string;
   title: string;
@@ -40,8 +42,8 @@ export const TeachersSurveyDashboardPage = () => {
   const [courses, setCourses] = useState<ICourse[]>([]);
   const [courseId, setCourseId] = useState<string>('');
   const [answers, setAnswers] = useState<IAnswerData[]>([]);
-  const [dateFrom, setDateFrom] = useState<any>(new Date().toISOString().split('T')[0].toString());
-  const [dateTo, setDateTo] = useState<any>(new Date().toISOString().split('T')[0].toString());
+  const [dateFrom, setDateFrom] = useState<string>(MAX_DATE);
+  const [dateTo, setDateTo] = useState<string>(MAX_DATE);
   const [teachersSurveyData, setTeachersSurveyData] = useState<IQuestion | null>(null);
 
   useEffect(() => {
@@ -55,7 +57,7 @@ export const TeachersSurveyDashboardPage = () => {
           title: course.title,
         }))]);
       });
-      fetchStudentsSurveyData();
+    fetchStudentsSurveyData();
   }, []);
 
   const fetchStudentsSurveyData = async () => {
@@ -64,7 +66,7 @@ export const TeachersSurveyDashboardPage = () => {
       .then(res => res.data)
       .then((data: IQuestion) => {
         setTeachersSurveyData(data);
-      }); 
+      });
   }
 
   useEffect(() => {
@@ -75,7 +77,7 @@ export const TeachersSurveyDashboardPage = () => {
     const tmpDateFrom = new Date(dateFrom);
     const tmpDateTo = new Date(dateTo);
 
-    if(tmpDateTo < tmpDateFrom) {
+    if (tmpDateTo < tmpDateFrom) {
       SwalUtils.warningSwal(
         "Rango de fechas inválido",
         "La fecha final debe ser mayor o igual a la fecha inicial.",
@@ -83,7 +85,7 @@ export const TeachersSurveyDashboardPage = () => {
         () => { console.warn('Invalid date range'); }
       );
     }
-    let endpoint = '/survey/student-results';
+    let endpoint = '/survey/teacher-results';
     const queryParams: string[] = [];
 
     if (courseId) {
@@ -97,12 +99,12 @@ export const TeachersSurveyDashboardPage = () => {
     if (queryParams.length > 0) {
       endpoint += `?${queryParams.join('&')}`;
     }
-    
+
     await get(endpoint)
       .then(res => res.json())
       .then(res => res.data)
       .then((data: IQuestion | null) => {
-        if(!data) {
+        if (!data) {
           setTeachersSurveyData(null);
           return;
         }
@@ -113,40 +115,40 @@ export const TeachersSurveyDashboardPage = () => {
               question: '1. La plataforma es fácil de usar',
               answers: questionsOptions.map((option, index) => ({
                 id: index,
-                option: option,
-                value: data.question1[index].toString()
+                option: questionsOptions[questionsOptions.length - 1 - index],
+                value: data.question1[questionsOptions.length - 1 - index].toString()
               }))
             },
             {
               question: '2. La plataforma funciona de forma rápida',
               answers: questionsOptions.map((option, index) => ({
                 id: index,
-                option: option,
-                value: data.question2[index].toString()
+                option: questionsOptions[questionsOptions.length - 1 - index],
+                value: data.question2[questionsOptions.length - 1 - index].toString()
               }))
             },
             {
               question: '3. El material proporcionado es cómodo a la hora de estudiar',
               answers: questionsOptions.map((option, index) => ({
                 id: index,
-                option: option,
-                value: data.question3[index].toString()
+                option: questionsOptions[questionsOptions.length - 1 - index],
+                value: data.question3[questionsOptions.length - 1 - index].toString()
               }))
             },
             {
               question: '4. Usar el material de la plataforma me ha ayudado a obtener mejores resultados',
               answers: questionsOptions.map((option, index) => ({
                 id: index,
-                option: option,
-                value: data.question4[index].toString()
+                option: questionsOptions[questionsOptions.length - 1 - index],
+                value: data.question4[questionsOptions.length - 1 - index].toString()
               }))
             },
             {
               question: '5. El uso de la plataforma colabora en la mejora de la enseñanza de mis docentes',
               answers: questionsOptions.map((option, index) => ({
                 id: index,
-                option: option,
-                value: data.question5[index].toString()
+                option: questionsOptions[questionsOptions.length - 1 - index],
+                value: data.question5[questionsOptions.length - 1 - index].toString()
               }))
             },
           ]
@@ -177,33 +179,33 @@ export const TeachersSurveyDashboardPage = () => {
       <Card style={{ width: '100%', paddingInline: '2rem', paddingBlock: '1rem', height: '100%', overflow: 'scroll', }}>
         <div className="d-flex flex-column">
           <div>
-            {answers.length > 0 && <>
-              <div className="d-flex flex-row align-items-center w-50 gap-2 mb-3">
-                <input
-                  type="date"
-                  className="form-control"
-                  placeholder="Fecha inicial"
-                  value={dateFrom}
-                  max={new Date().toISOString().split('T')[0]}
-                  onChange={(e) => setDateFrom(e.target.value)}
-                />
-                <input
-                  type="date"
-                  className="form-control"
-                  placeholder="Fecha final"
-                  value={dateTo}
-                  max={new Date().toISOString().split('T')[0]}
-                  onChange={(e) => setDateTo(e.target.value)}
-                />
-              </div>
-              <div style={{
-                justifyContent: 'space-between',
-                alignItems: 'center',
-                width: '50%',
-              }}>
-              </div>
-              <hr />
+            <div className="d-flex flex-row align-items-center w-50 gap-2 mb-3">
+              <input
+                type="date"
+                className="form-control"
+                placeholder="Fecha inicial"
+                value={dateFrom}
+                max={MAX_DATE}
+                onChange={(e) => setDateFrom(e.target.value)}
+              />
+              <input
+                type="date"
+                className="form-control"
+                placeholder="Fecha final"
+                value={dateTo}
+                max={MAX_DATE}
+                onChange={(e) => setDateTo(e.target.value)}
+              />
+            </div>
+            <div style={{
+              justifyContent: 'space-between',
+              alignItems: 'center',
+              width: '50%',
+            }}>
+            </div>
+            <hr />
 
+            {answers.length > 0 && <>
               {teachersSurveyData && answers.map((answer: IAnswerData) => (
                 <Card key={answer.question} style={{ width: '100%', paddingInline: '2rem', paddingBlock: '1rem', marginBlock: '1rem' }}>
                   <CardHeader tag='h4'>

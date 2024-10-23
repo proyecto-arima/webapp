@@ -22,6 +22,7 @@ export interface IContent {
   id: string;
   title: string;
   publicationType: string;
+  publicationDate: string;
   presignedUrl: string;
   status: string;
 }

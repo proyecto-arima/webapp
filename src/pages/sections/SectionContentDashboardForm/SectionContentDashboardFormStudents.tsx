@@ -47,7 +47,6 @@ export default function SectionContentDashboardFormStudents({ content, user, cou
     <thead>
       <tr>
         <th>Contenido</th>
-        <th>¿Que te parece el contenido?</th>
         <th></th>
       </tr>
     </thead>
@@ -61,36 +60,6 @@ export default function SectionContentDashboardFormStudents({ content, user, cou
                 c.publicationType === 'DEFERRED' ? 'Diferido' : 'Default'
             }
           </td>}
-          {user.role === 'STUDENT' &&
-            <td>
-              <div style={
-                {
-                  display: 'flex',
-                  gap: '2rem',
-                  fontSize: '1.5rem'
-                }
-              }>
-                <FontAwesomeIcon
-                  icon={faThumbsUp}
-                  onClick={() => {
-                    sendContentReaction(c.id, true);
-                  }}
-                  style={{
-                    color: '#4d3a8e',
-                    cursor: 'pointer'
-                  }} />
-                <FontAwesomeIcon
-                  icon={faThumbsDown}
-                  onClick={() => {
-                    sendContentReaction(c.id, false);
-                  }}
-                  style={{
-                    color: 'lightgray',
-                    cursor: 'pointer'
-                  }} />
-              </div>
-            </td>
-          }
           <td style={{
             display: 'flex',
             justifyContent: 'flex-end',

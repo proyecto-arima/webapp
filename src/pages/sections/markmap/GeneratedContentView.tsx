@@ -1,16 +1,16 @@
 import { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import { Card, Progress } from "reactstrap";
+import { RootState } from "../../../redux/store";
 import { get, patch } from "../../../utils/network";
 import './GeneratedContentView.css';
 import MarkmapHooks from './utils/MarkmapHooks';
-import { useSelector } from "react-redux";
-import { RootState } from "../../../redux/store";
 
-import processing from '../../../assets/images/processing.gif';
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSave } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Swal from "sweetalert2";
+import Reactions from "../../../components/Reactions";
 
 interface IGenerated {
   type: string;
@@ -35,7 +35,7 @@ export const GeneratedContentView = () => {
   }, []);
 
   const onChange = (newContent: string) => {
-    if(!newContent || !markmap) return;
+    if (!newContent || !markmap) return;
     setMarkmap({ ...markmap, content: newContent });
   };
 
@@ -43,7 +43,7 @@ export const GeneratedContentView = () => {
     patch(`/contents/${contentId}/mindmap`, {
       newContent: markmap?.content,
     }).then(res => res.json()).then(res => {
-      if(res.success) {
+      if (res.success) {
         Swal.fire({
           icon: 'success',
           title: 'Contenido actualizado',
@@ -108,7 +108,7 @@ export const GeneratedContentView = () => {
 
 
         </div>
-        <div
+        {user.role === 'TEACHER' && <div
           className="d-flex justify-content-end w-100 mt-3"
         >
           <button className="btn-purple-1" onClick={saveChanges}>
@@ -118,7 +118,8 @@ export const GeneratedContentView = () => {
           </button>
 
 
-        </div>
+        </div>}
+        {user.role === 'STUDENT' && <Reactions/>}
       </Card>
     </div>
   </div>

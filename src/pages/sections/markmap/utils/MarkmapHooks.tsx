@@ -47,10 +47,10 @@ export default function MarkmapHooks({ text, editable, onChange }: MarkmapHooksP
   useEffect(() => {
     // Create markmap and save to refMm
     if (refMm.current || refSvg.current === undefined) return;
-    if (refToolbar.current === undefined) return;
     const mm = Markmap.create(refSvg.current);
     console.log('create', refSvg.current);
     refMm.current = mm;
+    if (refToolbar.current === undefined) return;
     renderToolbar(refMm.current, refToolbar.current, () => {
       navigate(`${location.pathname.replace('map', 'summary')}`);
     });
@@ -71,7 +71,7 @@ export default function MarkmapHooks({ text, editable, onChange }: MarkmapHooksP
 
   const buildMarkmap = () => <>
     <svg className="flex-1 flex-grow-1 w-100 h-100" ref={refSvg as React.RefObject<SVGSVGElement>} />
-    <div className="absolute bottom-1 right-1" ref={refToolbar as React.RefObject<HTMLDivElement>}></div>
+    {/* <div className="absolute bottom-1" ref={refToolbar as React.RefObject<HTMLDivElement>}></div> */}
   </>
 
   return (

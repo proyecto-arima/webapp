@@ -9,6 +9,9 @@ import Swal from 'sweetalert2';
 import AnimatedStar from './Star';
 import { useNavigate, useParams } from 'react-router-dom';
 import { get } from '../../../utils/network';
+import Reactions from '../../../components/Reactions';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../../redux/store';
 
 interface Answer { answer: string, justification: string }
 
@@ -29,6 +32,8 @@ export default function Game() {
   const [gameOver, setGameOver] = useState(false);
   const { courseId, sectionId, contentId } = useParams<{ courseId: string, sectionId: string, contentId: string }>();
   const navigate = useNavigate();
+
+  const user = useSelector((state: RootState) => state.user);
 
   const [levels, setLevels] = useState<Level[]>([]);
   const [loading, setLoading] = useState(true);
@@ -167,6 +172,7 @@ export default function Game() {
           </>}
 
         </div>
+        {user.role === 'STUDENT' && <Reactions/>}
 
       </Card>
     </div>

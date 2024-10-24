@@ -5,6 +5,9 @@ import { get } from "../../../utils/network";
 import { useParams } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowLeft, faArrowRight, faBackward, faPause, faPlay, faRightToBracket } from "@fortawesome/free-solid-svg-icons";
+import Reactions from "../../../components/Reactions";
+import { useSelector } from "react-redux";
+import { RootState } from "../../../redux/store";
 
 interface IGenerated{
   type: string;
@@ -18,7 +21,8 @@ export default function AudioVisualizer() {
   const [audioLoading, setAudioLoading] = useState(true);
   const audioElement = audioRef.current;
   const containerRef = useRef<HTMLDivElement>(null);
-  audioElement.crossOrigin = 'anonymous';
+  const user = useSelector((state: RootState) => state.user);
+  
 
   const { contentId } = useParams<{ contentId: string }>();
   const [content, setContent] = useState<IGenerated>();
@@ -29,6 +33,7 @@ export default function AudioVisualizer() {
   useEffect(() => {
     get(`/contents/${contentId}/speech`).then(res => res.json()).then(res => res.data).then((data) => {
       setContent(data);
+      audioElement.crossOrigin = 'anonymous';
       audioElement.src = data.content[0].audioUrl;
       audioElement.load();
       audioElement.onended = () => {
@@ -177,7 +182,11 @@ export default function AudioVisualizer() {
               ]}
               gap={5}
 
-            ></ReactAudioSpectrum></>}
+            ></ReactAudioSpectrum>
+            {user.role === 'STUDENT' && <Reactions/>}
+            </>
+            
+            }
         </div>
       </Card>
     </div>

@@ -16,6 +16,7 @@ interface ISectionContentDashboardFormTeachersProps {
   user: UserState;
   courseId: string;
   sectionId: string;
+  
 }
 
 export default function SectionContentDashboardFormTeachers({ content, user, courseId, sectionId }: ISectionContentDashboardFormTeachersProps) {
@@ -48,7 +49,9 @@ export default function SectionContentDashboardFormTeachers({ content, user, cou
       <thead>
         <tr>
           <th>Contenido</th>
-          <th>Modo de publicación</th>
+          <th style={{ textAlign: 'center'}}>Modo de publicación</th>
+          <th style={{ textAlign: 'center'}}>Reacciones positivas</th>
+          <th style={{ textAlign: 'center'}}>Reacciones negativas</th>
           <th></th>
         </tr>
       </thead>
@@ -56,11 +59,23 @@ export default function SectionContentDashboardFormTeachers({ content, user, cou
         {localContent.map(c => (
           <tr key={c.id}>
             <td>{c.title}</td>
-            <td>
+            <td style={{ textAlign: 'center'}}>
               {c.publicationType === 'AUTOMATIC' ? 'Automático' :
                 c.publicationType === 'DEFERRED' ? 'Diferido' : 'Default'
               }
             </td>
+            <td style={{
+              textAlign: 'center',
+            }}>
+              {c.reactions.filter(r => r.isSatisfied).length}
+              </td>
+            <td
+              style={{
+                textAlign: 'center',
+              }}
+            >
+              {c.reactions.filter(r => !r.isSatisfied).length}
+              </td>
             <td style={{
               display: 'flex',
               justifyContent: 'flex-end',

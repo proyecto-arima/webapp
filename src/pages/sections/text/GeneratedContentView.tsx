@@ -8,6 +8,7 @@ import { RootState } from "../../../redux/store";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSave } from "@fortawesome/free-solid-svg-icons";
 import Swal from "sweetalert2";
+import Reactions from "../../../components/Reactions";
 
 interface IGenerated {
   type: string;
@@ -115,6 +116,7 @@ export const GeneratedContentView = () => {
             Guardar
           </button>
         </div>}
+        {user.role === 'STUDENT' && <Reactions/>}
 
       </Card>
     </div>

@@ -28,6 +28,13 @@ export default function SectionContentDashboardFormTeachers({ content, user, cou
     setLocalContent(content);
   }, [content]);
 
+  const formatDate = (dateString: string) => {
+    const date = new Date(dateString);
+    const day = String(date.getDate()).padStart(2, '0'); // Formatea el día
+    const month = String(date.getMonth() + 1).padStart(2, '0'); // Formatea el mes (0-11)
+    return `${day}/${month}`; // Devuelve la fecha en formato dd/mm
+  };
+
   const handleDeleteContent = async (contentId: string) => {
     SwalUtils.infoSwal(
       '¿Estás seguro de que quieres eliminar este contenido?',
@@ -61,7 +68,7 @@ export default function SectionContentDashboardFormTeachers({ content, user, cou
             <td>{c.title}</td>
             <td style={{ textAlign: 'center'}}>
               {c.publicationType === 'AUTOMATIC' ? 'Automático' :
-                c.publicationType === 'DEFERRED' ? 'Diferido' : 'Default'
+                c.publicationType === 'DEFERRED' ? `Diferido - disponible ${formatDate(c.publicationDate)}` : 'Default'
               }
             </td>
             <td style={{

@@ -31,7 +31,7 @@ const SetPasswordPage = () => {
     }
     const passwordValidation = FormValidators.isSecurePassword(newPassword);
     if (!passwordValidation) {
-      setMessage('La contraseña no es segura');
+      setMessage('La contraseña no es segura. Debe tener al menos 8 caracteres y al menos una letra mayúscula, dos dígitos y un carácter especial');
       setTimeout(() => {
         setMessage('');
       }, 2000);

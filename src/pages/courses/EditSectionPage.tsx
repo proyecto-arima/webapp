@@ -224,9 +224,9 @@ export const EditSectionPage: React.FC = () => {
             marginBottom: '2rem',
             color: '#6b7280'
           }}>
-            Aquí podrás editar la sección en la plataforma <br />
+            Acá podés editar la sección en la plataforma <br />
             Cada sección tendrá diferentes contenidos agrupados por temas, franjas de tiempo, etc.
-            Opcionalmente podrás cargar una imagen de portada, sino, nosotros la crearemos por tí.<br />
+            Opcionalmente podes cargar una imagen de portada, sino, nosotros la creamos por vos.<br />
           </p>
           <h3>Detalles de la sección</h3>
           <hr />

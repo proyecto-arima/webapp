@@ -244,10 +244,10 @@ export const CourseCreationPage = () => {
             marginBottom: '2rem',
             color: '#6b7280'
           }}>
-            Aquí podrás crear un nuevo curso en la plataforma. <br />
-            Cada curso debe tener un nombre y una descripción que verán los alumnos al ingresar a la plataforma.
-            Opcionalmente podrás cargar una imagen de portada, sino, nosotros la crearemos por tí.<br />
-            Una vez creado el curso, podrás agregarle secciones con el contenido deseado, y además matricular alumnos al curso.
+            Acá podés crear un nuevo curso en la plataforma. <br />
+            Cada curso debe tener un nombre y una descripción que verán los alumnos al ingresar.
+            Opcionalmente podés cargar una imagen de portada, sino, nosotros la creamos por vos.<br />
+            Una vez creado el curso, podés agregarle secciones con el contenido deseado, y además matricular alumnos al curso.
             Adicionalmente, se generará un código de automatriculación, para que los alumnos puedan matricularse automáticamente.
           </p>
           <h3>Detalles del curso</h3>

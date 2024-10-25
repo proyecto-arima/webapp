@@ -66,12 +66,12 @@ export const EditCoursePage: React.FC = () => {
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
       const file = e.target.files[0];
-      const validFileTypes = ['image/png'];
+      const validFileTypes = ['image/png', 'image/jpeg', 'image/jpg'];
   
       if (!validFileTypes.includes(file.type)) {
         SwalUtils.errorSwal(
           'Formato de archivo inválido',
-          'Solo se permiten archivos con extensión .png. Por favor, selecciona un archivo válido.',
+          'Solo se permiten archivos con extensión .png, .jpeg o .jpg Por favor, selecciona un archivo válido.',
           'Aceptar',
           () => navigate(`/courses${courseId}/edit/`))
         setSelectedFile(null);
@@ -289,7 +289,7 @@ export const EditCoursePage: React.FC = () => {
             color: '#6b7280'
           }}>
             Para generar una imagen automáticamente a partir del nombre y descripción del curso, clickea en Generar Imagen y espera que la magia ocurra.
-            También puedes subir un archivo con extensión .png para elegir manualmente la imagen del curso, si lo prefieres.
+            También puedes subir un archivo con extensión .png, .jpeg o .jpg para elegir manualmente la imagen del curso, si lo prefieres.
           </p>
           <div className='d-flex flex-row mb-3 gap-3'>
             <Input

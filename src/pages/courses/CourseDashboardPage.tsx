@@ -13,12 +13,14 @@ import { SwalUtils } from '../../utils/SwalUtils';
 import { del } from '../../utils/network';
 
 import '../../assets/styles/CourseDashboardPage.css';
+import placeholder from '../../assets/images/placeholder.webp';
+import empty from '../../assets/images/empty.svg';
 
 export const CourseDashboardPage = () => {
   const { courses } = useSelector((state: RootState) => state.courses);
   const user = useSelector((state: RootState) => state.user);
   const navigate = useNavigate();
-  
+
   const dispatch = useDispatch();
   const history = useNavigate();
 
@@ -52,7 +54,7 @@ export const CourseDashboardPage = () => {
         try {
           await del(`/courses/${courseId}`);
           dispatch(setCourses(courses?.filter(course => course.id !== courseId)));
-  
+
           // Mensaje de éxito al eliminar el curso
           SwalUtils.successSwal(
             'Curso eliminado',
@@ -73,7 +75,7 @@ export const CourseDashboardPage = () => {
       }
     );
   };
-  
+
 
   return (
     <div
@@ -92,20 +94,21 @@ export const CourseDashboardPage = () => {
             <h1>Mis Cursos</h1>
           </div>
           <hr />
-          <div style={{
+          {/* <div style={{
             display: 'flex',
             justifyContent: 'center',
             alignItems: 'center',
-            height: '100%',
+            overflowY: 'auto',
           }}>
-            <div className='d-flex flex-row justify-content-center gap-3 flex-wrap'>
+
+            <div className='d-flex flex-row justify-content-center gap-3 flex-wrap h-100'>
               {courses?.map(course => (
                 <Card key={course.id} className="course-card">
                   <img src={course.image} alt={course.title} className="course-image" />
                   <CardBody>
                     <CardTitle tag="h5">{course.title}</CardTitle>
                     <CardText>{course.description}</CardText>
-                    
+
                     {user.role === 'TEACHER' && (
                       <CardText>
                         Clave de Matriculación: <span style={{ fontWeight: 'bold' }}>{course.matriculationCode}</span>
@@ -133,6 +136,77 @@ export const CourseDashboardPage = () => {
                 </Card>
               ))}
             </div>
+
+          </div> */}
+          <div style={{
+            display: 'flex',
+            flexDirection: 'row',
+            justifyContent: 'center',
+            alignItems: 'center',
+            height: '100%',
+            overflowY: 'auto',
+          }}>
+            {courses?.length ? (
+              <div className="container" style={{
+                marginTop: 'auto',
+                marginBottom: 'auto',
+              }}>
+                <div className="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4 justify-content-center">
+                  {courses.map((course) => (
+                    <div key={course.id} className="col">
+                      <div className="card h-100">
+                        <div className="card-img-container position-relative" style={{ paddingBottom: '66.67%', overflow: 'hidden' }}>
+                          <img
+                            src={course.image ? course.image : placeholder}
+                            className="card-img-top position-absolute top-0 start-0 w-100 h-100"
+                            alt={course.title}
+                            style={{
+                              width: '100%',
+                              height: '100%',
+                              objectFit: 'cover',
+                              objectPosition: 'center'
+                            }}
+                          />
+                        </div>
+                        <div className="card-body">
+                          <h5 className="card-title fs-4 fs-md-3 mb-3">{course.title}</h5>
+                          <p className="card-text flex-grow-1 fs-6 fs-md-5">{course.description}</p>
+                          {user.role === 'TEACHER' && (
+                            <CardText>
+                              Clave de Matriculación: <span style={{ fontWeight: 'bold' }}>{course.matriculationCode}</span>
+                            </CardText>
+                          )}
+                        </div>
+                        <div className="card-footer d-flex flex-column flex-md-row justify-content-end align-items-center gap-3">
+                          <button className='btn-purple-1 w-100 w-md-auto' onClick={() => handleViewCourse(course.id)}>Ver curso</button>
+                          {user.role === 'TEACHER' && (
+                            <div className='d-flex gap-3 flex-column flex-md-row'>
+                              <button className='btn-purple-2 w-100 w-md-auto' onClick={() => handleEditCourse(course.id)}><FontAwesomeIcon icon={faEdit} /></button>
+                              <button className='btn-purple-2 w-100 w-md-auto' onClick={() => handleDeleteCourse(course.id)}><FontAwesomeIcon icon={faTrash} /></button>
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            ) : (
+              <div className='d-flex flex-column justify-content-center align-items-center'>
+                <img src={empty} alt="No sections available" />
+                {user.role === 'STUDENT' ? (
+                  <>
+                    <h3>Parece que aún no hay secciones en este curso.</h3>
+                    <h4>Por favor intenta de nuevo más tarde</h4>
+                  </>
+                ) : (
+                  <>
+                    <h3>Parece que aún no has creado ninguna sección en este curso.</h3>
+                    <h4>Por favor crea una sección para comenzar a añadir contenido.</h4>
+                  </>
+                )}
+              </div>
+            )}
           </div>
         </Card>
       </div>

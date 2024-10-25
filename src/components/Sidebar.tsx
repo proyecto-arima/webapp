@@ -31,9 +31,13 @@ export default function Sidebar() {
   };
 
   return (
-    <Nav vertical className='sidebar'>
+    <Nav vertical className='sidebar' style={{
+      flexWrap: 'nowrap',
+    }}>
       <img src={logo} alt="Proyecto Arima" className='sidebar-header' />
-      <div className='sidebar-container'>
+      <div className='sidebar-container' style={{
+        overflowY: 'auto',
+      }}>
         <div className="w-100 d-flex flex-column gap-3">
 
           {user?.role === 'TEACHER' && (

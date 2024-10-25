@@ -37,10 +37,9 @@
 
 .section-card {
   background-color: #fff;
-  padding: 15px;
-  margin: 10px 0; /* Ajusta el margen para separarlas verticalmente */
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
   border-radius: 8px;
+  
 }
 
 .course-detail-header {
@@ -112,6 +111,7 @@ h1 {
 
 .section-slider {
   width: 100%;
+  transform: scale(0.8);
 }
 
 .slick-track {

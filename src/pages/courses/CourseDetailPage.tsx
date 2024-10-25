@@ -80,12 +80,12 @@ export const CourseDetailPage: React.FC = () => {
         await del(`/courses/${courseId}/sections/${sectionId}`);
         await fetchSections();
         SwalUtils.successSwal(
-          'Sección eliminada', 
+          'Sección eliminada',
           'La sección se ha eliminado con éxito.',
           'Aceptar',
           () => navigate(`/courses/${courseId}`),
           () => navigate(`/courses/${courseId}`)
-          );
+        );
       }
     );
   };
@@ -130,104 +130,50 @@ export const CourseDetailPage: React.FC = () => {
             justifyContent: 'center',
             alignItems: 'center',
             height: '100%',
+            overflowY: 'auto',
           }}>
             {visibleSections.length ? (
-              <Slider
-                dots
-                infinite={visibleSections.length > 1}
-                speed={500}
-                slidesToShow={1}
-                slidesToScroll={1}
-                arrows
-                autoplaySpeed={3000}
-                centerMode
-                className='section-slider'
-                useTransform={false}
-                variableWidth={false}
-              >
-                {visibleSections.map(section => (
-                  <Card key={section.id} style={{
-                    display: 'flex',
-                    flexDirection: 'column',
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                    height: '100%',
-                    padding: '1rem',
-                  }}
-                    className="section-card"
-                  >
-                    <div style={{
-                      display: 'flex',
-                      flexDirection: 'column',
-                      justifyContent: 'center',
-                      alignItems: 'center',
-                      height: '60vh',
-                      position: 'relative', // Cambiado aquí
-                    }}>
-                      <img src={section.image ? section.image : placeholder}
-                        alt="Section"
-                        style={{
-                          width: '100%',
-                          borderRadius: '0.5rem',
-                          objectFit: 'cover',
-                          overflow: 'hidden',
-                        }}
-                      />
-                      {user.role === 'TEACHER' && (
-                        <div style={{ position: 'absolute', top: '1rem', right: '1rem' }}>
-                          <Badge
-                            color={section.visible ? 'success' : 'danger'}
+              <div className="container" style={{
+                marginBlock: 'auto',
+              }}>
+                <div className="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4 justify-content-center">
+                  {visibleSections.map((section) => (
+                    <div key={section.id} className="col">
+                      <div className="card h-100">
+                        <div className="card-img-container position-relative" style={{ paddingBottom: '66.67%', overflow: 'hidden' }}>
+                          <img
+                            src={section.image ? section.image : placeholder}
+                            className="card-img-top position-absolute top-0 start-0 w-100 h-100"
+                            alt={section.name}
                             style={{
-                              boxShadow: '0px 4px 8px rgba(0, 0, 0, 0.2)',
-                              fontSize: '0.9rem',
-                              padding: '0.5rem 1rem'
-                            }}>
-                            {section.visible ? 'Visible para los estudiantes' : 'No visible para los estudiantes'}
-                          </Badge>
+                              width: '100%',
+                              height: '100%',
+                              objectFit: 'cover',
+                              objectPosition: 'center'
+                            }}
+                          />
                         </div>
-                      )}
-                    </div>
-                    <div style={{
-                      display: 'flex',
-                      flexDirection: 'row',
-                      justifyContent: 'space-between',
-                      alignItems: 'center',
-                      paddingInline: '1rem',
-                      paddingTop: '1rem',
-                    }}>
-                      <div style={{
-                        width: '80%',
-                        flexGrow: 1,
-                        marginRight: '1rem',
-                        height: '6rem'
-                      }}>
-                        <h2>{section.name}</h2>
-                        <div style={{
-                          textOverflow: 'ellipsis',
-                          overflow: 'hidden',
-                          display: '-webkit-box',
-                          WebkitLineClamp: 2,
-                          WebkitBoxOrient: 'vertical',
-                        }}>
-                          <span>{section.description}</span>
+                        <div className="card-body">
+                          <h5 className="card-title fs-4 fs-md-3 mb-3">{section.name}</h5>
+                          <p className="card-text flex-grow-1 fs-6 fs-md-5">{section.description}</p>
                         </div>
-                      </div>
-                      <div className='d-flex flex-row gap-3'>
-                        <button className='btn-purple-1' style={{
-                          width: '8rem',
-                          height: '3rem',
-                        }} onClick={() => navigate(`/courses/${courseId}/sections/${section.id}`)}>Ver Sección</button>
-                        {user.role === 'TEACHER' && (
-                          <>
-                            <button className='btn-purple-2' onClick={() => handleEditSection(section.id)}><FontAwesomeIcon icon={faEdit} /></button>
-                            <button className='btn-purple-2' onClick={() => handleDeleteSection(section.id)}><FontAwesomeIcon icon={faTrash} /></button>
-                          </>
-                        )}
+                        <div className="card-footer d-flex flex-column flex-md-row justify-content-end align-items-center gap-3">
+                          <button className='btn-purple-1 w-100 w-md-auto' onClick={() => navigate(`/courses/${courseId}/sections/${section.id}`)}>Ver sección</button>
+                          {user.role === 'TEACHER' && (
+                            <div className='d-flex gap-3 flex-column flex-md-row'>
+                              <button className='btn-purple-2 w-100 w-md-auto' onClick={() => handleEditSection(section.id)}><FontAwesomeIcon icon={faEdit} /></button>
+                              <button className='btn-purple-2 w-100 w-md-auto' onClick={() => handleDeleteSection(section.id)}><FontAwesomeIcon icon={faTrash} /></button>
+                            </div>
+                          )}
+                        </div>
+
+
+
                       </div>
                     </div>
-                  </Card>
-                ))}
-              </Slider>
+                  ))}
+                </div>
+              </div>
             ) : (
               <div className='d-flex flex-column justify-content-center align-items-center'>
                 <img src={empty} alt="No sections available" />

@@ -257,10 +257,10 @@ export const EditCoursePage: React.FC = () => {
             marginBottom: '2rem',
             color: '#6b7280'
           }}>
-            Aquí podrás editar el curso en la plataforma. <br />
-            Cada curso debe tener un nombre y una descripción que verán los alumnos al ingresar a la plataforma.
-            Opcionalmente podrás cargar una imagen de portada, sino, nosotros la crearemos por tí.<br />
-            Una vez editado el curso, podrás seguirle agregando secciones con el contenido deseado, y además matricular alumnos al curso.
+            Acá podés editar el curso en la plataforma. <br />
+            Cada curso debe tener un nombre y una descripción que verán los alumnos al ingresar.
+            Opcionalmente podés cargar una imagen de portada, sino, nosotros la creamos por vos.<br />
+            Una vez editado el curso, podés seguirle agregando secciones con el contenido deseado, y además matricular alumnos al curso.
           </p>
           <h3>Detalles del curso</h3>
           <Input

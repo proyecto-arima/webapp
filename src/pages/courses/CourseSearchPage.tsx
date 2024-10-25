@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Table, Card, CardHeader } from 'reactstrap';
+import { Table, Card, CardHeader, Input, Label } from 'reactstrap';
 import Swal from 'sweetalert2';
 import { get, post } from '../../utils/network';
 import { useSelector, useDispatch } from 'react-redux';
@@ -114,60 +114,36 @@ export const CourseSearchPage = () => {
           height: '100%',
         }}
       >
-        <Card style={{ width: '100%', padding: '20px', height: '100%', overflow: 'auto' }}>
-          <h2>Buscar Curso</h2>
-          <div style={{ display: 'flex', alignItems: 'center', marginBottom: '20px' }}>
-            <input
-              type="text"
-              placeholder="Ingrese parte del nombre del curso"
-              value={searchCode}
-              onChange={(e) => setSearchCode(e.target.value)}
-              style={{ padding: '10px', width: '100%', borderRadius: '4px', marginRight: '10px' }}
-            />
-            <button
-              onClick={handleSearch}
-              style={{
-                padding: '10px 20px',
-                borderRadius: '4px',
-                backgroundColor: '#6f2c91',
-                color: '#fff',
-                border: 'none',
-                cursor: 'pointer',
-              }}
-            >
-              Buscar
+        <Card style={{ width: '100%', paddingInline: '2rem', paddingBlock: '1rem', height: '100%' }}>
+          <h1>Buscar Curso</h1>
+          <hr />
+          <div className="d-flex flex-row align-items-center w-100 gap-2 mb-5">
+          <Input 
+            name="title" 
+            type="text" 
+            placeholder="Ingrese parte del nombre del curso" 
+            className="w-100" 
+            onChange={(e) => setSearchCode(e.target.value)} 
+            style={{ flex: 1, height: '40px', marginRight: '10px' }}
+          />
+            <button className="btn-purple-1" onClick={handleSearch}>
+              Buscar Curso
             </button>
           </div>
 
-          <Card>
-            <CardHeader tag='h4'>Resultados</CardHeader>
+          <h5 style={{ fontWeight: 'bold' }}>Cursos disponibles</h5>
+            <hr />
+            
             {filteredCourses.length > 0 ? (
-              <Table striped responsive>
-                <thead>
-                  <tr>
-                    <th style={{ verticalAlign: 'middle' }}>Título del Curso</th>
-                    <th style={{ verticalAlign: 'middle', textAlign: 'right' }}>Acciones</th>
-                  </tr>
-                </thead>
+              <Table>
                 <tbody>
                   {filteredCourses.map((course) => (
                     <tr key={course.id}>
                       <td style={{ verticalAlign: 'middle' }}>{course.courseName}</td>
                       <td style={{ textAlign: 'right', verticalAlign: 'middle' }}>
-                        <button
-                          onClick={() => handleEnroll(course.id)}
-                          style={{
-                            padding: '10px 20px',
-                            borderRadius: '4px',
-                            backgroundColor: '#9b59b6',
-                            color: '#fff',
-                            border: 'none',
-                            cursor: 'pointer',
-                            marginRight: '10px',
-                          }}
-                        >
-                          Matricularme
-                        </button>
+                        <div className='d-flex flex-row justify-content-end'>
+                          <button className='btn-purple-1' onClick={() => handleEnroll(course.id)} >Matricularme</button>
+                        </div>
                       </td>
                     </tr>
                   ))}
@@ -178,7 +154,7 @@ export const CourseSearchPage = () => {
                 <strong>No se encontraron cursos.</strong>
               </div>
             )}
-          </Card>
+
         </Card>
       </div>
     </div>

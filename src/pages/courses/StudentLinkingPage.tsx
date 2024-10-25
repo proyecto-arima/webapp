@@ -92,7 +92,7 @@ export const StudentLinkingPage = () => {
         <Card style={{ width: '100%', paddingInline: '2rem', paddingBlock: '1rem', height: '100%' }}>
           <h2>Estudiantes</h2>
           <hr />
-          <p>Aquí podrá agregar estudiantes al curso <b>{course?.title}</b>. Los alumnos podrán auto-matricularse utilizando el código: <b>{course?.matriculationCode}</b></p>
+          <p>Acá podés agregar estudiantes al curso <b>{course?.title}</b>. Los alumnos podrán auto-matricularse utilizando el código: <b>{course?.matriculationCode}</b></p>
           <div className="d-flex flex-column">
             <h5 style={{ fontWeight: 'bold' }}>Agregar estudiante</h5>
             <hr />

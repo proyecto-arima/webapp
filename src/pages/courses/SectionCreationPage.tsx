@@ -176,8 +176,8 @@ export const SectionCreationPage = () => {
           <h1>Crear Sección</h1>
           <hr />
           <p style={{ textAlign: 'left', marginBottom: '2rem', color: '#6b7280' }}>
-            Aquí podrás crear una nueva sección en la plataforma. Cada sección tendrá diferentes contenidos agrupados por temas, franjas de tiempo, etc. 
-            Opcionalmente podrás cargar una imagen de portada, sino, nosotros la crearemos por tí. Una vez creada la sección, podrás agregarle contenidos en PDF.
+            Acá podés crear una nueva sección en la plataforma. Cada sección tendrá diferentes contenidos agrupados por temas, franjas de tiempo, etc. 
+            Opcionalmente podés cargar una imagen de portada, sino, nosotros la creamos por vos. Una vez creada la sección, podrás agregarle contenidos en PDF.
           </p>
           <h3>Detalles de la sección</h3>
           <hr />

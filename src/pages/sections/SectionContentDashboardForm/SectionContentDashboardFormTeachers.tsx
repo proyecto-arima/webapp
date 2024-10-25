@@ -30,10 +30,10 @@ export default function SectionContentDashboardFormTeachers({ content, user, cou
 
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
-    const day = String(date.getDate()).padStart(2, '0'); // Formatea el día
-    const month = String(date.getMonth() + 1).padStart(2, '0'); // Formatea el mes (0-11)
+    const day = String(date.getUTCDate()).padStart(2, '0'); // Usa el día en UTC
+    const month = String(date.getUTCMonth() + 1).padStart(2, '0'); // Usa el mes en UTC (0-11)
     return `${day}/${month}`; // Devuelve la fecha en formato dd/mm
-  };
+};
 
   const handleDeleteContent = async (contentId: string) => {
     SwalUtils.infoSwal(

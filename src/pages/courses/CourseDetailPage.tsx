@@ -140,7 +140,9 @@ export const CourseDetailPage: React.FC = () => {
                   {visibleSections.map((section) => (
                     <div key={section.id} className="col">
                       <div className="card h-100">
+                        
                         <div className="card-img-container position-relative" style={{ paddingBottom: '66.67%', overflow: 'hidden' }}>
+
                           <img
                             src={section.image ? section.image : placeholder}
                             className="card-img-top position-absolute top-0 start-0 w-100 h-100"
@@ -152,7 +154,21 @@ export const CourseDetailPage: React.FC = () => {
                               objectPosition: 'center'
                             }}
                           />
+
                         </div>
+                        {user.role === 'TEACHER' && (
+                          <div style={{ position: 'absolute', top: '1rem', right: '1rem' }}>
+                            <Badge
+                              color={section.visible ? 'success' : 'danger'}
+                              style={{
+                                boxShadow: '0px 4px 8px rgba(0, 0, 0, 0.2)',
+                                fontSize: '0.9rem',
+                                padding: '0.5rem 1rem'
+                              }}>
+                              {section.visible ? 'Visible para los estudiantes' : 'No visible para los estudiantes'}
+                            </Badge>
+                          </div>
+                        )}
                         <div className="card-body">
                           <h5 className="card-title fs-4 fs-md-3 mb-3">{section.name}</h5>
                           <p className="card-text flex-grow-1 fs-6 fs-md-5">{section.description}</p>

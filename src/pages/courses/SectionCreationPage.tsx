@@ -35,12 +35,12 @@ export const SectionCreationPage = () => {
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
       const file = e.target.files[0];
-      const validFileTypes = ['image/png'];
+      const validFileTypes = ['image/png', 'image/jpeg', 'image/jpg'];
   
       if (!validFileTypes.includes(file.type)) {
         SwalUtils.errorSwal(
           'Formato de archivo inválido',
-          'Solo se permiten archivos con extensión .png. Por favor, selecciona un archivo válido.',
+          'Solo se permiten archivos con extensión .png, .jpeg o .jpg Por favor, selecciona un archivo válido.',
           'Aceptar',
           () => navigate(`/courses/${courseId}/new-section`))
         setSelectedFile(null);
@@ -193,7 +193,7 @@ export const SectionCreationPage = () => {
           <hr />
           <p style={{ textAlign: 'left', marginBottom: '2rem', color: '#6b7280' }}>
             Para generar una imagen automáticamente a partir del nombre y descripción de la sección, clickea en Generar Imagen y espera que la magia ocurra. 
-            También puedes subir un archivo con extensión .png para elegir manualmente la imagen de la sección, si lo prefieres.
+            También puedes subir un archivo con extensión .png, .jpeg o .jpg para elegir manualmente la imagen de la sección, si lo prefieres.
           </p>
           <div className='d-flex flex-row mb-3 gap-3'>
             <Input type='checkbox' name='auto-generate' id='auto-generate' onClick={e => setAutoGenerateImage(!autoGenerateImage)} checked={autoGenerateImage} />

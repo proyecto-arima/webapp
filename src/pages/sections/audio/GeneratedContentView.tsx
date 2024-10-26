@@ -108,7 +108,7 @@ export default function AudioVisualizer() {
               "fontWeight": 500,
               "fontStyle": "normal",
               "textAlign": "center",
-              "fontSize": "1.5rem",
+              "fontSize": "2vmin",
             }}>
               {content?.content[current].text}
             </span>

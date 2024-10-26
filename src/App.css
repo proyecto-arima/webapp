@@ -113,7 +113,7 @@
 }
 
 .sidebar-section-title {
-  font-size: 0.8rem;
+  font-size: 1.8vmin;
   font-weight: bold;
   color: #49454f;
   align-self: flex-start;
@@ -152,7 +152,12 @@
   justify-content: flex-start;
   align-items: center;
   gap: 0.5rem;
-  font-size: 0.8rem;
+  font-size: 1.8vh;
+}
+
+.sidebar-dot {
+  width: 1.2vh;
+  color: #49454f;
 }
 
 

@@ -73,7 +73,8 @@ export const EditCoursePage: React.FC = () => {
           'Formato de archivo inválido',
           'Solo se permiten archivos con extensión .png, .jpeg o .jpg Por favor, selecciona un archivo válido.',
           'Aceptar',
-          () => navigate(`/courses${courseId}/edit/`))
+          () => navigate(`/courses/${courseId}/edit`))
+          e.target.value = "";
         setSelectedFile(null);
         return;
       }
@@ -340,7 +341,7 @@ export const EditCoursePage: React.FC = () => {
             </div>
           ) : (
             <div style={{ flex: '1' }}>
-              <Input type="file" accept=".png" onChange={handleFileChange} className="mb-3" />
+              <Input name="file" type="file" onChange={handleFileChange} className="mb-3" />
             </div>
           )}
 

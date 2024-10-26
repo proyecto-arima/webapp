@@ -43,6 +43,7 @@ export const SectionCreationPage = () => {
           'Solo se permiten archivos con extensión .png, .jpeg o .jpg Por favor, selecciona un archivo válido.',
           'Aceptar',
           () => navigate(`/courses/${courseId}/new-section`))
+          e.target.value = "";
         setSelectedFile(null);
         return;
       }

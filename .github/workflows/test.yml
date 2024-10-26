@@ -71,7 +71,7 @@ jobs:
           user: '${{ secrets.REMOTE_USER }}'
           ssh_private_key: '${{ secrets.GCP_SSH_PRIVATE_KEY }}'
           zone: 'us-central1-f'
-          command: "echo ${{ secrets.GHCR_TOKEN }} | docker login ghcr.io -u ${{ github.actor }} --password-stdin && \
+          command: "echo ${{ secrets.GITHUB_TOKEN }} | docker login ghcr.io -u ${{ github.actor }} --password-stdin && \
             docker pull ghcr.io/proyecto-arima/webapp:latest-test && \
             cd .. && \
             cd ${{ secrets.REMOTE_PATH }} && \

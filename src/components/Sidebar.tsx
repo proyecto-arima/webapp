@@ -180,7 +180,7 @@ export default function Sidebar() {
                 </NavItem>
               </NavLink>
 
-              <NavLink to={'/me/users/bulk'} end className={({ isActive }) => isActive ? 'sidebar-navlink-active' : 'sidebar-navlink-inactive'}>
+              <NavLink to={'/users/bulk'} end className={({ isActive }) => isActive ? 'sidebar-navlink-active' : 'sidebar-navlink-inactive'}>
                 <NavItem className='sidebar-navlink-item'>
                   <FontAwesomeIcon icon={faCircle} style={{
                     width: '0.6rem',

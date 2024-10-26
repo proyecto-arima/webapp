@@ -196,8 +196,8 @@
   position: absolute;
   bottom: 0;
   right: 0;
-  width: 200px;
-  height: 200px;
+  width: 15vh;
+  height: 25vh;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -207,8 +207,8 @@
 }
 
 .fab {
-  width: 60px;
-  height: 60px;
+  width: 6vh;
+  height: 6vh;
   border-radius: 50%;
   background-color: #007bff;
   color: white;
@@ -226,7 +226,7 @@
 }
 
 .fab i {
-  font-size: 24px;
+  font-size: small;
 }
 
 .fab-dislike {
@@ -250,28 +250,28 @@
 }
 
 .floating-like {
-  font-size: 30px;
+  font-size: small;
   color: #007bff;
   animation: floatUp 1s ease forwards;
 }
 
 @keyframes floatUp {
   0% {
-    opacity: 0;
-    transform: translateY(20px);
+    transform: translateY(0);
+    opacity: 1;
   }
   50% {
-    opacity: 1;
-    transform: translateY(-10px);
+    transform: translateY(-20px);
+    opacity: 0.5;
   }
   100% {
-    opacity: 0;
     transform: translateY(-40px);
+    opacity: 0;
   }
 }
 
 .floating-dislike {
-  font-size: 30px;
+  font-size: small;
   color: #dc3545;
   animation: floatUp 1s ease forwards;
 }

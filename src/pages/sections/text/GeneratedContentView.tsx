@@ -9,6 +9,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSave } from "@fortawesome/free-solid-svg-icons";
 import Swal from "sweetalert2";
 import Reactions from "../../../components/Reactions";
+import PageWrapper from "../../../components/PageWrapper";
 
 interface IGenerated {
   type: string;
@@ -36,7 +37,7 @@ export const GeneratedContentView = () => {
     patch(`/contents/${contentId}/summary`, {
       newContent: content?.content,
     }).then(res => res.json()).then(res => {
-      if(res.success) {
+      if (res.success) {
         Swal.fire({
           icon: 'success',
           title: 'Contenido actualizado',
@@ -52,75 +53,50 @@ export const GeneratedContentView = () => {
     });
   }
 
-  return <div
-    style={{
+  return <PageWrapper title="Lee con atención">
+    <div style={{
       display: 'flex',
+      flexDirection: 'column',
+      alignItems: 'center',
       justifyContent: 'center',
-      alignItems: 'flex-start',  /* Alinea el contenido al inicio, en lugar de al centro */
-      height: '100vh',
-      backgroundColor: '#f6effa',
-      width: '100vw',
-    }}
-  >
-    <div
-      style={{
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'flex-start', /* Alinea el contenido al principio */
-        padding: '20px',
-        width: '100%',
-        height: '100%',
+      width: '100%',
+      height: '100%',
+      gap: '1rem',
+    }}>
+      <h3>{content?.title}</h3>
+      <textarea className="generated-content" value={content?.content} style={{
+        width: '80%',
+        flex: 1,
+        border: 'none',
+        scrollbarWidth: 'none',
+
       }}
-    >
-      <Card style={{ width: '100%', paddingInline: '2rem', paddingBlock: '1rem', height: '100%' }}>
-        <h2>Contenido</h2>
-        <hr />
-        <div style={{
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-          justifyContent: 'center',
-          width: '100%',
-          height: '100%',
-          gap: '1rem',
-        }}>
-          <h3>{content?.title}</h3>
-        <textarea className="generated-content" value={content?.content} style={{ 
-          width: '80%', 
-          flex: 1,
-          border: 'none',
-          scrollbarWidth: 'none',
-          
-          }} 
-          readOnly={user?.role === 'STUDENT'}
-          onChange={e => {
-            if(!content) return;
-            setContent({ ...content, content: e.target.value ?? "" })
-          }}
-          ></textarea>
-        </div>
-        
-        {/** FAB Button to save changes only for teachers */}
-
-        {user?.role === 'TEACHER' && <div style={{
-          display: 'flex',
-          justifyContent: 'flex-end',
-          paddingBlock: '1rem',
-          width: '100%',
-        }}>
-          <button
-          className="btn-purple-1"
-          onClick={saveChanges}>
-            <FontAwesomeIcon icon={faSave} />
-            {' '}
-            Guardar
-          </button>
-        </div>}
-        {user.role === 'STUDENT' && <Reactions/>}
-
-      </Card>
+        readOnly={user?.role === 'STUDENT'}
+        onChange={e => {
+          if (!content) return;
+          setContent({ ...content, content: e.target.value ?? "" })
+        }}
+      ></textarea>
     </div>
-  </div>
+
+    {/** FAB Button to save changes only for teachers */}
+
+    {user?.role === 'TEACHER' && <div style={{
+      display: 'flex',
+      justifyContent: 'flex-end',
+      paddingBlock: '1rem',
+      width: '100%',
+    }}>
+      <button
+        className="btn-purple-1"
+        onClick={saveChanges}>
+        <FontAwesomeIcon icon={faSave} />
+        {' '}
+        Guardar
+      </button>
+    </div>}
+    {user.role === 'STUDENT' && <Reactions />}
+  </PageWrapper>
 
 
 };

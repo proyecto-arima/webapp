@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Table } from "reactstrap";
-import { faEdit, faTrash } from '@fortawesome/free-solid-svg-icons';
+import { faEdit, faMagicWandSparkles, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import empty from '../../../assets/images/empty.svg';
 import { IContent } from "../SectionContentDashboardPage";
@@ -52,7 +52,11 @@ export default function SectionContentDashboardFormTeachers({ content, user, cou
   };
 
   return (localContent.length ? (
-    <Table>
+    <Table
+      style={{
+        fontSize: 'small',
+      }}
+    >
       <thead>
         <tr>
           <th>Contenido</th>
@@ -97,7 +101,9 @@ export default function SectionContentDashboardFormTeachers({ content, user, cou
                 onClick={() => {
                   navigate(`/courses/${courseId}/sections/${sectionId}/content/${c.id}/review`);
                 }}
-              >Ver contenido generado</button>
+              ><FontAwesomeIcon icon={faMagicWandSparkles} />
+              {' '}
+              Ver</button>
 
               <div style={{
                 borderLeft: '1px solid #000000',

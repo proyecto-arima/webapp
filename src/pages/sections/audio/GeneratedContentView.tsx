@@ -8,8 +8,9 @@ import { faArrowLeft, faArrowRight, faBackward, faPause, faPlay, faRightToBracke
 import Reactions from "../../../components/Reactions";
 import { useSelector } from "react-redux";
 import { RootState } from "../../../redux/store";
+import PageWrapper from "../../../components/PageWrapper";
 
-interface IGenerated{
+interface IGenerated {
   type: string;
   content: { text: string, audioUrl: string }[];
   approved: boolean;
@@ -22,7 +23,7 @@ export default function AudioVisualizer() {
   const audioElement = audioRef.current;
   const containerRef = useRef<HTMLDivElement>(null);
   const user = useSelector((state: RootState) => state.user);
-  
+
 
   const { contentId } = useParams<{ contentId: string }>();
   const [content, setContent] = useState<IGenerated>();
@@ -60,74 +61,38 @@ export default function AudioVisualizer() {
     console.log("Audio loading: ", audioLoading);
   }, [audioLoading]);
 
-  return <div
-    style={{
+  return <PageWrapper title="Escucha con atención">
+    <div style={{
       display: 'flex',
-      justifyContent: 'center',
-      alignItems: 'flex-start',  /* Alinea el contenido al inicio, en lugar de al centro */
-      height: '100vh',
-      backgroundColor: '#f6effa',
-      width: '100vw',
+      flexDirection: 'column',
+      alignItems: 'baseline',
+      justifyContent: 'space-between',
+      width: '100%',
+      height: '100%',
+      gap: '1rem',
     }}
-  >
-    <div
-      style={{
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'flex-start', /* Alinea el contenido al principio */
-        padding: '20px',
-        width: '100%',
-        height: '100%',
-      }}
+      ref={containerRef}
     >
-      <Card style={{ width: '100%', paddingInline: '2rem', paddingBlock: '1rem', height: '100%' }}>
-        <h2>Escucha con atención</h2>
-        <hr />
-        <div style={{
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'baseline',
-          justifyContent: 'space-between',
-          width: '100%',
-          height: '100%',
-          gap: '1rem',
-        }}
-          ref={containerRef}
+      {(content?.content?.length ?? 0) > 0 && <>
+        <div
+          className="d-flex flex-row justify-content-end w-100"
+          style={{
+            color: 'gray',
+          }}
         >
-          {(content?.content?.length ?? 0) > 0 && <>
-          <div
-            className="d-flex flex-row justify-content-end w-100"
-            style={{
-              color: 'gray',
-            }}
-          >
-            <span>Audio {current + 1}/{content?.content.length}</span>
-          </div>
-            <span style={{
-              "fontFamily": "Comic Neue",
-              "fontWeight": 500,
-              "fontStyle": "normal",
-              "textAlign": "center",
-              "fontSize": "2vmin",
-            }}>
-              {content?.content[current].text}
-            </span>
-            <div className="d-flex flex-row justify-content-center align-items-center gap-3 w-100">
-            <button
-              style={{
-                "backgroundColor": "#6650a4",
-                "border": "none",
-                "color": "white",
-                "padding": "0.5rem 1rem",
-                "borderRadius": "0.5rem",
-                "cursor": "pointer",
-                "alignSelf": "center",
-              }}
-              onClick={() => setCurrent((current - 1 + (content?.content?.length ?? 0)) % (content?.content?.length ?? 0))}
-            >
-              <FontAwesomeIcon icon={faArrowLeft} />
-            </button>
-            <button
+          <span>Audio {current + 1}/{content?.content.length}</span>
+        </div>
+        <span style={{
+          "fontFamily": "Comic Neue",
+          "fontWeight": 500,
+          "fontStyle": "normal",
+          "textAlign": "center",
+          "fontSize": "2vmin",
+        }}>
+          {content?.content[current].text}
+        </span>
+        <div className="d-flex flex-row justify-content-center align-items-center gap-3 w-100">
+          <button
             style={{
               "backgroundColor": "#6650a4",
               "border": "none",
@@ -137,59 +102,71 @@ export default function AudioVisualizer() {
               "cursor": "pointer",
               "alignSelf": "center",
             }}
-              onClick={async () => {
-                if (playing) {
-                  audioElement.pause();
-                  setPlaying(false);
-                } else {
-                  audioElement.play().then(() => setPlaying(true));
-                }
-                
-              }}
-            >
-              <FontAwesomeIcon icon={playing ? faPause : faPlay} />
+            onClick={() => setCurrent((current - 1 + (content?.content?.length ?? 0)) % (content?.content?.length ?? 0))}
+          >
+            <FontAwesomeIcon icon={faArrowLeft} />
+          </button>
+          <button
+            style={{
+              "backgroundColor": "#6650a4",
+              "border": "none",
+              "color": "white",
+              "padding": "0.5rem 1rem",
+              "borderRadius": "0.5rem",
+              "cursor": "pointer",
+              "alignSelf": "center",
+            }}
+            onClick={async () => {
+              if (playing) {
+                audioElement.pause();
+                setPlaying(false);
+              } else {
+                audioElement.play().then(() => setPlaying(true));
+              }
 
-            </button>
-            <button
-              style={{
-                "backgroundColor": "#6650a4",
-                "border": "none",
-                "color": "white",
-                "padding": "0.5rem 1rem",
-                "borderRadius": "0.5rem",
-                "cursor": "pointer",
-                "alignSelf": "center",
-              }}
-              onClick={() => setCurrent((current + 1) % (content?.content?.length ?? 0))}
-            >
-              <FontAwesomeIcon icon={faArrowRight} />
-            </button>
-            </div>
-            
-            <ReactAudioSpectrum
-              id="audio-canvas"
-              audioEle={audioElement}
-              width={containerRef.current?.clientWidth || 0}
-              height={innerHeight / 4}
-              // capColor={'blue'}
-              capHeight={2}
-              meterWidth={4}
-              meterCount={400}
-              meterColor={[
-                { stop: 0, color: '#6650a4' },
-                { stop: 0.5, color: 'purple' },
-                { stop: 1, color: '#4d3a8e' },
-              ]}
-              gap={5}
+            }}
+          >
+            <FontAwesomeIcon icon={playing ? faPause : faPlay} />
 
-            ></ReactAudioSpectrum>
-            {user.role === 'STUDENT' && <Reactions/>}
-            </>
-            
-            }
+          </button>
+          <button
+            style={{
+              "backgroundColor": "#6650a4",
+              "border": "none",
+              "color": "white",
+              "padding": "0.5rem 1rem",
+              "borderRadius": "0.5rem",
+              "cursor": "pointer",
+              "alignSelf": "center",
+            }}
+            onClick={() => setCurrent((current + 1) % (content?.content?.length ?? 0))}
+          >
+            <FontAwesomeIcon icon={faArrowRight} />
+          </button>
         </div>
-      </Card>
+
+        <ReactAudioSpectrum
+          id="audio-canvas"
+          audioEle={audioElement}
+          width={containerRef.current?.clientWidth || 0}
+          height={innerHeight / 4}
+          // capColor={'blue'}
+          capHeight={2}
+          meterWidth={4}
+          meterCount={400}
+          meterColor={[
+            { stop: 0, color: '#6650a4' },
+            { stop: 0.5, color: 'purple' },
+            { stop: 1, color: '#4d3a8e' },
+          ]}
+          gap={5}
+
+        ></ReactAudioSpectrum>
+        {user.role === 'STUDENT' && <Reactions />}
+      </>
+
+      }
     </div>
-  </div>
+  </PageWrapper>
 
 }

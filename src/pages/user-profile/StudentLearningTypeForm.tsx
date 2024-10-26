@@ -4,6 +4,7 @@ import DragDropAgreement from './Kolb';
 import Swal from 'sweetalert2';
 import { post } from '../../utils/network';
 import { useNavigate } from 'react-router-dom';
+import PageWrapper from '../../components/PageWrapper';
 
 
 interface IQuestion {
@@ -130,39 +131,17 @@ export const StudentLearningTypeForm = () => {
   const [testResponses, setTestResponses] = useState<number[][]>([]);
   const navigate = useNavigate();
 
-  return <div
-    style={{
-      display: 'flex',
-      justifyContent: 'center',
-      alignItems: 'flex-start',  /* Alinea el contenido al inicio, en lugar de al centro */
-      height: '100vh',
-      backgroundColor: '#f6effa',
-      width: '100vw',
-    }}
-  >
-    <div
-      style={{
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'flex-start', /* Alinea el contenido al principio */
-        padding: '20px',
-        width: '100%',
-        height: '100%',
-      }}
-    >
-      <Card style={{ width: '100%', paddingInline: '2rem', paddingBlock: '1rem', height: '100%' }}>
-        <h2>Test de Aprendizaje</h2>
-        <hr />
-        <div style={{
+  return <PageWrapper title="Test de Aprendizaje">
+    <div style={{
           display: 'flex',
           flexDirection: 'column',
           justifyContent: 'space-between',
           width: '100%',
-          height: '100%',
           gap: '1rem',
+          overflowY: 'auto'
+          
         }}>
           <div style={{
-            height: '100%',
             flex: '1',
           }}>
             <DragDropAgreement
@@ -197,9 +176,7 @@ export const StudentLearningTypeForm = () => {
           </div>
 
         </div>
-      </Card>
-    </div>
-  </div>
+  </PageWrapper>
 
 
 };

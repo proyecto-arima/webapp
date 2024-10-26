@@ -12,6 +12,7 @@ import { addCourse } from '../../redux/slices/courses';
 import { post } from '../../utils/network';
 import { SwalUtils } from '../../utils/SwalUtils';
 import { API_URL } from '../../config';
+import PageWrapper from '../../components/PageWrapper';
 
 interface ICourseCreationFormValues {
   title?: string;
@@ -40,22 +41,22 @@ export const CourseCreationPage = () => {
     if (e.target.files) {
       const file = e.target.files[0];
       const validFileTypes = ['image/png', 'image/jpeg', 'image/jpg'];
-  
+
       if (!validFileTypes.includes(file.type)) {
         SwalUtils.errorSwal(
           'Formato de archivo inválido',
           'Solo se permiten archivos con extensión .png, .jpeg o .jpg Por favor, selecciona un archivo válido.',
           'Aceptar',
           () => navigate(`/courses/create/`))
-          e.target.value = "";
+        e.target.value = "";
         setSelectedFile(null);
         return;
       }
-  
+
       setSelectedFile(file);
     }
   };
-  
+
 
   const createCourse = async () => {
     if (!formValues.title) {
@@ -219,112 +220,97 @@ export const CourseCreationPage = () => {
   };
 
   return (
-    <div
-      style={{
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'flex-start',
-        height: '100vh',
-        backgroundColor: '#f6effa',
-        width: '100vw',
-      }}
-    >
-      <div style={{
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'flex-start',
-        padding: '20px',
-        width: '100%',
-        height: '100%',
-      }}>
-        <Card style={{ paddingInline: '2rem', paddingBlock: '1rem', width: '100%', height: '100%' }}>
-          <h1>Crear Curso</h1>
-          <hr />
-          <p style={{
-            textAlign: 'left',
-            marginBottom: '2rem',
-            color: '#6b7280'
-          }}>
-            Acá podés crear un nuevo curso en la plataforma. <br />
-            Cada curso debe tener un nombre y una descripción que verán los alumnos al ingresar.
-            Opcionalmente podés cargar una imagen de portada, sino, nosotros la creamos por vos.<br />
-            Una vez creado el curso, podés agregarle secciones con el contenido deseado, y además matricular alumnos al curso.
-            Adicionalmente, se generará un código de automatriculación, para que los alumnos puedan matricularse automáticamente.
-          </p>
-          <h3>Detalles del curso</h3>
-          <hr />
-          <Input name="title" type="text" placeholder="Nombre" className="mb-3" onChange={handleFormChange('title')} />
-          <Input name="description" type="textarea" placeholder="Descripción del curso" className="mb-3" onChange={handleFormChange('description')} />
+    <PageWrapper title="Crear curso">
+      <div
+        style={{
+          overflowY: 'auto',
+        }}
+      >
+        <p style={{
+          textAlign: 'left',
+          marginBottom: '2rem',
+          color: '#6b7280'
+        }}>
+          Acá podés crear un nuevo curso en la plataforma. <br />
+          Cada curso debe tener un nombre y una descripción que verán los alumnos al ingresar.
+          Opcionalmente podés cargar una imagen de portada, sino, nosotros la creamos por vos.<br />
+          Una vez creado el curso, podés agregarle secciones con el contenido deseado, y además matricular alumnos al curso.
+          Adicionalmente, se generará un código de automatriculación, para que los alumnos puedan matricularse automáticamente.
+        </p>
+        <h5>Detalles del curso</h5>
+        <hr />
+        <Input name="title" type="text" placeholder="Nombre" className="mb-3" onChange={handleFormChange('title')} />
+        <Input name="description" type="textarea" placeholder="Descripción del curso" className="mb-3" onChange={handleFormChange('description')} />
 
-          <h3>Imagen</h3>
-          <hr />
-          <p style={{
-            textAlign: 'left',
-            marginBottom: '2rem',
-            color: '#6b7280'
-          }}>
-            Para generar una imagen automáticamente a partir del nombre y descripción del curso, clickea en Generar Imagen y espera que la magia ocurra.<br />
-            También puedes subir un archivo con extensión .png, .jpeg o .jpg para elegir manualmente la imagen del curso, si lo prefieres.
-          </p>
-          <div className='d-flex flex-row mb-3 gap-3'>
-            <Input type='checkbox' name='auto-generate' id='auto-generate' onClick={e => setAutoGenerateImage(!autoGenerateImage)} checked={autoGenerateImage} />
-            <Label for='auto-generate'>Generar imagen automáticamente</Label>
-          </div>
+        <h5>Imagen</h5>
+        <hr />
+        <p style={{
+          textAlign: 'left',
+          marginBottom: '2rem',
+          color: '#6b7280'
+        }}>
+          Para generar una imagen automáticamente a partir del nombre y descripción del curso, clickea en Generar Imagen y espera que la magia ocurra.<br />
+          También puedes subir un archivo con extensión .png, .jpeg o .jpg para elegir manualmente la imagen del curso, si lo prefieres.
+        </p>
+        <div className='d-flex flex-row mb-3 gap-3'>
+          <Input type='checkbox' name='auto-generate' id='auto-generate' onClick={e => setAutoGenerateImage(!autoGenerateImage)} checked={autoGenerateImage} />
+          <Label for='auto-generate'>Generar imagen automáticamente</Label>
+        </div>
 
-          {autoGenerateImage ? (<div style={{
-            flex: '1',
+        {autoGenerateImage ? (<div style={{
+          flex: '1',
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+        }}>
+
+          {imageLoading ? <button style={{
+            backgroundColor: '#4d3a8e',
+            color: 'white',
+            padding: '1rem',
+            borderRadius: '5px',
+            cursor: 'pointer',
             display: 'flex',
-            justifyContent: 'center',
+            flexDirection: 'row',
             alignItems: 'center',
-          }}>
+            gap: '1rem',
+          }}
+            disabled
+          >
+            <FontAwesomeIcon icon={faWandMagicSparkles} spin />
+            Generando Imagen...
+          </button> : (generatedImage ? <img src={generatedImage} alt="Generated" style={{
+            width: '200px',
+            borderRadius: '0.5rem',
+            objectFit: 'cover',
+            overflow: 'hidden',
+          }} /> : <button style={{
+            backgroundColor: '#4d3a8e',
+            color: 'white',
+            padding: '1rem',
+            borderRadius: '5px',
+            cursor: 'pointer',
+            display: 'flex',
+            flexDirection: 'row',
+            alignItems: 'center',
+            gap: '1rem',
+          }}
+            onClick={generateImage}
+          >
+            <FontAwesomeIcon icon={faWandMagicSparkles} />
+            Generar Imagen
+          </button>)}
 
-            {imageLoading ? <button style={{
-              backgroundColor: '#4d3a8e',
-              color: 'white',
-              padding: '1rem',
-              borderRadius: '5px',
-              cursor: 'pointer',
-              display: 'flex',
-              flexDirection: 'row',
-              alignItems: 'center',
-              gap: '1rem',
-            }}
-              disabled
-            >
-              <FontAwesomeIcon icon={faWandMagicSparkles} spin />
-              Generando Imagen...
-            </button> : (generatedImage ? <img src={generatedImage} alt="Generated" style={{
-              width: '200px',
-              borderRadius: '0.5rem',
-              objectFit: 'cover',
-              overflow: 'hidden',
-            }} /> : <button style={{
-              backgroundColor: '#4d3a8e',
-              color: 'white',
-              padding: '1rem',
-              borderRadius: '5px',
-              cursor: 'pointer',
-              display: 'flex',
-              flexDirection: 'row',
-              alignItems: 'center',
-              gap: '1rem',
-            }}
-              onClick={generateImage}
-            >
-              <FontAwesomeIcon icon={faWandMagicSparkles} />
-              Generar Imagen
-            </button>)}
+        </div>) : <div style={{
+          flex: '1',
+        }}>
+          <Input type="file" onChange={handleFileChange} className="mb-3" />
+        </div>}
+        <div className='d-flex flex-row justify-content-end'>
+          <button className='btn-purple-1' onClick={createCourse}>Crear Curso</button>
+        </div>
 
-          </div>) : <div style={{
-            flex: '1',
-          }}>
-            <Input type="file" onChange={handleFileChange} className="mb-3" />
-          </div>}
-          <div className='d-flex flex-row justify-content-end'>
-            <button className='btn-purple-1' onClick={createCourse}>Crear Curso</button>
-          </div>
-        </Card>
       </div>
-    </div>
+    </PageWrapper>
   );
 };

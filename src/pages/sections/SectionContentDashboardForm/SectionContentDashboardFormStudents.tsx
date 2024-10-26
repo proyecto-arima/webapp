@@ -43,7 +43,11 @@ export default function SectionContentDashboardFormStudents({ content, user, cou
     'CONVERGENTE': 'game'
   }
 
-  return (content?.length ? <Table>
+  return (content?.length ? <Table
+    style={{
+      fontSize: 'small',
+    }}
+  >
     <thead>
       <tr>
         <th>Contenido</th>

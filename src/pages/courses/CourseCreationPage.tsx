@@ -47,6 +47,7 @@ export const CourseCreationPage = () => {
           'Solo se permiten archivos con extensión .png, .jpeg o .jpg Por favor, selecciona un archivo válido.',
           'Aceptar',
           () => navigate(`/courses/create/`))
+          e.target.value = "";
         setSelectedFile(null);
         return;
       }

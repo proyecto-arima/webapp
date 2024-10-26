@@ -19,6 +19,7 @@ import { TeacherLearningTypeDashboardPage } from './teachers/TeacherLearningType
 import { StudentsSurveyDashboardPage } from '../pages/directors/StudentsSurveyDashboardPage';
 import { TeachersSurveyDashboardPage } from '../pages/directors/TeachersSurveyDashboardPage';
 import { DirectorLearningTypeDashboardPage } from '../pages/directors/DirectorLearningTypeDashboardPage';
+import { UserCreationMassivePage } from './directors/UserCreationMassivePage';
 
 import Sidebar from '../components/Sidebar';
 import { get, del } from '../utils/network';
@@ -138,6 +139,7 @@ export const Index = () => {
             <Route path="/students-survey" element={<StudentsSurveyDashboardPage />} />
             <Route path="/teachers-survey" element={<TeachersSurveyDashboardPage />} />
             <Route path="/students/profile" element={<DirectorLearningTypeDashboardPage />} />
+            <Route path="/users/bulk" element={<UserCreationMassivePage />} />
             <Route path="*" element={<Navigate to={DEFAULT_PAGE_ROLE.DIRECTOR} replace />} />
           </>
         )}

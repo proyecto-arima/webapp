@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Card, Table, Button } from "reactstrap";
+import { Card, Table } from "reactstrap";
 import { get, patch } from "../../utils/network";
 import { useNavigate } from "react-router-dom";
 import { faEdit } from '@fortawesome/free-solid-svg-icons';
@@ -111,9 +111,9 @@ export const TeacherDashboardPage = () => {
             width: '100%',
           }}>
             <h2>Docentes</h2>
-            <Button className="btn-purple-1" onClick={() => navigate('/teachers/new')} style={{ backgroundColor: '#8e44ad', borderColor: '#8e44ad' }}>
+            <button className="btn-purple-1" onClick={() => navigate('/teachers/new')}>
               Crear docente
-            </Button>
+            </button>
           </div>
           <hr />
           <Table>

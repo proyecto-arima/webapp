@@ -7,6 +7,7 @@ import { RootState } from "../../redux/store";
 import { useNavigate } from 'react-router-dom';
 import { SwalUtils } from '../../utils/SwalUtils';
 import { addCourse, setCourses } from '../../redux/slices/courses';
+import PageWrapper from '../../components/PageWrapper';
 
 interface ICourse {
   id: string;
@@ -94,37 +95,15 @@ export const CourseSearchPage = () => {
   };
 
   return (
-    <div
-      style={{
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'flex-start',
-        height: '100vh',
-        backgroundColor: '#f6effa',
-        width: '100vw',
-      }}
-    >
-      <div
-        style={{
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'flex-start',
-          padding: '20px',
-          width: '100%',
-          height: '100%',
-        }}
-      >
-        <Card style={{ width: '100%', paddingInline: '2rem', paddingBlock: '1rem', height: '100%' }}>
-          <h1>Buscar Curso</h1>
-          <hr />
-          <div className="d-flex flex-row align-items-center w-100 gap-2 mb-5">
+    <PageWrapper title="Buscar cursos">
+      <div className="d-flex flex-row align-items-center w-100 gap-2 mb-5">
           <Input 
             name="title" 
             type="text" 
             placeholder="Ingrese parte del nombre del curso" 
             className="w-100" 
             onChange={(e) => setSearchCode(e.target.value)} 
-            style={{ flex: 1, height: '40px', marginRight: '10px' }}
+            style={{ flex: 1, marginRight: '10px' }}
           />
             <button className="btn-purple-1" onClick={handleSearch}>
               Buscar Curso
@@ -154,10 +133,7 @@ export const CourseSearchPage = () => {
                 <strong>No se encontraron cursos.</strong>
               </div>
             )}
-
-        </Card>
-      </div>
-    </div>
+          </PageWrapper>
   );
 };
 

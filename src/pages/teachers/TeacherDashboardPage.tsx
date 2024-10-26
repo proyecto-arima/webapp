@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { faEdit } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Swal from 'sweetalert2';
+import PageWrapper from "../../components/PageWrapper";
 
 interface ITeacher {
   id: string;
@@ -82,41 +83,18 @@ export const TeacherDashboardPage = () => {
   };
 
   return (
-    <div
-      style={{
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'flex-start',
-        height: '100vh',
-        backgroundColor: '#f6effa',
-        width: '100vw',
-      }}
+    <PageWrapper title="Docentes"
+      buttons={
+        <button className="btn-purple-1" onClick={() => navigate('/teachers/new')}>
+          Crear docente
+        </button>
+      }
     >
-      <div
-        style={{
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'flex-start',
-          padding: '20px',
-          width: '100%',
-          height: '100%',
-        }}
-      >
-        <Card style={{ width: '100%', paddingInline: '2rem', paddingBlock: '1rem', height: '100%' }}>
-          <div style={{
-            display: 'flex',
-            flexDirection: 'row',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-            width: '100%',
-          }}>
-            <h2>Docentes</h2>
-            <button className="btn-purple-1" onClick={() => navigate('/teachers/new')}>
-              Crear docente
-            </button>
-          </div>
-          <hr />
-          <Table>
+      
+      <Table style={{
+        overflow: 'auto',
+        fontSize: 'small',
+      }}>
             <thead>
               <tr>
                 <th>Nombre</th>
@@ -140,8 +118,6 @@ export const TeacherDashboardPage = () => {
               ))}
             </tbody>
           </Table>
-        </Card>
-      </div>
-    </div>
+    </PageWrapper>
   );
 };

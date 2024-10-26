@@ -24,6 +24,12 @@ export const CourseSearchPage = () => {
 
   useEffect(() => {
     fetchCoursesToMatriculate();
+  
+    const interval = setInterval(() => {
+      fetchCoursesToMatriculate();
+    }, 5000); // Cada 5 segundos
+  
+    return () => clearInterval(interval); // Limpia el intervalo al desmontar
   }, []);
 
   const fetchCoursesToMatriculate = () => 

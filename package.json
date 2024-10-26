@@ -19,6 +19,7 @@
     "markmap-render": "^0.17.0",
     "markmap-toolbar": "^0.17.0",
     "markmap-view": "^0.17.0",
+    "papaparse": "^5.4.1",
     "react": "^18.3.1",
     "react-audio-spectrum": "^0.1.5",
     "react-confetti": "^6.1.0",
@@ -63,6 +64,7 @@
   "devDependencies": {
     "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
     "@eslint/js": "^9.5.0",
+    "@types/papaparse": "^5.3.15",
     "@types/react-slick": "^0.23.13",
     "@types/uuid": "^10.0.0",
     "eslint": "^8.57.0",

@@ -169,6 +169,7 @@ export default function Sidebar() {
                   <span>Estudiantes</span>
                 </NavItem>
               </NavLink>
+
               <NavLink to={'/teachers/'} end className={({ isActive }) => isActive ? 'sidebar-navlink-active' : 'sidebar-navlink-inactive'}>
                 <NavItem className='sidebar-navlink-item'>
                   <FontAwesomeIcon icon={faCircle} style={{
@@ -179,6 +180,16 @@ export default function Sidebar() {
                 </NavItem>
               </NavLink>
 
+              <NavLink to={'/me/users/bulk'} end className={({ isActive }) => isActive ? 'sidebar-navlink-active' : 'sidebar-navlink-inactive'}>
+                <NavItem className='sidebar-navlink-item'>
+                  <FontAwesomeIcon icon={faCircle} style={{
+                    width: '0.6rem',
+                    color: '#49454f',
+                  }} />
+                  <span>Creación masiva de usuarios</span>
+                </NavItem>
+              </NavLink>
+              
               <span className='sidebar-section-title'>Reportes</span>
               <NavLink to={'/students-survey'} end className={({ isActive }) => isActive ? 'sidebar-navlink-active' : 'sidebar-navlink-inactive'}>
                 <NavItem className='sidebar-navlink-item'>

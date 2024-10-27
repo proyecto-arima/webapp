@@ -43,8 +43,8 @@ export const TeacherStudentsSurveyDashboardPage = () => {
   const [courses, setCourses] = useState<ICourse[]>([]);
   const [courseId, setCourseId] = useState<string>('');
   const [answers, setAnswers] = useState<IAnswerData[]>([]);
-  const [dateFrom, setDateFrom] = useState<string>(MAX_DATE);
-  const [dateTo, setDateTo] = useState<string>(MAX_DATE);
+  const [dateFrom, setDateFrom] = useState<string | null>(null);
+  const [dateTo, setDateTo] = useState<string | null>(null);
   const [studentsSurveyData, setStudentsSurveyData] = useState<IQuestion | null>(null);
 
   useEffect(() => {
@@ -75,17 +75,20 @@ export const TeacherStudentsSurveyDashboardPage = () => {
   }, [courseId, dateFrom, dateTo]);
 
   const fetchStudentsSurveyDataFiltered = async () => {
-    const tmpDateFrom = new Date(dateFrom);
-    const tmpDateTo = new Date(dateTo);
+    if (dateFrom && dateTo) {
+      const tmpDateFrom = new Date(dateFrom);
+      const tmpDateTo = new Date(dateTo);
+  
+      if (tmpDateTo < tmpDateFrom) {
+        SwalUtils.warningSwal(
+          "Rango de fechas inválido",
+          "La fecha final debe ser mayor o igual a la fecha inicial.",
+          "Continuar",
+          () => { console.warn('Invalid date range'); }
+        );
+      }
+    };
 
-    if (tmpDateTo < tmpDateFrom) {
-      SwalUtils.warningSwal(
-        "Rango de fechas inválido",
-        "La fecha final debe ser mayor o igual a la fecha inicial.",
-        "Continuar",
-        () => { console.warn('Invalid date range'); }
-      );
-    }
     let endpoint = '/survey/student-results';
     const queryParams: string[] = [];
 
@@ -185,7 +188,6 @@ export const TeacherStudentsSurveyDashboardPage = () => {
                 type="date"
                 className="form-control"
                 placeholder="Fecha inicial"
-                value={dateFrom}
                 max={MAX_DATE}
                 onChange={(e) => setDateFrom(e.target.value)}
               />
@@ -193,7 +195,6 @@ export const TeacherStudentsSurveyDashboardPage = () => {
                 type="date"
                 className="form-control"
                 placeholder="Fecha final"
-                value={dateTo}
                 max={MAX_DATE}
                 onChange={(e) => setDateTo(e.target.value)}
               />

@@ -49,8 +49,9 @@ export const Index = () => {
         }
       })
       .then((res) => {
+        dispatch(login());
         if (res.success) {
-          dispatch(login());
+          setWebLoading(false);
           return true;
         } else {
           console.warn("User is not authenticated");
@@ -72,8 +73,6 @@ export const Index = () => {
         console.error(`An error occurred while retrieve user session: ${error}`);
         return false;
       });
-    
-    setWebLoading(false);
     if (!userSession || !['TEACHER', 'STUDENT', 'ADMIN', 'DIRECTOR'].includes(userSession.role)) {
       console.warn('Session not found');
       dispatch(logout());
@@ -114,7 +113,7 @@ export const Index = () => {
   };
 
   useEffect(() => {
-    if (isAuthenticated) return;
+    if (isAuthenticated) return setWebLoading(false);
     fetchSession();
   }, [user]);
 

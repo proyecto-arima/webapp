@@ -196,13 +196,13 @@ export const CourseDashboardPage = () => {
                 <img src={empty} alt="No sections available" />
                 {user.role === 'STUDENT' ? (
                   <>
-                    <h3>Parece que aún no hay secciones en este curso.</h3>
-                    <h4>Por favor intenta de nuevo más tarde</h4>
+                    <h3>Parece que aún no te has matriculado a ningún curso.</h3>
+                    <h4>Por favor matriculate a un curso para poder ver el contenido. </h4>
                   </>
                 ) : (
                   <>
-                    <h3>Parece que aún no has creado ninguna sección en este curso.</h3>
-                    <h4>Por favor crea una sección para comenzar a añadir contenido.</h4>
+                    <h3>Parece que aún no has creado ningún curso.</h3>
+                    <h4>Por favor crea un curso para comenzar a añadir secciones y contenido.</h4>
                   </>
                 )}
               </div>

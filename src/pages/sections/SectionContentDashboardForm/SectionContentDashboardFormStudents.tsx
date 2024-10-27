@@ -88,6 +88,9 @@ export default function SectionContentDashboardFormStudents({ content, user, cou
     </tbody>
   </Table> : <div className='d-flex flex-column justify-content-center align-items-center h-100'>
     <img
+      style={{
+        height: '50vh',
+      }}
       src={empty}
     ></img>
     <>

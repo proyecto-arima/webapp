@@ -40,10 +40,10 @@ export const CourseDetailPage: React.FC = () => {
   const { courseId } = useParams<{ courseId: string }>();
   const [course, setCourse] = useState<ICourse | null>(null);
   const [sections, setSections] = useState<ISection[]>([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetchCourse();
-    fetchSections();
+    Promise.all([fetchCourse(), fetchSections()]).then(() => setLoading(false));
   }, [courseId]);
 
   // Fetch course details
@@ -96,7 +96,8 @@ export const CourseDetailPage: React.FC = () => {
   );
 
   return (
-    <PageWrapper title={course?.title ?? ''}
+    <PageWrapper title={course?.title ?? 'Cargando...'}
+      loading={loading}
       buttons={
         user.role === 'TEACHER' && (
           <div className='d-flex flex-row gap-3'>

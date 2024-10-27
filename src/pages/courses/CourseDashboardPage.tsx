@@ -18,12 +18,16 @@ import empty from '../../assets/images/empty.svg';
 import PageWrapper from '../../components/PageWrapper';
 
 export const CourseDashboardPage = () => {
-  const { courses } = useSelector((state: RootState) => state.courses);
+  const { courses, loading } = useSelector((state: RootState) => state.courses);
+
+  useEffect(() => {
+    console.log('loading', loading);
+  }, [loading]);
+  
   const user = useSelector((state: RootState) => state.user);
   const navigate = useNavigate();
 
   const dispatch = useDispatch();
-  const history = useNavigate();
 
   useEffect(() => {
     if (user.requiresSurvey) {
@@ -32,13 +36,13 @@ export const CourseDashboardPage = () => {
         "Hay una encuesta disponible para evaluar el contenido de la plataforma. ¿Deseas realizarla?",
         "Si",
         "No",
-        () => history("/me/survey"),
+        () => navigate("/me/survey"),
       );
     }
   }, [user.requiresSurvey, history]);
 
   const handleViewCourse = (courseId: string) => {
-    history(`/courses/${courseId}`);
+    navigate(`/courses/${courseId}`);
   };
 
   const handleEditCourse = (courseId: string) => {
@@ -79,7 +83,7 @@ export const CourseDashboardPage = () => {
 
 
   return (
-    <PageWrapper title="Mis cursos">
+    <PageWrapper title="Mis cursos" loading={loading}>
       <div style={{
             display: 'flex',
             flexDirection: 'row',

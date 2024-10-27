@@ -88,29 +88,35 @@ export const UserCreationMassivePage = () => {
       "Si, estoy seguro",
       "No, volver",
       async () => {
-        // post('/users/massive', body)
-        //   .then((response) => {
-        //     console.log(response);
-        //     SwalUtils.successSwal(
-        //       'Usuarios creados',
-        //       'Los usuarios se han creado exitosamente',
-        //       undefined,
-        //       () => {
-        //         setUsersCreated(users);
-        //         setUsers([]);
-        //         setUserType(null);
-        //       }
-        //     );
-        //   })
-        //   .catch((error) => {
-        //     console.error(error);
-        //     SwalUtils.errorSwal(
-        //       'Error al crear usuarios',
-        //       'Ocurrió un error al intentar crear los usuarios, por favor intenta más tarde',
-        //       undefined,
-        //       () => { console.warn('Error creating users') }
-        //     );
-        //   });
+        post('/users/massive', users)
+          .then((res) => {
+            if (res.ok) {
+              SwalUtils.successSwal(
+                'Usuarios creados',
+                'Los usuarios se han creado exitosamente',
+                'Aceptar',
+                () => {
+                  setUsers(users);
+                  setUsers([]);
+                  setUserType(null);
+                },
+                () => {
+                  setUsers(users);
+                  setUsers([]);
+                  setUserType(null);
+                }, 
+              );
+            };
+          })
+          .catch((error) => {
+            console.error(error);
+            SwalUtils.errorSwal(
+              'Error al crear usuarios',
+              'Ocurrió un error al intentar crear los usuarios, por favor intenta más tarde',
+              undefined,
+              () => { console.warn('Error creating users') }
+            );
+          });
         console.log("creando usuarios");
         await post(endpoint, users)
           .then((res) => {

@@ -39,6 +39,14 @@ const questionsOptions = [
   "Totalmente de acuerdo"
 ];
 
+const studentsQuestions = [
+  "1. La plataforma es fácil de usar",
+  "2. La plataforma funciona de forma rápida",
+  "3. El material proporcionado es cómodo a la hora de estudiar",
+  "4. Usar el material de la plataforma me ha ayudado a obtener mejores resultados",
+  "5. El uso de la plataforma colabora en la mejora de la enseñanza de mis docentes",
+];
+
 export const TeacherStudentsSurveyDashboardPage = () => {
   const [courses, setCourses] = useState<ICourse[]>([]);
   const [courseId, setCourseId] = useState<string>('');
@@ -116,7 +124,7 @@ export const TeacherStudentsSurveyDashboardPage = () => {
         setAnswers(
           [
             {
-              question: '1. La plataforma es fácil de usar',
+              question: studentsQuestions[0],
               answers: questionsOptions.map((option, index) => ({
                 id: index,
                 option: questionsOptions[questionsOptions.length - 1 - index],
@@ -124,7 +132,7 @@ export const TeacherStudentsSurveyDashboardPage = () => {
               }))
             },
             {
-              question: '2. La plataforma funciona de forma rápida',
+              question: studentsQuestions[1],
               answers: questionsOptions.map((option, index) => ({
                 id: index,
                 option: questionsOptions[questionsOptions.length - 1 - index],
@@ -132,7 +140,7 @@ export const TeacherStudentsSurveyDashboardPage = () => {
               }))
             },
             {
-              question: '3. El material proporcionado es cómodo a la hora de estudiar',
+              question: studentsQuestions[2],
               answers: questionsOptions.map((option, index) => ({
                 id: index,
                 option: questionsOptions[questionsOptions.length - 1 - index],
@@ -140,7 +148,7 @@ export const TeacherStudentsSurveyDashboardPage = () => {
               }))
             },
             {
-              question: '4. Usar el material de la plataforma me ha ayudado a obtener mejores resultados',
+              question: studentsQuestions[3],
               answers: questionsOptions.map((option, index) => ({
                 id: index,
                 option: questionsOptions[questionsOptions.length - 1 - index],
@@ -148,7 +156,7 @@ export const TeacherStudentsSurveyDashboardPage = () => {
               }))
             },
             {
-              question: '5. El uso de la plataforma colabora en la mejora de la enseñanza de mis docentes',
+              question: studentsQuestions[4],
               answers: questionsOptions.map((option, index) => ({
                 id: index,
                 option: questionsOptions[questionsOptions.length - 1 - index],

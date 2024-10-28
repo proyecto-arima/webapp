@@ -39,12 +39,20 @@ const questionsOptions = [
   "Totalmente de acuerdo"
 ];
 
+const studentsQuestions = [
+  "1. La plataforma es fácil de usar",
+  "2. La plataforma funciona de forma rápida",
+  "3. El material proporcionado es cómodo a la hora de estudiar",
+  "4. Usar el material de la plataforma me ha ayudado a obtener mejores resultados",
+  "5. El uso de la plataforma colabora en la mejora de la enseñanza de mis docentes",
+];
+
 export const TeacherStudentsSurveyDashboardPage = () => {
   const [courses, setCourses] = useState<ICourse[]>([]);
   const [courseId, setCourseId] = useState<string>('');
   const [answers, setAnswers] = useState<IAnswerData[]>([]);
-  const [dateFrom, setDateFrom] = useState<string>(MAX_DATE);
-  const [dateTo, setDateTo] = useState<string>(MAX_DATE);
+  const [dateFrom, setDateFrom] = useState<string | null>(null);
+  const [dateTo, setDateTo] = useState<string | null>(null);
   const [studentsSurveyData, setStudentsSurveyData] = useState<IQuestion | null>(null);
 
   useEffect(() => {
@@ -75,17 +83,20 @@ export const TeacherStudentsSurveyDashboardPage = () => {
   }, [courseId, dateFrom, dateTo]);
 
   const fetchStudentsSurveyDataFiltered = async () => {
-    const tmpDateFrom = new Date(dateFrom);
-    const tmpDateTo = new Date(dateTo);
+    if (dateFrom && dateTo) {
+      const tmpDateFrom = new Date(dateFrom);
+      const tmpDateTo = new Date(dateTo);
+  
+      if (tmpDateTo < tmpDateFrom) {
+        SwalUtils.warningSwal(
+          "Rango de fechas inválido",
+          "La fecha final debe ser mayor o igual a la fecha inicial.",
+          "Continuar",
+          () => { console.warn('Invalid date range'); }
+        );
+      }
+    };
 
-    if (tmpDateTo < tmpDateFrom) {
-      SwalUtils.warningSwal(
-        "Rango de fechas inválido",
-        "La fecha final debe ser mayor o igual a la fecha inicial.",
-        "Continuar",
-        () => { console.warn('Invalid date range'); }
-      );
-    }
     let endpoint = '/survey/student-results';
     const queryParams: string[] = [];
 
@@ -113,7 +124,7 @@ export const TeacherStudentsSurveyDashboardPage = () => {
         setAnswers(
           [
             {
-              question: '1. La plataforma es fácil de usar',
+              question: studentsQuestions[0],
               answers: questionsOptions.map((option, index) => ({
                 id: index,
                 option: questionsOptions[questionsOptions.length - 1 - index],
@@ -121,7 +132,7 @@ export const TeacherStudentsSurveyDashboardPage = () => {
               }))
             },
             {
-              question: '2. La plataforma funciona de forma rápida',
+              question: studentsQuestions[1],
               answers: questionsOptions.map((option, index) => ({
                 id: index,
                 option: questionsOptions[questionsOptions.length - 1 - index],
@@ -129,7 +140,7 @@ export const TeacherStudentsSurveyDashboardPage = () => {
               }))
             },
             {
-              question: '3. El material proporcionado es cómodo a la hora de estudiar',
+              question: studentsQuestions[2],
               answers: questionsOptions.map((option, index) => ({
                 id: index,
                 option: questionsOptions[questionsOptions.length - 1 - index],
@@ -137,7 +148,7 @@ export const TeacherStudentsSurveyDashboardPage = () => {
               }))
             },
             {
-              question: '4. Usar el material de la plataforma me ha ayudado a obtener mejores resultados',
+              question: studentsQuestions[3],
               answers: questionsOptions.map((option, index) => ({
                 id: index,
                 option: questionsOptions[questionsOptions.length - 1 - index],
@@ -145,7 +156,7 @@ export const TeacherStudentsSurveyDashboardPage = () => {
               }))
             },
             {
-              question: '5. El uso de la plataforma colabora en la mejora de la enseñanza de mis docentes',
+              question: studentsQuestions[4],
               answers: questionsOptions.map((option, index) => ({
                 id: index,
                 option: questionsOptions[questionsOptions.length - 1 - index],
@@ -185,7 +196,6 @@ export const TeacherStudentsSurveyDashboardPage = () => {
                 type="date"
                 className="form-control"
                 placeholder="Fecha inicial"
-                value={dateFrom}
                 max={MAX_DATE}
                 onChange={(e) => setDateFrom(e.target.value)}
               />
@@ -193,7 +203,6 @@ export const TeacherStudentsSurveyDashboardPage = () => {
                 type="date"
                 className="form-control"
                 placeholder="Fecha final"
-                value={dateTo}
                 max={MAX_DATE}
                 onChange={(e) => setDateTo(e.target.value)}
               />

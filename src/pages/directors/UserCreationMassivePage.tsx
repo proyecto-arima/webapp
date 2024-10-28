@@ -88,29 +88,35 @@ export const UserCreationMassivePage = () => {
       "Si, estoy seguro",
       "No, volver",
       async () => {
-        // post('/users/massive', body)
-        //   .then((response) => {
-        //     console.log(response);
-        //     SwalUtils.successSwal(
-        //       'Usuarios creados',
-        //       'Los usuarios se han creado exitosamente',
-        //       undefined,
-        //       () => {
-        //         setUsersCreated(users);
-        //         setUsers([]);
-        //         setUserType(null);
-        //       }
-        //     );
-        //   })
-        //   .catch((error) => {
-        //     console.error(error);
-        //     SwalUtils.errorSwal(
-        //       'Error al crear usuarios',
-        //       'Ocurrió un error al intentar crear los usuarios, por favor intenta más tarde',
-        //       undefined,
-        //       () => { console.warn('Error creating users') }
-        //     );
-        //   });
+        post('/users/massive', users)
+          .then((res) => {
+            if (res.ok) {
+              SwalUtils.successSwal(
+                'Usuarios creados',
+                'Los usuarios se han creado exitosamente',
+                'Aceptar',
+                () => {
+                  setUsers(users);
+                  setUsers([]);
+                  setUserType(null);
+                },
+                () => {
+                  setUsers(users);
+                  setUsers([]);
+                  setUserType(null);
+                }, 
+              );
+            };
+          })
+          .catch((error) => {
+            console.error(error);
+            SwalUtils.errorSwal(
+              'Error al crear usuarios',
+              'Ocurrió un error al intentar crear los usuarios, por favor intenta más tarde',
+              undefined,
+              () => { console.warn('Error creating users') }
+            );
+          });
         console.log("creando usuarios");
         await post(endpoint, users)
           .then((res) => {
@@ -346,18 +352,6 @@ export const UserCreationMassivePage = () => {
             width: '100%',
           }}>
             <h2>Creación masiva de usuarios</h2>
-            <div>
-              <Select
-                value={userType ? { value: userType, label: userType === 'DOCENTE' ? 'Docente' : 'Estudiante' } : null}
-                options={["Estudiante", "Docente"].map((option) => ({ value: option.toUpperCase(), label: option }))}
-                placeholder="Seleccionar tipo de usuario"
-                isDisabled={users.length > 0}
-                isSearchable={false}
-                onChange={(selectedOption) => {
-                  setUserType(selectedOption ? selectedOption.value : '');
-                }}
-              />
-            </div>
           </div>
 
           <hr />
@@ -369,14 +363,27 @@ export const UserCreationMassivePage = () => {
                 </CardTitle>
                 <CardBody>
                   <ul>
-                    <li key='0'>Es muy importante <strong>que el usuario no exista previamente</strong> en el listado.</li>
+                    <li key='0'>Es muy importante <strong>que los usuarios no existan previamente</strong> en el listado.</li>
                     <li key='1'>Si alguno de los usuarios ya existe, <strong>no se podrán crear el resto de los usuarios</strong>.</li>
-                    <li key='2'>Recorda <strong>seleccionar el tipo de usuario</strong> que vas a cargar (docentes o alumnos).</li>
-                    <li key='3'>Debes cargar un archivo en formato .csv, para luego generar la tabla con los usuarios que se van a cargar.</li>
-                    <li key='4'>En Google Spreadsheets, podes hacer clic en Archivo {'>'} Descargar {'>'} Valores separados por comas (.csv, valores separados por comas) para obtener el archivo en el formato correcto.</li>
+                    <li key='2'>Recorda <strong>seleccionar el tipo de usuario</strong> que vas a cargar (docentes o estudiantes).</li>
+                    <li key='3'>El archivo debe ser un .csv que AdaptarIA tomará para mostrar la tabla de usuarios que se van a crear.</li>
+                    <li key='4'>En Google Spreadsheets, podes hacer clic en Archivo {'>'} Descargar {'>'} Valores separados por comas (.csv) para obtener el archivo en el formato correcto.</li>
                     <li key='5'>En Microsoft Excel, podes hacer clic en Archivo {'>'} Guardar como {'>'} seleccionar CSV (delimitado por comas) (*.csv) para obtener el archivo en el formato correcto.</li>
                   </ul>
                 </CardBody>
+              </div>
+
+              <div style={{ width: '30%', marginBottom: '1rem' }}>
+                <Select
+                  value={userType ? { value: userType, label: userType === 'DOCENTE' ? 'Docente' : 'Estudiante' } : null}
+                  options={["Estudiante", "Docente"].map((option) => ({ value: option.toUpperCase(), label: option }))}
+                  placeholder="Seleccionar tipo de usuario"
+                  isDisabled={users.length > 0}
+                  isSearchable={false}
+                  onChange={(selectedOption) => {
+                    setUserType(selectedOption ? selectedOption.value : '');
+                  }}
+                />
               </div>
 
               <Input

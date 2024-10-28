@@ -89,7 +89,6 @@ export const UserPersonalDataPage = () => {
     }
   };
 
-
   return (
     <div
       style={{
@@ -156,17 +155,18 @@ export const UserPersonalDataPage = () => {
                 } disabled />
               </>
             )}
-
-            {/* Imagen de perfil */}
-            <Label for="profileImage">Imagen de Perfil</Label>
-            <Input type="file" name="profileImage" id="profileImage" onChange={handleFileChange} />
-
-            {/* Botón de actualización */}
             
+            {['STUDENT', 'TEACHER'].includes(user.role ?? '') && (
+              <>
+                <Label for="profileImage">Imagen de Perfil</Label>
+                <Input type="file" name="profileImage" id="profileImage" onChange={handleFileChange} />
+              </>
+            )}
+
           </CardBody>
           <div className='d-flex flex-row justify-content-end'>
             <button className='btn-purple-1' onClick={uploadProfileImage}>Actualizar información</button>
-            </div>
+          </div>
         </Card>
       </div>
     </div>

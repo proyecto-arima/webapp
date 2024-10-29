@@ -160,7 +160,7 @@ export const UserPersonalDataPage = () => {
               </>
             )}
             
-            {['STUDENT', 'TEACHER'].includes(user.role ?? '') && (
+            {['STUDENT', 'TEACHER', 'DIRECTOR'].includes(user.role ?? '') && (
               <>
                 <Label for="profileImage">Imagen de Perfil</Label>
                 <Input type="file" name="profileImage" id="profileImage" onChange={handleFileChange} />

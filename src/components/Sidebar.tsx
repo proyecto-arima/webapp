@@ -234,7 +234,7 @@ export default function Sidebar() {
         </div>
 
         <div className="w-100">
-          {user?.role && ['STUDENT', 'TEACHER'].includes(user.role) && (
+          {user?.role && ['STUDENT', 'TEACHER', 'DIRECTOR'].includes(user.role) && (
             user.profilePicture ? (
               <img src={user.profilePicture} alt="profile" className='sidebar-profile-picture' />
             ) : (

@@ -18,6 +18,7 @@ export interface UserState {
   },
   learningProfile?: 'DIVERGENTE' | 'ASIMILADOR' | 'ACOMODADOR' | 'CONVERGENTE',
   requiresSurvey?: boolean,
+  profilePicture?: string,
 }
 
 const initialState: UserState = {}

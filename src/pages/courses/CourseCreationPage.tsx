@@ -135,7 +135,10 @@ export const CourseCreationPage = () => {
         Swal.fire({
           title: 'Curso creado exitosamente',
           html: `El curso ha sido creado correctamente. La clave de matriculación es: <strong>${res.data.matriculationCode}</strong>`,
-          confirmButtonText: 'Aceptar'
+          confirmButtonText: 'Aceptar',
+          customClass: {
+            confirmButton: 'btn-purple-1',
+          },
         }).then(() => {
           navigate('/courses/dashboard');
         });

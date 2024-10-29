@@ -1,16 +1,19 @@
-import { Card, CardBody, CardTitle, Input, Label, Button } from 'reactstrap';
-import { RootState } from "../../redux/store";
-import { useSelector } from "react-redux";
-import { API_URL } from '../../config';
+import { Card, CardBody, CardTitle, Input, Label } from 'reactstrap';
 import React from 'react';
+import { useSelector } from "react-redux";
+import { useNavigate } from 'react-router-dom';
+
 import { patch } from '../../utils/network';
 import { SwalUtils } from '../../utils/SwalUtils';
-import { useNavigate } from 'react-router-dom';
+import { RootState } from "../../redux/store";
+
+import { API_URL } from '../../config';
 
 export const UserPersonalDataPage = () => {
   const user = useSelector((state: RootState) => state.user);
   const [selectedFile, setSelectedFile] = React.useState<File | null>(null);
   const navigate = useNavigate();
+
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
@@ -73,9 +76,10 @@ export const UserPersonalDataPage = () => {
           'Información actualizada',
           'Tu información de perfil ha sido actualizada correctamente.',
           'Aceptar',
-          () => navigate('/me/profile'),
-          () => navigate('/me/profile')
+          () => { navigate('/me/profile'); window.location.reload(); },
+          () => { navigate('/me/profile'); window.location.reload(); },
         );
+        
       } else {
         throw new Error(json.message || 'Error al actualizar el perfil');
       }

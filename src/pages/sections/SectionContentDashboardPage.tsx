@@ -35,10 +35,21 @@ export const SectionContentDashboard = () => {
 
   const [section, setSection] = useState<ISection | null>(null);
   const [content, setContent] = useState<IContent[]>([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    get(`/courses/${courseId}/sections/${sectionId}`).then(res => res.json()).then(res => res.data).then((data: ISection) => setSection(data));
-    get(`/courses/${courseId}/sections/${sectionId}/contents`).then(res => res.json()).then(res => res.data).then((data: IContent[]) => setContent(data));
+    setLoading(true);
+
+    Promise.all([
+      get(`/courses/${courseId}/sections/${sectionId}`).then(res => res.json()).then(res => res.data),
+      get(`/courses/${courseId}/sections/${sectionId}/contents`).then(res => res.json()).then(res => res.data),
+    ])
+      .then(([sectionData, contentData]) => {
+        setSection(sectionData);
+        setContent(contentData);
+      })
+      .finally(() => setLoading(false));
+
   }, [courseId, sectionId]);
 
 
@@ -73,7 +84,7 @@ export const SectionContentDashboard = () => {
         </div>
         <hr />
 
-        {user?.role === 'TEACHER' ? <SectionContentDashboardFormTeachers
+        {loading && user?.role === 'TEACHER' ? <SectionContentDashboardFormTeachers
           courseId={courseId!}
           sectionId={sectionId!}
           content={content}

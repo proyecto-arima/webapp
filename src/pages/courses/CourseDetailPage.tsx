@@ -1,21 +1,18 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
-import Slider from 'react-slick';
-import { Card, Badge } from 'reactstrap';
+import { Badge } from 'reactstrap'; // Importa el componente Badge
 
-import "slick-carousel/slick/slick-theme.css";
-import "slick-carousel/slick/slick.css";
-
-import { get, del } from '../../utils/network';
 import { RootState } from '../../redux/store';
+import { del, get } from '../../utils/network';
 
+import { faEdit, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faTrash, faEdit } from '@fortawesome/free-solid-svg-icons';
 
-import placeholder from '../../assets/images/placeholder.webp';
 import empty from '../../assets/images/empty.svg';
+import placeholder from '../../assets/images/placeholder.webp';
 import '../../assets/styles/CourseDetailPage.css';
+import PageWrapper from '../../components/PageWrapper';
 import { SwalUtils } from '../../utils/SwalUtils';
 
 interface ISection {
@@ -43,11 +40,10 @@ export const CourseDetailPage: React.FC = () => {
   const { courseId } = useParams<{ courseId: string }>();
   const [course, setCourse] = useState<ICourse | null>(null);
   const [sections, setSections] = useState<ISection[]>([]);
-  const [loadingSections, setLoadingSections] = useState(true); // Nuevo estado de carga
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetchCourse();
-    fetchSections();
+    Promise.all([fetchCourse(), fetchSections()]).then(() => setLoading(false));
   }, [courseId]);
 
   // Fetch course details
@@ -60,14 +56,11 @@ export const CourseDetailPage: React.FC = () => {
 
   // Fetch sections details
   const fetchSections = () => {
-    setLoadingSections(true); // Inicia la carga
     get(`/courses/${courseId}/sections`)
       .then(res => res.json())
       .then(res => res.data)
       .then((data: ISection[]) => {
-        console.log(data);
         setSections(data);
-        setLoadingSections(false); // Finaliza la carga
       });
   };
 
@@ -104,109 +97,101 @@ export const CourseDetailPage: React.FC = () => {
   );
 
   return (
-    <div
-      style={{
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'flex-start',
-        height: '100vh',
-        backgroundColor: '#f6effa',
-        width: '100vw',
-      }}
-    >
-      <div className="course-detail-container">
-        <Card style={{ width: '100%', paddingInline: '2rem', paddingBlock: '1rem', height: '100%', maxWidth: 'calc(100vw - 25rem)' }}>
-
-          <div className="course-detail-header">
-            <h1>{course?.title}</h1>
-            {user.role === 'TEACHER' &&
-              <div className='d-flex flex-row gap-3'>
-                <button className="btn-purple-1" onClick={handleNewSection}>Nueva Sección</button>
-                <button className='btn-purple-2' onClick={() => navigate(`/courses/${courseId}/students`)}>Estudiantes</button>
-              </div>
-            }
+    <PageWrapper title={course?.title ?? 'Cargando...'}
+      loading={loading}
+      skeletonType='card'
+      buttons={
+        user.role === 'TEACHER' && (
+          <div className='d-flex flex-row gap-3'>
+            <button className="btn-purple-1" onClick={handleNewSection}>Nueva Sección</button>
+            <button className='btn-purple-2' onClick={() => navigate(`/courses/${courseId}/students`)}>Estudiantes</button>
           </div>
-
-          <hr />
-
-          <div style={{
-            display: 'flex',
-            flexDirection: 'row',
-            justifyContent: 'center',
-            alignItems: 'center',
-            height: '100%',
-            overflowY: 'auto',
+        )
+      }
+    >
+      <div style={{
+        display: 'flex',
+        flexDirection: 'row',
+        justifyContent: 'center',
+        alignItems: 'center',
+        height: '100%',
+        overflowY: 'auto',
+      }}>
+        {visibleSections.length ? (
+          <div className="container" style={{
+            marginBlock: 'auto',
           }}>
-            {!loadingSections && visibleSections.length ? (
-              <div className="container" style={{ marginBlock: 'auto' }}>
-                <div className="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4 justify-content-center">
-                  {visibleSections.map((section) => (
-                    <div key={section.id} className="col">
-                      <div className="card h-100">
-                        
-                        <div className="card-img-container position-relative" style={{ paddingBottom: '66.67%', overflow: 'hidden' }}>
-                          <img
-                            src={section.image ? section.image : placeholder}
-                            className="card-img-top position-absolute top-0 start-0 w-100 h-100"
-                            alt={section.name}
-                            style={{
-                              width: '100%',
-                              height: '100%',
-                              objectFit: 'cover',
-                              objectPosition: 'center'
-                            }}
-                          />
-                        </div>
-                        {user.role === 'TEACHER' && (
-                          <div style={{ position: 'absolute', top: '1rem', right: '1rem' }}>
-                            <Badge
-                              color={section.visible ? 'success' : 'danger'}
-                              style={{
-                                boxShadow: '0px 4px 8px rgba(0, 0, 0, 0.2)',
-                                fontSize: '0.9rem',
-                                padding: '0.5rem 1rem'
-                              }}>
-                              {section.visible ? 'Visible para los estudiantes' : 'No visible para los estudiantes'}
-                            </Badge>
-                          </div>
-                        )}
-                        <div className="card-body">
-                          <h5 className="card-title fs-4 fs-md-3 mb-3">{section.name}</h5>
-                          <p className="card-text flex-grow-1 fs-6 fs-md-5">{section.description}</p>
-                        </div>
-                        <div className="card-footer d-flex flex-column flex-md-row justify-content-end align-items-center gap-3">
-                          <button className='btn-purple-1 w-100 w-md-auto' onClick={() => navigate(`/courses/${courseId}/sections/${section.id}`)}>Ver sección</button>
-                          {user.role === 'TEACHER' && (
-                            <div className='d-flex gap-3 flex-column flex-md-row'>
-                              <button className='btn-purple-2 w-100 w-md-auto' onClick={() => handleEditSection(section.id)}><FontAwesomeIcon icon={faEdit} /></button>
-                              <button className='btn-purple-2 w-100 w-md-auto' onClick={() => handleDeleteSection(section.id)}><FontAwesomeIcon icon={faTrash} /></button>
-                            </div>
-                          )}
-                        </div>
-                      </div>
+            <div className="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4 justify-content-center">
+              {visibleSections.map((section) => (
+                <div key={section.id} className="col">
+                  <div className="card h-100">
+
+                    <div className="card-img-container position-relative" style={{ paddingBottom: '66.67%', overflow: 'hidden' }}>
+
+                      <img
+                        src={section.image ? section.image : placeholder}
+                        className="card-img-top position-absolute top-0 start-0 w-100 h-100"
+                        alt={section.name}
+                        style={{
+                          width: '100%',
+                          height: '100%',
+                          objectFit: 'cover',
+                          objectPosition: 'center'
+                        }}
+                      />
+
                     </div>
-                  ))}
+                    {user.role === 'TEACHER' && (
+                      <div style={{ position: 'absolute', top: '1rem', right: '1rem' }}>
+                        <Badge
+                          color={section.visible ? 'success' : 'danger'}
+                          style={{
+                            boxShadow: '0px 4px 8px rgba(0, 0, 0, 0.2)',
+                            fontSize: '0.9rem',
+                            padding: '0.5rem 1rem'
+                          }}>
+                          {section.visible ? 'Visible para los estudiantes' : 'No visible para los estudiantes'}
+                        </Badge>
+                      </div>
+                    )}
+                    <div className="card-body">
+                      <h5 className="card-title fs-4 fs-md-3 mb-3">{section.name}</h5>
+                      <p className="card-text flex-grow-1 fs-6 fs-md-5">{section.description}</p>
+                    </div>
+                    <div className="card-footer d-flex flex-column flex-md-row justify-content-end align-items-center gap-3">
+                      <button className='btn-purple-1 w-100 w-md-auto' onClick={() => navigate(`/courses/${courseId}/sections/${section.id}`)}>Ver sección</button>
+                      {user.role === 'TEACHER' && (
+                        <div className='d-flex gap-3 flex-column flex-md-row'>
+                          <button className='btn-purple-2 w-100 w-md-auto' onClick={() => handleEditSection(section.id)}><FontAwesomeIcon icon={faEdit} /></button>
+                          <button className='btn-purple-2 w-100 w-md-auto' onClick={() => handleDeleteSection(section.id)}><FontAwesomeIcon icon={faTrash} /></button>
+                        </div>
+                      )}
+                    </div>
+
+
+
+                  </div>
                 </div>
-              </div>
-            ) : !loadingSections && (
-              <div className='d-flex flex-column justify-content-center align-items-center'>
-                <img src={empty} alt="No sections available" />
-                {user.role === 'STUDENT' ? (
-                  <>
-                    <h3>Parece que aún no hay secciones en este curso.</h3>
-                    <h4>Por favor intenta de nuevo más tarde</h4>
-                  </>
-                ) : (
-                  <>
-                    <h3>Parece que aún no has creado ninguna sección en este curso.</h3>
-                    <h4>Por favor crea una sección para comenzar a añadir contenido.</h4>
-                  </>
-                )}
-              </div>
+              ))}
+            </div>
+          </div>
+        ) : (
+          <div className='d-flex flex-column justify-content-center align-items-center'>
+            <img src={empty} alt="No sections available" />
+            {user.role === 'STUDENT' ? (
+              <>
+                <h3>Parece que aún no hay secciones en este curso.</h3>
+                <h4>Por favor intenta de nuevo más tarde</h4>
+              </>
+            ) : (
+              <>
+                <h3>Parece que aún no has creado ninguna sección en este curso.</h3>
+                <h4>Por favor crea una sección para comenzar a añadir contenido.</h4>
+              </>
             )}
           </div>
-        </Card>
+        )}
       </div>
-    </div>
+    </PageWrapper>
   );
 };

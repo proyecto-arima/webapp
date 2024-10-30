@@ -1,25 +1,17 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faThumbsUp, faThumbsDown } from '@fortawesome/free-solid-svg-icons';
 import { useParams } from 'react-router-dom';
-import { post, get } from '../utils/network';
-import { useSelector } from 'react-redux';
-import { RootState } from '../redux/store';
+import { post } from '../utils/network';
 
 
-const Reactions = () => {
+const InlineReactions = ({ contentId, reaction }: { contentId: string, reaction?: boolean }) => {
   const [likeClicked, setLikeClicked] = useState(false);
   const [dislikeClicked, setDislikeClicked] = useState(false);
-  const [reactionState, setReactionState] = useState<boolean | undefined>(undefined);
-  const user = useSelector((state: RootState) => state.user);
 
-  useEffect(() => {
-    get(`/contents/${contentId}/reactions`).then(res => res.json()).then((response) => {
-      setReactionState(response.data.reactions.find((reaction: any) => reaction.userId === user.id)?.isSatisfied);
-    });
-  }, []);
+  const [reactionState, setReactionState] = useState(reaction);
 
-  const { contentId } = useParams<{ contentId: string }>();
+  
 
   const handleClick = (reaction: boolean) => {
     post(`/contents/${contentId}/reactions`, {
@@ -43,7 +35,7 @@ const Reactions = () => {
   };
 
   return (
-    <div className="fab-container">
+    <div className="inline-fab-container">
       {likeClicked && <div className="floating-like">
         <FontAwesomeIcon icon={faThumbsUp} />
       </div>}
@@ -52,7 +44,7 @@ const Reactions = () => {
       </div>}
       {/* Like Button */}
       <div
-        className={`fab ${likeClicked ? 'clicked' : ''}`}
+        className={`inline-fab ${likeClicked ? 'clicked' : ''}`}
         onClick={handleLikeClick}
         style={{
           backgroundColor: (reactionState === true || reactionState === undefined) ? '#007bff' : 'gray',
@@ -63,7 +55,7 @@ const Reactions = () => {
 
       {/* Dislike Button */}
       <div
-        className={`fab fab-dislike ${dislikeClicked ? 'clicked' : ''}`}
+        className={`inline-fab fab-dislike ${dislikeClicked ? 'clicked' : ''}`}
         onClick={handleDislikeClick}
         style={{
           backgroundColor: (reactionState === false || reactionState === undefined) ? '#dc3545' : 'gray',
@@ -76,4 +68,4 @@ const Reactions = () => {
   );
 };
 
-export default Reactions;
+export default InlineReactions;

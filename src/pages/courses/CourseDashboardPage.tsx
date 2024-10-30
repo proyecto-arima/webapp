@@ -15,14 +15,19 @@ import { del } from '../../utils/network';
 import '../../assets/styles/CourseDashboardPage.css';
 import placeholder from '../../assets/images/placeholder.webp';
 import empty from '../../assets/images/empty.svg';
+import PageWrapper from '../../components/PageWrapper';
 
 export const CourseDashboardPage = () => {
-  const { courses } = useSelector((state: RootState) => state.courses);
+  const { courses, loading } = useSelector((state: RootState) => state.courses);
+
+  useEffect(() => {
+    console.log('loading', loading);
+  }, [loading]);
+  
   const user = useSelector((state: RootState) => state.user);
   const navigate = useNavigate();
 
   const dispatch = useDispatch();
-  const history = useNavigate();
 
   useEffect(() => {
     if (user.requiresSurvey) {
@@ -31,13 +36,13 @@ export const CourseDashboardPage = () => {
         "Hay una encuesta disponible para evaluar el contenido de la plataforma. ¿Deseas realizarla?",
         "Si",
         "No",
-        () => history("/me/survey"),
+        () => navigate("/me/survey"),
       );
     }
   }, [user.requiresSurvey, history]);
 
   const handleViewCourse = (courseId: string) => {
-    history(`/courses/${courseId}`);
+    navigate(`/courses/${courseId}`);
   };
 
   const handleEditCourse = (courseId: string) => {
@@ -78,67 +83,8 @@ export const CourseDashboardPage = () => {
 
 
   return (
-    <div
-      style={{
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'flex-start',
-        height: '100vh',
-        backgroundColor: '#f6effa',
-        width: '100vw',
-      }}
-    >
-      <div className="course-dashboard-container">
-        <Card style={{ paddingInline: '2rem', paddingBlock: '1rem', width: '100%', height: '100%' }}>
-          <div className="course-detail-header">
-            <h1>Mis Cursos</h1>
-          </div>
-          <hr />
-          {/* <div style={{
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
-            overflowY: 'auto',
-          }}>
-
-            <div className='d-flex flex-row justify-content-center gap-3 flex-wrap h-100'>
-              {courses?.map(course => (
-                <Card key={course.id} className="course-card">
-                  <img src={course.image} alt={course.title} className="course-image" />
-                  <CardBody>
-                    <CardTitle tag="h5">{course.title}</CardTitle>
-                    <CardText>{course.description}</CardText>
-
-                    {user.role === 'TEACHER' && (
-                      <CardText>
-                        Clave de Matriculación: <span style={{ fontWeight: 'bold' }}>{course.matriculationCode}</span>
-                      </CardText>
-                    )}
-                  </CardBody>
-                  <CardFooter style={{
-                    display: 'flex',
-                    justifyContent: 'flex-end',
-                    backgroundColor: 'transparent',
-                    gap: '0.5rem',
-                  }}>
-                    <button className='btn-purple-1' onClick={() => handleViewCourse(course.id)}>Ver Curso</button>
-                    {user.role === 'TEACHER' && (
-                      <>
-                        <button className='btn-purple-2' onClick={() => handleEditCourse(course.id)}>
-                          <FontAwesomeIcon icon={faEdit} />
-                        </button>
-                        <button className='btn-purple-2' onClick={() => handleDeleteCourse(course.id)}>
-                          <FontAwesomeIcon icon={faTrash} />
-                        </button>
-                      </>
-                    )}
-                  </CardFooter>
-                </Card>
-              ))}
-            </div>
-
-          </div> */}
-          <div style={{
+    <PageWrapper title="Mis cursos" loading={loading} skeletonType='card'>
+      <div style={{
             display: 'flex',
             flexDirection: 'row',
             justifyContent: 'center',
@@ -208,8 +154,6 @@ export const CourseDashboardPage = () => {
               </div>
             )}
           </div>
-        </Card>
-      </div>
-    </div>
+    </PageWrapper>
   );
 };

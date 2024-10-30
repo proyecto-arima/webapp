@@ -176,23 +176,24 @@ export default function DragDropAgreement({ answers, question, next, current, to
     <div style={{
       display: 'flex',
       flexDirection: 'column',
-      height: '100%'
+      overflowY: 'auto'
     }}>
       <div>
         <p style={{
           textAlign: 'left',
           marginBottom: '2rem',
-          color: '#6b7280'
+          color: '#6b7280',
+          fontSize: 'small',
         }}>
           A continuación se presentan cuatro afirmaciones que deberás ordenar según consideres más o menos efectivo. <br />
           Cada afirmación debe ser ubicada en alguna de las cuatro posibles columnas y no puede haber más de una afirmación por columna. <br />
           Al finalizar, se calculará tu estilo de aprendizaje basado en tus respuestas. <br />
         </p>
-        <h3>{question}</h3>
+        <h5>{question}</h5>
         <div
           className="flex flex-wrap gap-2 min-h-[100px] bg-gray-50 rounded p-4 flex-row d-flex align-items-center justify-content-center"
           style={{
-            height: '125px'
+            height: '18vmin'
           }}
           onDragOver={onDragOver}
           onDrop={onDropToAvailable}
@@ -204,7 +205,8 @@ export default function DragDropAgreement({ answers, question, next, current, to
               onDragStart={(e) => onDragStart(e, item)}
               className="p-2 bg-white rounded shadow cursor-move"
               style={{
-                width: 'fit-content'
+                width: 'fit-content',
+                fontSize: '2vmin'
               }}
             >
               {item.content}
@@ -217,7 +219,7 @@ export default function DragDropAgreement({ answers, question, next, current, to
           <Card key={columnId} style={{
             flex: '1 1 0',
             width: '0',
-            height: '300px'
+            height: '30vh'
           }}>
             <CardHeader>
               <CardTitle>{column.title}</CardTitle>
@@ -237,7 +239,8 @@ export default function DragDropAgreement({ answers, question, next, current, to
                     onDragStart={(e) => onDragStart(e, column.item!)}
                     className="p-2 bg-white rounded shadow cursor-move w-full text-center"
                     style={{
-                      width: '250px'
+                      width: 'fit-content',
+                      fontSize: 'small'
                     }}
                   >
                     {column.item.content}
@@ -258,7 +261,8 @@ export default function DragDropAgreement({ answers, question, next, current, to
       <span
         style={{
           textAlign: 'center',
-          color: '#6b7280'
+          color: '#6b7280',
+          fontSize: 'small',
         }}
       >
         Pregunta {current + 1} de {total}

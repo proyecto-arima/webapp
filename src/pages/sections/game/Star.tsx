@@ -6,7 +6,7 @@ import Confetti from 'react-confetti'
 
 interface StarProps {
   fillProgress: number,
-  size: number,
+  size: string,
   id: string,
   shouldShowConfeti: boolean
   

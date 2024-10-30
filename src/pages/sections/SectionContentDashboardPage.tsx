@@ -11,6 +11,7 @@ import { RootState } from "../../redux/store";
 import empty from '../../assets/images/empty.svg';
 import SectionContentDashboardFormTeachers from "./SectionContentDashboardForm/SectionContentDashboardFormTeachers";
 import SectionContentDashboardFormStudents from "./SectionContentDashboardForm/SectionContentDashboardFormStudents";
+import PageWrapper from "../../components/PageWrapper";
 interface ISection {
   id: string;
   name: string;
@@ -36,9 +37,13 @@ export const SectionContentDashboard = () => {
   const [section, setSection] = useState<ISection | null>(null);
   const [content, setContent] = useState<IContent[]>([]);
 
+  const [loading, setLoading] = useState(true);
+
   useEffect(() => {
-    get(`/courses/${courseId}/sections/${sectionId}`).then(res => res.json()).then(res => res.data).then((data: ISection) => setSection(data));
-    get(`/courses/${courseId}/sections/${sectionId}/contents`).then(res => res.json()).then(res => res.data).then((data: IContent[]) => setContent(data));
+    Promise.all([
+      get(`/courses/${courseId}/sections/${sectionId}`).then(res => res.json()).then(res => res.data).then((data: ISection) => setSection(data)),
+      get(`/courses/${courseId}/sections/${sectionId}/contents`).then(res => res.json()).then(res => res.data).then((data: IContent[]) => setContent(data)),
+    ]).then(() => setLoading(false));
   }, [courseId, sectionId]);
 
 
@@ -46,45 +51,28 @@ export const SectionContentDashboard = () => {
     navigate(`/courses/${courseId}/sections/${sectionId}/new`);
   }
 
-  return <div
-    style={{
-      display: 'flex',
-      justifyContent: 'center',
-      alignItems: 'flex-start',
-      height: '100vh',
-      backgroundColor: '#f6effa',
-      width: '100vw',
-    }}
-  >
-    <div style={{
-      display: 'flex',
-      flexDirection: 'column',
-      alignItems: 'flex-start',
-      padding: '20px',
-      width: '100%',
-      height: '100%',
-    }}>
-      <Card style={{ width: '100%', paddingInline: '2rem', paddingBlock: '1rem', height: '100%' }}>
-        <div className="course-detail-header">
-          <h1>{section?.name}</h1>
-          <div className='d-flex flex-row gap-3'>
-            {user.role === 'TEACHER' && <button onClick={handleNewContent} className="btn-purple-1">Subir contenido</button>}
-          </div>
+  return <PageWrapper
+    skeletonType="table"
+    columnsCount={5}
+    loading={loading}
+    title={section?.name ?? 'Cargando...'}
+    buttons={
+      user.role === 'TEACHER' && (
+        <div className='d-flex flex-row gap-3'>
+          <button onClick={handleNewContent} className="btn-purple-1">Subir contenido</button>
         </div>
-        <hr />
-
-        {user?.role === 'TEACHER' ? <SectionContentDashboardFormTeachers
-          courseId={courseId!}
-          sectionId={sectionId!}
-          content={content}
-          user={user}
-        /> : <SectionContentDashboardFormStudents
-          courseId={courseId!}
-          sectionId={sectionId!}
-          content={content}
-          user={user}
-        />}
-      </Card>
-    </div>
-  </div>
+      )
+    }>
+    {user?.role === 'TEACHER' ? <SectionContentDashboardFormTeachers
+      courseId={courseId!}
+      sectionId={sectionId!}
+      content={content}
+      user={user}
+    /> : <SectionContentDashboardFormStudents
+      courseId={courseId!}
+      sectionId={sectionId!}
+      content={content}
+      user={user}
+    />}
+  </PageWrapper>
 };

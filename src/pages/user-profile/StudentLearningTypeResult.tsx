@@ -9,6 +9,7 @@ import convergente from '../../assets/images/convergente.png';
 import divergente from '../../assets/images/divergente.png';
 import { useDispatch } from 'react-redux';
 import { setLearningProfile as setLearningProfileRedux } from '../../redux/slices/user';
+import PageWrapper from '../../components/PageWrapper';
 
 const result: { [key: string]: { description: string; image: string; finalContent: string } } = {
   'SIN_PERFIL': {
@@ -66,93 +67,72 @@ export const StudentLearningTypeResult = () => {
   }, []);
 
   return (
-    <div
-      style={{
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        height: '100vh',
-        backgroundColor: '#f6effa',
-        width: '100vw',
-      }}
-    >
-      <div
-        style={{
-          display: 'flex',
-          flexDirection: 'column',
-          justifyContent: 'space-between',
-          alignItems: 'flex-start',
-          padding: '20px',
-          width: '100%',
-          height: '100%',
-        }}
-      >
-        <Card style={{ display: 'flex', flexDirection: 'column', width: '100%', padding: '2rem 1rem', flex: '1' }}>
-          <h2>Resultado del test de aprendizaje</h2>
-          <hr />
-          {learningProfile && learningProfile !== 'SIN_PERFIL' ? (
-            <>
-              <h2>Según el test realizado, tu perfil de aprendizaje es:</h2>
+    <PageWrapper title="Resultado del Test de Aprendizaje">
+      {learningProfile && learningProfile !== 'SIN_PERFIL' ? (
+        <div
+          style={{
+            overflowY: 'auto',
+          }}
+        >
+          <h3>Según el test realizado, tu perfil de aprendizaje es:</h3>
 
-              <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-                <img
-                  src={result[learningProfile].image}
-                  alt="learning-type"
-                  style={{ width: '40%', height: 'auto' }}
-                />
-              </div>
-
-              <p style={{ textAlign: 'justify', marginTop: '1rem' }}>
-                {result[learningProfile].description}
-              </p>
-              <p style={{ textAlign: 'justify' }}>
-                Por lo tanto, AdaptarIA te ofrecerá <i>{result[learningProfile].finalContent}</i> en base al contenido que carguen tus docentes.
-              </p>
-
-              <h3 style={{ marginTop: '20px' }}>
-                Algo más sobre el test 📚
-              </h3>
-              <p style={{ textAlign: 'justify' }}>
-                El test de Kolb fue creado por David Kolb, un psicólogo estadounidense, con el objetivo de identificar los estilos de aprendizaje de las personas. 
-                Según su teoría, las personas aprendemos mejor a través de la experiencia y existen cuatro tipos principales de aprendizaje: convergente, divergente, 
-                acomodador y asimilador. Este test ayuda a estudiantes a descubrir su forma preferida de aprender y a mejorar sus métodos de estudio.
-              </p>
-            </>
-          ) : (
-            <>
-              <h2>Todavía no hay resultados para el test de aprendizaje</h2>
-              <p>Te sugerimos realizar el test para descubrir cuál es tu tipo</p>
-            </>
-          )}
-          
-          {/* Contenedor para los botones */}
-          <div className='d-flex flex-row justify-content-end gap-3' style={{ marginTop: 'auto' }}>
-            {learningProfile && learningProfile !== 'SIN_PERFIL' ? (
-              <>
-                <button
-                  className="btn-purple-2"
-                  onClick={() => navigate('/me/learning-type')}
-                >
-                  Repetir test
-                </button>
-                <button
-                  className="btn-purple-1"
-                  onClick={() => navigate('/courses/dashboard')}
-                >
-                  Finalizar
-                </button>
-              </>
-            ) : (
-              <button
-                className="btn-purple-2"
-                onClick={() => navigate('/me/learning-type')}
-              >
-                Comenzar test
-              </button>
-            )}
+          <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+            <img
+              src={result[learningProfile].image}
+              alt="learning-type"
+              style={{ width: '40%', height: 'auto' }}
+            />
           </div>
-        </Card>
+
+          <p style={{ textAlign: 'justify', marginTop: '1rem' }}>
+            {result[learningProfile].description}
+          </p>
+          <p style={{ textAlign: 'justify' }}>
+            Por lo tanto, AdaptarIA te ofrecerá <i>{result[learningProfile].finalContent}</i> en base al contenido que carguen tus docentes.
+          </p>
+
+          <h4 style={{ marginTop: '20px' }}>
+            Algo más sobre el test 📚
+          </h4>
+          <p style={{ textAlign: 'justify' }}>
+            El test de Kolb fue creado por David Kolb, un psicólogo estadounidense, con el objetivo de identificar los estilos de aprendizaje de las personas.
+            Según su teoría, las personas aprendemos mejor a través de la experiencia y existen cuatro tipos principales de aprendizaje: convergente, divergente,
+            acomodador y asimilador. Este test ayuda a estudiantes a descubrir su forma preferida de aprender y a mejorar sus métodos de estudio.
+          </p>
+        </div>
+      ) : (
+        <>
+          <h2>Todavía no hay resultados para el test de aprendizaje</h2>
+          <p>Te sugerimos realizar el test para descubrir cuál es tu tipo</p>
+        </>
+      )}
+
+      {/* Contenedor para los botones */}
+      <div className='d-flex flex-row justify-content-end gap-3' style={{ marginTop: 'auto' }}>
+        {learningProfile && learningProfile !== 'SIN_PERFIL' ? (
+          <>
+            <button
+              className="btn-purple-2"
+              onClick={() => navigate('/me/learning-type')}
+            >
+              Repetir test
+            </button>
+            <button
+              className="btn-purple-1"
+              onClick={() => navigate('/courses/dashboard')}
+            >
+              Finalizar
+            </button>
+          </>
+        ) : (
+          <button
+            className="btn-purple-2"
+            onClick={() => navigate('/me/learning-type')}
+          >
+            Comenzar test
+          </button>
+        )}
       </div>
-    </div>
+    </PageWrapper>
   );
 };

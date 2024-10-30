@@ -13,6 +13,7 @@ export interface ICourse {
 
 export interface CoursesState {
   courses?: ICourse[]
+  loading?: boolean
 }
 
 const initialState: CoursesState = {}
@@ -47,9 +48,15 @@ export const courseSlice = createSlice({
         courses: state.courses?.filter(course => course.id !== action.payload)
       };
     },
+    setLoading: (state, action) => {
+      return {
+        ...state,
+        loading: action.payload
+      };
+    }
   },
 });
 
-export const { addCourse, reset, setCourses, editCourses, removeCourse } = courseSlice.actions;
+export const { addCourse, reset, setCourses, editCourses, removeCourse, setLoading } = courseSlice.actions;
 
 export default courseSlice.reducer;

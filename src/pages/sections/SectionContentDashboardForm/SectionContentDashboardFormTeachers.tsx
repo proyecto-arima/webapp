@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Table } from "reactstrap";
-import { faEdit, faTrash } from '@fortawesome/free-solid-svg-icons';
+import { faEdit, faMagicWandSparkles, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import empty from '../../../assets/images/empty.svg';
 import { IContent } from "../SectionContentDashboardPage";
@@ -52,7 +52,11 @@ export default function SectionContentDashboardFormTeachers({ content, user, cou
   };
 
   return (localContent.length ? (
-    <Table>
+    <Table
+      style={{
+        fontSize: '1.8vmin',
+      }}
+    >
       <thead>
         <tr>
           <th>Contenido</th>
@@ -86,32 +90,36 @@ export default function SectionContentDashboardFormTeachers({ content, user, cou
             <td style={{
               display: 'flex',
               justifyContent: 'flex-end',
-              gap: '1rem',
+              gap: '1vmin',
             }}>
               <button className="btn-purple-2"
+              style={{ fontSize: '1.7vmin' }}
                 onClick={() => {
                   navigate(`/courses/${courseId}/sections/${sectionId}/content/${c.id}?url=${encodeURIComponent(c.presignedUrl)}`);
                 }}
               >Ver PDF</button>
               <button className="btn-purple-1"
+              style={{ fontSize: '1.7vmin' }}
                 onClick={() => {
                   navigate(`/courses/${courseId}/sections/${sectionId}/content/${c.id}/review`);
                 }}
-              >Ver contenido generado</button>
+              ><FontAwesomeIcon icon={faMagicWandSparkles} />
+              {' '}
+              Ver</button>
 
               <div style={{
                 borderLeft: '1px solid #000000',
                 height: 'auto',
-                margin: '0 1rem',
+                margin: '0 1vmin',
               }}></div>
 
-              <button className='btn-purple-2' onClick={() => {
+              <button className='btn-purple-2' style={{ fontSize: '1.7vmin' }} onClick={() => {
                 navigate(`/courses/${courseId}/sections/${sectionId}/contents/${c.id}/edit-title`);
               }}>
                 <FontAwesomeIcon icon={faEdit} />
               </button>
 
-              <button className='btn-purple-2' onClick={() => handleDeleteContent(c.id)}>
+              <button className='btn-purple-2' style={{ fontSize: '1.7vmin' }} onClick={() => handleDeleteContent(c.id)}>
                 <FontAwesomeIcon icon={faTrash} />
               </button>
             </td>
@@ -121,7 +129,9 @@ export default function SectionContentDashboardFormTeachers({ content, user, cou
     </Table>
   ) : (
     <div className='d-flex flex-column justify-content-center align-items-center h-100'>
-      <img src={empty} alt="Sin contenido" />
+      <img src={empty} alt="Sin contenido" style={{
+        height: '50vh',
+      }} />
       <h3>Parece que aún no has subido ningún contenido en esta sección.</h3>
       <h4>Por favor sube un contenido para que pueda ser procesado por AdaptarIA</h4>
     </div>

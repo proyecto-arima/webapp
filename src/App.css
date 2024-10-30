@@ -23,6 +23,16 @@
   }
 }
 
+.sidebar-profile-picture {
+  width:  3.5vmin;
+  height: 3.5vmin;   
+  border-radius: 50%;
+  position: relative;
+  margin-bottom: 5px;
+  box-shadow: 0 3px 10px rgb(0 0 0 / 0.2);
+  margin-left: 2.2vmin;
+}
+
 /* Headers */
 .App-header {
   background-color: #f6effa;

@@ -59,7 +59,7 @@ const nameValidations = (name: string) => {
   return {
     hasMinLength: name.length >= 3,
     hasMaxLength: name.length <= 30,
-    onlyLettersOrSpaces: /^[a-zA-Z\s]*$/.test(name)
+    onlyLettersOrSpaces: /^[a-zA-ZáéíóúÁÉÍÓÚüÜñÑ\s]+$/.test(name)
   };
 };
 

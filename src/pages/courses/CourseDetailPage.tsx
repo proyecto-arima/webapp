@@ -55,13 +55,14 @@ export const CourseDetailPage: React.FC = () => {
     });
 
   // Fetch sections details
-  const fetchSections = () => get(`/courses/${courseId}/sections`)
-    .then(res => res.json())
-    .then(res => res.data)
-    .then((data: ISection[]) => {
-      console.log(data);
-      setSections(data);
-    });
+  const fetchSections = () => {
+    get(`/courses/${courseId}/sections`)
+      .then(res => res.json())
+      .then(res => res.data)
+      .then((data: ISection[]) => {
+        setSections(data);
+      });
+  };
 
   const handleNewSection = () => {
     navigate(`/courses/${courseId}/new-section`);

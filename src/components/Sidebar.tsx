@@ -1,14 +1,19 @@
-import { faCircle } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useDispatch, useSelector } from "react-redux";
 import { NavLink, useNavigate } from "react-router-dom";
 import { Nav, NavItem } from "reactstrap";
-import logo from '../assets/images/horizontal_black.png';
+
 import { logout } from "../redux/slices/auth";
 import { ICourse } from "../redux/slices/courses";
 import { reset } from "../redux/slices/user";
 import { RootState } from "../redux/store";
+
 import { del } from "../utils/network";
+
+import { faCircle } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+
+import logo from '../assets/images/horizontal_black.png';
+import default_profile_pic from '../assets/images/default_profile_pic.jpg';
 
 const coursesManagmentSection = [
   { to: '/courses/create', label: 'Nuevo curso' },
@@ -160,7 +165,7 @@ export default function Sidebar() {
                   <span>Creación masiva de usuarios</span>
                 </NavItem>
               </NavLink>
-              
+
               <span className='sidebar-section-title'>Reportes</span>
               <NavLink to={'/students-survey'} end className={({ isActive }) => isActive ? 'sidebar-navlink-active' : 'sidebar-navlink-inactive'}>
                 <NavItem className='sidebar-navlink-item'>
@@ -187,6 +192,13 @@ export default function Sidebar() {
         </div>
 
         <div className="w-100">
+          {user?.role && ['STUDENT', 'TEACHER', 'DIRECTOR'].includes(user.role) && (
+            user.profilePicture ? (
+              <img src={user.profilePicture} alt="profile" className='sidebar-profile-picture' />
+            ) : (
+              <img src={default_profile_pic} alt="profile" className='sidebar-profile-picture' />
+            )
+          )}
           <span className='sidebar-section-title'>Perfil</span>
           <NavLink to={'/me/profile'} end className={({ isActive }) => isActive ? 'sidebar-navlink-active' : 'sidebar-navlink-inactive'}>
             <NavItem className='sidebar-navlink-item'>

@@ -9,6 +9,8 @@ import { IContent } from "../SectionContentDashboardPage";
 import empty from '../../../assets/images/empty.svg';
 import { UserState } from "../../../redux/slices/user";
 import { post } from "../../../utils/network";
+import InlineReactions from "../../../components/InlineReactions";
+import { useState } from "react";
 
 interface ISectionContentDashboardFormStudentsProps {
   content: IContent[];
@@ -21,20 +23,7 @@ export default function SectionContentDashboardFormStudents({ content, user, cou
 
   const navigate = useNavigate();
 
-  const sendContentReaction = (id: string, _isSatisfied: boolean): void => {
-    post(`/contents/${id}/reactions`, { isSatisfied: _isSatisfied })
-      .then((res) => {
-        if (!res.ok) {
-          throw new Error('Failed to send content reaction');
-        } else {
-          return res.json();
-        }
-      })
-      .catch((err) => {
-        console.error(`An unexpected error occurred while sending the content reaction: ${err}`);
-      });
-  }
-
+  const [reactions, setReactions] = useState(content.map(c => c.reactions));
 
   const urlByProfile = {
     'DIVERGENTE': 'map',
@@ -51,6 +40,8 @@ export default function SectionContentDashboardFormStudents({ content, user, cou
     <thead>
       <tr>
         <th>Contenido</th>
+        <th style={{
+        }}>¿Qué te parece el contenido?</th>
         <th></th>
       </tr>
     </thead>
@@ -58,12 +49,17 @@ export default function SectionContentDashboardFormStudents({ content, user, cou
       {content.map(c => (
         <tr key={c.id}>
           <td>{c.title}</td>
-          {user.role === 'TEACHER' && <td>
-            {
-              c.publicationType === 'AUTOMATIC' ? 'Automático' :
-                c.publicationType === 'DEFERRED' ? 'Diferido' : 'Default'
-            }
-          </td>}
+          <td>
+           <div style={{
+            width: '100%',
+            display: 'flex',
+           }}>
+            <InlineReactions
+                contentId={c.id}
+                reaction={c.reactions.find(r => r.userId === user.id)?.['isSatisfied']}
+              />
+           </div>
+          </td>
           <td style={{
             display: 'flex',
             justifyContent: 'flex-end',

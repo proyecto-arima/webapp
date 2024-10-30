@@ -41,6 +41,7 @@ export const DirectorLearningTypeDashboardPage = () => {
   const [students, setStudents] = useState<IStudent[]>([]);
   const [filteredStudents, setFilteredStudents] = useState<IStudent[]>([]);
   const [teachers, setTeachers] = useState<ITeacher[]>([]); // Estado para la lista de docentes
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     get('/directors/courses/')
@@ -59,11 +60,13 @@ export const DirectorLearningTypeDashboardPage = () => {
   }, []);
 
   const fetchStudents = async () => {
+    setLoading(true);
     await get('/students/learning-profile')
       .then(res => res.json())
       .then(res => res.data)
       .then((data: IStudent[]) => {
         setStudents(data);
+        setLoading(false);
       });
   };
 
@@ -78,6 +81,7 @@ export const DirectorLearningTypeDashboardPage = () => {
           lastName: teacherObject.user.lastName,
           email: teacherObject.user.email,
         })));
+        setLoading(false);
       });
   };
 
@@ -86,6 +90,7 @@ export const DirectorLearningTypeDashboardPage = () => {
   }, [courseId, selectedLearningType, selectedStudent, selectedTeacher]); // Agregar selectedTeacher a las dependencias
 
   const fetchFilteredStudents = async () => {
+    setLoading(true);
     let endpoint = '/students/learning-profile';
     const queryParams: string[] = [];
 
@@ -136,6 +141,7 @@ export const DirectorLearningTypeDashboardPage = () => {
         console.error("Error fetching students:", error);
         setFilteredStudents([]);
       });
+      setLoading(false);
   };
 
   return (
@@ -213,40 +219,46 @@ export const DirectorLearningTypeDashboardPage = () => {
 
             <hr />
 
-            <Card>
-              <CardHeader tag='h4'>
-                Resultados
-              </CardHeader>
-              {filteredStudents.length === 0 ? ( // Condición para mostrar el mensaje si no hay resultados
-                <div style={{
-                  textAlign: 'center',
-                  padding: '20px',
-                  color: '#888',
-                  fontSize: '1.2rem',
-                }}>
-                  <strong>No hay resultados para esa búsqueda</strong>
-                </div>
-              ) : (
-                <Table striped responsive>
-                  <thead>
-                    <tr>
-                      <th className="text-center">Alumno</th>
-                      <th className="text-center">Email</th>
-                      <th className="text-center">Tipo de Aprendizaje</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {filteredStudents.map((student) => (
-                      <tr key={student.id}>
-                        <td className="text-center">{`${student.firstName} ${student.lastName}`}</td>
-                        <td className="text-center">{student.email}</td>
-                        <td className="text-center">{student.learningProfile}</td>
+            {loading ? (
+              <div style={{ textAlign: 'center', padding: '20px' }}>
+                <strong>Cargando...</strong>
+              </div>
+            ) : (
+              <Card>
+                <CardHeader tag='h4'>
+                  Resultados
+                </CardHeader>
+                {filteredStudents.length === 0 ? ( // Condición para mostrar el mensaje si no hay resultados
+                  <div style={{
+                    textAlign: 'center',
+                    padding: '20px',
+                    color: '#888',
+                    fontSize: '1.2rem',
+                  }}>
+                    <strong>No hay resultados para esa búsqueda</strong>
+                  </div>
+                ) : (
+                  <Table striped responsive>
+                    <thead>
+                      <tr>
+                        <th className="text-center">Alumno</th>
+                        <th className="text-center">Email</th>
+                        <th className="text-center">Tipo de Aprendizaje</th>
                       </tr>
-                    ))}
-                  </tbody>
-                </Table>
-              )}
-            </Card>
+                    </thead>
+                    <tbody>
+                      {filteredStudents.map((student) => (
+                        <tr key={student.id}>
+                          <td className="text-center">{`${student.firstName} ${student.lastName}`}</td>
+                          <td className="text-center">{student.email}</td>
+                          <td className="text-center">{student.learningProfile}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </Table>
+                )}
+              </Card>
+            )}
           </div>
         </Card>
       </div>

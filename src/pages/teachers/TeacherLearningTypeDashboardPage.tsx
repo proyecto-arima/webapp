@@ -32,6 +32,7 @@ export const TeacherLearningTypeDashboardPage = () => {
   const [selectedStudent, setSelectedStudent] = useState<IStudent | null>(null);
   const [students, setStudents] = useState<IStudent[]>([]);
   const [filteredStudents, setFilteredStudents] = useState<IStudent[]>([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     get('/teachers/me/courses/')
@@ -49,11 +50,13 @@ export const TeacherLearningTypeDashboardPage = () => {
   }, []);
 
   const fetchStudents = async () => {
+    setLoading(true);
     await get('/students/learning-profile')
       .then(res => res.json())
       .then(res => res.data)
       .then((data: IStudent[]) => {
         setStudents(data);
+        setLoading(false);
       });
   };
 
@@ -62,6 +65,7 @@ export const TeacherLearningTypeDashboardPage = () => {
   }, [courseId, selectedLearningType, selectedStudent]);
 
   const fetchFilteredStudents = async () => {
+    setLoading(true);
     let endpoint = '/students/learning-profile';
     const queryParams: string[] = [];
 
@@ -108,6 +112,7 @@ export const TeacherLearningTypeDashboardPage = () => {
         console.error("Error fetching students:", error);
         setFilteredStudents([]);
       });
+      setLoading(false);
   };
 
   return (
@@ -170,6 +175,11 @@ export const TeacherLearningTypeDashboardPage = () => {
 
             <hr />
 
+            {loading ? (
+              <div style={{ textAlign: 'center', padding: '20px' }}>
+                <strong>Cargando...</strong>
+              </div>
+            ) : (
             <Card>
               <CardHeader tag='h4'>
                 Resultados
@@ -204,6 +214,7 @@ export const TeacherLearningTypeDashboardPage = () => {
               </Table>
              )}
             </Card>
+            )}
           </div>
         </Card>
       </div>

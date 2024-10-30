@@ -7,6 +7,7 @@ import { faWandMagicSparkles } from '@fortawesome/free-solid-svg-icons';
 import { SwalUtils } from '../../utils/SwalUtils';
 import Swal from 'sweetalert2';
 import { API_URL } from '../../config';
+import PageWrapper from '../../components/PageWrapper';
 
 interface ISectionCreationFormValues {
   title?: string;
@@ -36,18 +37,18 @@ export const SectionCreationPage = () => {
     if (e.target.files) {
       const file = e.target.files[0];
       const validFileTypes = ['image/png', 'image/jpeg', 'image/jpg'];
-  
+
       if (!validFileTypes.includes(file.type)) {
         SwalUtils.errorSwal(
           'Formato de archivo inválido',
           'Solo se permiten archivos con extensión .png, .jpeg o .jpg Por favor, selecciona un archivo válido.',
           'Aceptar',
           () => navigate(`/courses/${courseId}/new-section`))
-          e.target.value = "";
+        e.target.value = "";
         setSelectedFile(null);
         return;
       }
-  
+
       setSelectedFile(file);
     }
   };
@@ -171,65 +172,63 @@ export const SectionCreationPage = () => {
   };
 
   return (
-    <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'flex-start', height: '100vh', backgroundColor: '#f6effa', width: '100vw' }}>
-      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', padding: '20px', width: '100%', height: '100%' }}>
-        <Card style={{ paddingInline: '2rem', paddingBlock: '1rem', width: '100%', height: '100%' }}>
-          <h1>Crear Sección</h1>
-          <hr />
-          <p style={{ textAlign: 'left', marginBottom: '2rem', color: '#6b7280' }}>
-            Acá podés crear una nueva sección en la plataforma. Cada sección tendrá diferentes contenidos agrupados por temas, franjas de tiempo, etc. 
-            Opcionalmente podés cargar una imagen de portada, sino, nosotros la creamos por vos. Una vez creada la sección, podrás agregarle contenidos en PDF.
-          </p>
-          <h3>Detalles de la sección</h3>
-          <hr />
-          <Input name="title" type="text" placeholder="Nombre" className="mb-3" onChange={handleFormChange('title')} />
-          <Input name="description" type="textarea" placeholder="Descripción de la sección" className="mb-3" onChange={handleFormChange('description')} />
-          
-          <div className='d-flex flex-row mb-3 gap-3'>
-            <Input name="visible" type='checkbox' id='visible' onClick={() => setFormValues({ ...formValues, visible: !formValues.visible })} checked={formValues.visible} />
-            <Label for='visible'>Visible</Label>
-          </div>
+    <PageWrapper title="Crear sección">
+      <div style={{
+        overflowY: 'auto',
+      }}>
+        <p style={{ textAlign: 'left', marginBottom: '2rem', color: '#6b7280' }}>
+          Acá podés crear una nueva sección en la plataforma. Cada sección tendrá diferentes contenidos agrupados por temas, franjas de tiempo, etc.
+          Opcionalmente podés cargar una imagen de portada, sino, nosotros la creamos por vos. Una vez creada la sección, podrás agregarle contenidos en PDF.
+        </p>
+        <h3>Detalles de la sección</h3>
+        <hr />
+        <Input name="title" type="text" placeholder="Nombre" className="mb-3" onChange={handleFormChange('title')} />
+        <Input name="description" type="textarea" placeholder="Descripción de la sección" className="mb-3" onChange={handleFormChange('description')} />
 
-          <h3>Imagen</h3>
-          <hr />
-          <p style={{ textAlign: 'left', marginBottom: '2rem', color: '#6b7280' }}>
-            Para generar una imagen automáticamente a partir del nombre y descripción de la sección, clickea en Generar Imagen y espera que la magia ocurra. 
-            También puedes subir un archivo con extensión .png, .jpeg o .jpg para elegir manualmente la imagen de la sección, si lo prefieres.
-          </p>
-          <div className='d-flex flex-row mb-3 gap-3'>
-            <Input type='checkbox' name='auto-generate' id='auto-generate' onClick={e => setAutoGenerateImage(!autoGenerateImage)} checked={autoGenerateImage} />
-            <Label for='auto-generate'>Generar imagen automáticamente</Label>
-          </div>
+        <div className='d-flex flex-row mb-3 gap-3'>
+          <Input name="visible" type='checkbox' id='visible' onClick={() => setFormValues({ ...formValues, visible: !formValues.visible })} checked={formValues.visible} />
+          <Label for='visible'>Visible</Label>
+        </div>
 
-          {autoGenerateImage ? (
-            <div style={{ flex: '1', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-              {imageLoading ? (
-                <button style={{ backgroundColor: '#4d3a8e', color: 'white', padding: '1rem', borderRadius: '5px', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '1rem' }} disabled>
-                  <FontAwesomeIcon icon={faWandMagicSparkles} spin />
-                  Generando Imagen...
-                </button>
-              ) : (generatedImage ? (
-                <img src={generatedImage} alt="Generated" style={{ width: '200px', borderRadius: '0.5rem', objectFit: 'cover' }} />
-              ) : (
-                <button style={{ backgroundColor: '#4d3a8e', color: 'white', padding: '1rem', borderRadius: '5px', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '1rem' }} onClick={generateImage}>
-                  <FontAwesomeIcon icon={faWandMagicSparkles} />
-                  Generar Imagen
-                </button>
-              ))}
-            </div>
-          ) : (
-            <div>
-              <Input name="file" type="file" className="mb-3" onChange={handleFileChange} />
-            </div>
-          )}
+        <h3>Imagen</h3>
+        <hr />
+        <p style={{ textAlign: 'left', marginBottom: '2rem', color: '#6b7280' }}>
+          Para generar una imagen automáticamente a partir del nombre y descripción de la sección, clickea en Generar Imagen y espera que la magia ocurra.
+          También puedes subir un archivo con extensión .png, .jpeg o .jpg para elegir manualmente la imagen de la sección, si lo prefieres.
+        </p>
+        <div className='d-flex flex-row mb-3 gap-3'>
+          <Input type='checkbox' name='auto-generate' id='auto-generate' onClick={e => setAutoGenerateImage(!autoGenerateImage)} checked={autoGenerateImage} />
+          <Label for='auto-generate'>Generar imagen automáticamente</Label>
+        </div>
 
-            <div className='d-flex flex-row justify-content-end'>
-              <button className="btn-purple-1" onClick={createSection}>
-                Crear
+        {autoGenerateImage ? (
+          <div style={{ flex: '1', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+            {imageLoading ? (
+              <button style={{ backgroundColor: '#4d3a8e', color: 'white', padding: '1rem', borderRadius: '5px', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '1rem' }} disabled>
+                <FontAwesomeIcon icon={faWandMagicSparkles} spin />
+                Generando Imagen...
               </button>
-            </div>
-        </Card>
+            ) : (generatedImage ? (
+              <img src={generatedImage} alt="Generated" style={{ width: '200px', borderRadius: '0.5rem', objectFit: 'cover' }} />
+            ) : (
+              <button style={{ backgroundColor: '#4d3a8e', color: 'white', padding: '1rem', borderRadius: '5px', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '1rem' }} onClick={generateImage}>
+                <FontAwesomeIcon icon={faWandMagicSparkles} />
+                Generar Imagen
+              </button>
+            ))}
+          </div>
+        ) : (
+          <div>
+            <Input name="file" type="file" className="mb-3" onChange={handleFileChange} />
+          </div>
+        )}
+
+        <div className='d-flex flex-row justify-content-end'>
+          <button className="btn-purple-1" onClick={createSection}>
+            Crear
+          </button>
+        </div>
       </div>
-    </div>
+    </PageWrapper>
   );
 };

@@ -224,6 +224,9 @@ export const CourseCreationPage = () => {
       <div
         style={{
           overflowY: 'auto',
+          display: 'flex',
+          flexDirection: 'column',
+          height: '100%',
         }}
       >
         <p style={{
@@ -257,7 +260,8 @@ export const CourseCreationPage = () => {
           <Label for='auto-generate'>Generar imagen automáticamente</Label>
         </div>
 
-        {autoGenerateImage ? (<div style={{
+        {autoGenerateImage ? (
+          <div style={{
           flex: '1',
           display: 'flex',
           justifyContent: 'center',

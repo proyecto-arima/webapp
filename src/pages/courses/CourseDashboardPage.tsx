@@ -83,7 +83,7 @@ export const CourseDashboardPage = () => {
 
 
   return (
-    <PageWrapper title="Mis cursos" loading={loading}>
+    <PageWrapper title="Mis cursos" loading={loading} skeletonType='card'>
       <div style={{
             display: 'flex',
             flexDirection: 'row',

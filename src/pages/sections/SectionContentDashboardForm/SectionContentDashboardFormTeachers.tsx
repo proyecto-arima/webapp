@@ -54,7 +54,7 @@ export default function SectionContentDashboardFormTeachers({ content, user, cou
   return (localContent.length ? (
     <Table
       style={{
-        fontSize: 'small',
+        fontSize: '1.8vmin',
       }}
     >
       <thead>
@@ -90,14 +90,16 @@ export default function SectionContentDashboardFormTeachers({ content, user, cou
             <td style={{
               display: 'flex',
               justifyContent: 'flex-end',
-              gap: '1rem',
+              gap: '1vmin',
             }}>
               <button className="btn-purple-2"
+              style={{ fontSize: '1.7vmin' }}
                 onClick={() => {
                   navigate(`/courses/${courseId}/sections/${sectionId}/content/${c.id}?url=${encodeURIComponent(c.presignedUrl)}`);
                 }}
               >Ver PDF</button>
               <button className="btn-purple-1"
+              style={{ fontSize: '1.7vmin' }}
                 onClick={() => {
                   navigate(`/courses/${courseId}/sections/${sectionId}/content/${c.id}/review`);
                 }}
@@ -108,16 +110,16 @@ export default function SectionContentDashboardFormTeachers({ content, user, cou
               <div style={{
                 borderLeft: '1px solid #000000',
                 height: 'auto',
-                margin: '0 1rem',
+                margin: '0 1vmin',
               }}></div>
 
-              <button className='btn-purple-2' onClick={() => {
+              <button className='btn-purple-2' style={{ fontSize: '1.7vmin' }} onClick={() => {
                 navigate(`/courses/${courseId}/sections/${sectionId}/contents/${c.id}/edit-title`);
               }}>
                 <FontAwesomeIcon icon={faEdit} />
               </button>
 
-              <button className='btn-purple-2' onClick={() => handleDeleteContent(c.id)}>
+              <button className='btn-purple-2' style={{ fontSize: '1.7vmin' }} onClick={() => handleDeleteContent(c.id)}>
                 <FontAwesomeIcon icon={faTrash} />
               </button>
             </td>

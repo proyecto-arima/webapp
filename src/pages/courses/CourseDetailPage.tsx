@@ -98,6 +98,7 @@ export const CourseDetailPage: React.FC = () => {
   return (
     <PageWrapper title={course?.title ?? 'Cargando...'}
       loading={loading}
+      skeletonType='card'
       buttons={
         user.role === 'TEACHER' && (
           <div className='d-flex flex-row gap-3'>

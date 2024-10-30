@@ -1,15 +1,18 @@
 import { faEdit, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Button, Card, CardBody, CardFooter, CardText, CardTitle, Col, Placeholder, Progress, Spinner } from "reactstrap";
+import { Button, Card, CardBody, CardFooter, CardText, CardTitle, Col, Placeholder, Progress, Spinner, Table } from "reactstrap";
 import user from "../redux/slices/user";
 import CardsSkeleton from "./CardsSkeleton";
 import { useEffect, useState } from "react";
+import TableSkeleton from "./TableSkeleton";
 
 interface IPageWrapperProps {
   title: string;
   children: React.ReactNode;
   buttons?: React.ReactNode;
   loading?: boolean;
+  skeletonType?: 'card' | 'table';
+  columnsCount?: number;
 }
 
 export default function PageWrapper(props: IPageWrapperProps) {
@@ -65,12 +68,18 @@ export default function PageWrapper(props: IPageWrapperProps) {
             opacity: 0.5,
           }}
         >
-          <div className="container" style={{
+          {props.skeletonType === 'card' ? <div className="container" style={{
             marginTop: 'auto',
             marginBottom: 'auto',
           }}>
             <CardsSkeleton />
-          </div>
+          </div> : <div style={{
+            width: '100%',
+            height: '100%',
+            overflowY: 'hidden',
+          }}>
+            <TableSkeleton columnsCount={props.columnsCount} />
+            </div>}
         </div> : (props.loading && !showPageLoading ? <></> : props.children)}
       </Card>
     </div>

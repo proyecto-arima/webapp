@@ -45,7 +45,7 @@ export default function SectionContentDashboardFormStudents({ content, user, cou
 
   return (content?.length ? <Table
     style={{
-      fontSize: 'small',
+      fontSize: '1.8vmin',
     }}
   >
     <thead>

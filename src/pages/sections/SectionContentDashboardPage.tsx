@@ -37,9 +37,13 @@ export const SectionContentDashboard = () => {
   const [section, setSection] = useState<ISection | null>(null);
   const [content, setContent] = useState<IContent[]>([]);
 
+  const [loading, setLoading] = useState(true);
+
   useEffect(() => {
-    get(`/courses/${courseId}/sections/${sectionId}`).then(res => res.json()).then(res => res.data).then((data: ISection) => setSection(data));
-    get(`/courses/${courseId}/sections/${sectionId}/contents`).then(res => res.json()).then(res => res.data).then((data: IContent[]) => setContent(data));
+    Promise.all([
+      get(`/courses/${courseId}/sections/${sectionId}`).then(res => res.json()).then(res => res.data).then((data: ISection) => setSection(data)),
+      get(`/courses/${courseId}/sections/${sectionId}/contents`).then(res => res.json()).then(res => res.data).then((data: IContent[]) => setContent(data)),
+    ]).then(() => setLoading(false));
   }, [courseId, sectionId]);
 
 
@@ -47,28 +51,28 @@ export const SectionContentDashboard = () => {
     navigate(`/courses/${courseId}/sections/${sectionId}/new`);
   }
 
-  
-  
-
-  return <PageWrapper 
-  title={section?.name ?? ''}
+  return <PageWrapper
+    skeletonType="table"
+    columnsCount={5}
+    loading={loading}
+    title={section?.name ?? 'Cargando...'}
     buttons={
       user.role === 'TEACHER' && (
-      <div className='d-flex flex-row gap-3'>
-        <button onClick={handleNewContent} className="btn-purple-1">Subir contenido</button>
-      </div>
-    )
+        <div className='d-flex flex-row gap-3'>
+          <button onClick={handleNewContent} className="btn-purple-1">Subir contenido</button>
+        </div>
+      )
     }>
     {user?.role === 'TEACHER' ? <SectionContentDashboardFormTeachers
-          courseId={courseId!}
-          sectionId={sectionId!}
-          content={content}
-          user={user}
-        /> : <SectionContentDashboardFormStudents
-          courseId={courseId!}
-          sectionId={sectionId!}
-          content={content}
-          user={user}
-        />}
+      courseId={courseId!}
+      sectionId={sectionId!}
+      content={content}
+      user={user}
+    /> : <SectionContentDashboardFormStudents
+      courseId={courseId!}
+      sectionId={sectionId!}
+      content={content}
+      user={user}
+    />}
   </PageWrapper>
 };

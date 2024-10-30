@@ -17,6 +17,7 @@ interface ITeacher {
 export const TeacherDashboardPage = () => {
   const [teachers, setTeachers] = useState<ITeacher[]>([]);
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(true);
 
  
   useEffect(() => {
@@ -41,7 +42,7 @@ export const TeacherDashboardPage = () => {
       }
     };
 
-    fetchTeachers();
+    fetchTeachers().then(() => setLoading(false));
   }, []);
 
   const handleEditRole = async (teacher: ITeacher) => {
@@ -84,6 +85,9 @@ export const TeacherDashboardPage = () => {
 
   return (
     <PageWrapper title="Docentes"
+      loading={loading}
+      skeletonType="table"
+      columnsCount={4}
       buttons={
         <button className="btn-purple-1" onClick={() => navigate('/teachers/new')}>
           Crear docente

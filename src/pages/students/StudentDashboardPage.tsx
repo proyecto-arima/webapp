@@ -10,6 +10,7 @@ import PageWrapper from "../../components/PageWrapper";
 export const StudentDashboardPage = () => {
   const [students, setStudents] = useState<any[]>([]);
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchStudents = async () => {
@@ -18,7 +19,7 @@ export const StudentDashboardPage = () => {
       setStudents(data.data);
     };
 
-    fetchStudents();
+    fetchStudents().then(() => setLoading(false));
   }, []);
 
   const handleEditRole = async (student: any) => {
@@ -64,7 +65,11 @@ export const StudentDashboardPage = () => {
         <button className="btn-purple-1" onClick={() => navigate('/students/new')}>
           Crear estudiante
         </button>
-      }>
+      }
+      loading={loading}
+      skeletonType="table"
+      columnsCount={4}
+      >
       <div style={{ overflow: 'auto', fontSize: 'small' }}>
         <Table>
           <thead>

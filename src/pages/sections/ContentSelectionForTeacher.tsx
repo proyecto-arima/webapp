@@ -31,13 +31,13 @@ const contents = [
   {
     title: 'Juego',
     image: game,
-    url: 'game',
+    url: 'game/edit',
     type: 'Convergente',
   },
   {
     title: 'Audio',
     image: audio,
-    url: 'audio',
+    url: 'audio/edit',
     type: 'Acomodador',
   },
   {

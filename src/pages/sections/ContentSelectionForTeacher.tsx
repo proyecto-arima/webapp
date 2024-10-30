@@ -134,7 +134,7 @@ export default function ContentSelectionForTeacher() {
         textAlign: 'left',
         marginBottom: '2rem',
         color: '#6b7280',
-        fontSize: 'small',
+        fontSize: '2vmin',
       }}>
         Acá podés visualizar y gestionar el contenido generado por ADAPTARIA para tus estudiantes en los cuatro formatos propuestos para cada estilo de aprendizaje <br />
         Como docente, podés editar, aprobar o regenerar el contenido generado por nosotros.
@@ -145,7 +145,7 @@ export default function ContentSelectionForTeacher() {
         style={{
           display: 'flex',
           flexDirection: 'column',
-          justifyContent: 'center',
+          justifyContent: 'space-between',
           width: '100%',
           alignItems: 'center',
           height: '100%',
@@ -156,7 +156,9 @@ export default function ContentSelectionForTeacher() {
           <thead>
             <tr>
               <th>Contenido</th>
-              <th>Tipo de Aprendizaje</th>
+              <th style={{
+                textAlign: 'center',
+              }}>Tipo de Aprendizaje</th>
               <th></th>
             </tr>
           </thead>
@@ -173,8 +175,15 @@ export default function ContentSelectionForTeacher() {
                   {c.title}
                 </td>
 
-                <td>{c.type}</td>
-                <td>
+                <td style={{
+                  verticalAlign: 'middle',
+                  textAlign: 'center',
+                }}>
+                <span>{c.type}</span>
+                </td>
+                <td style={{
+                  verticalAlign: 'middle',
+                }}>
                   <button className="btn-purple-1"
                     onClick={() => {
                       navigate(`/courses/${courseId}/sections/${sectionId}/content/${contentId}/${c.url}`);

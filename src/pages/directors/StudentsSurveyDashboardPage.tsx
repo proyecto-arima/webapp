@@ -54,6 +54,7 @@ export const StudentsSurveyDashboardPage = () => {
   const [answers, setAnswers] = useState<IAnswerData[]>([]);
   const [dateFrom, setDateFrom] = useState<string | null>(null);
   const [dateTo, setDateTo] = useState<string | null>(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     get('/directors/courses/')
@@ -65,11 +66,13 @@ export const StudentsSurveyDashboardPage = () => {
           id: course.id,
           courseName: course.courseName,
         }))]);
+        setLoading(false);
       });
     fetchStudentsSurveyData();
   }, []);
 
   const fetchStudentsSurveyData = async () => {
+    setLoading(true);
     await get('/survey/student-results')
       .then(res => res.json())
       .then(res => res.data)
@@ -83,6 +86,7 @@ export const StudentsSurveyDashboardPage = () => {
   }, [courseId, dateFrom, dateTo]);
 
   const fetchStudentsSurveyDataFiltered = async () => {
+    setLoading(true);
     if (dateFrom && dateTo) {
       const tmpDateFrom = new Date(dateFrom);
       const tmpDateTo = new Date(dateTo);
@@ -116,6 +120,7 @@ export const StudentsSurveyDashboardPage = () => {
       .then(res => res.json())
       .then(res => res.data)
       .then((data: IQuestion | null) => {
+        setLoading(false);
         if (!data) {
           setStudentsSurveyData(null);
           return;
@@ -225,7 +230,7 @@ export const StudentsSurveyDashboardPage = () => {
             </div>
             <hr />
 
-            {answers.length > 0 && <>
+            {!loading && answers.length > 0 && <>
               {studentsSurveyData && answers.map((answer: IAnswerData) => (
                 <Card key={answer.question} style={{ width: '100%', paddingInline: '2rem', paddingBlock: '1rem', marginBlock: '1rem' }}>
                   <CardHeader tag='h4'>
@@ -252,7 +257,7 @@ export const StudentsSurveyDashboardPage = () => {
             </>
             }
 
-            {!studentsSurveyData && <>
+            {!loading && !studentsSurveyData && <>
               <h2>Sin resultados</h2>
               <span>No encontramos resultados para mostrarte</span>
               <div style={{

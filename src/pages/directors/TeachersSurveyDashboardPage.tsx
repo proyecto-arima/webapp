@@ -53,6 +53,7 @@ export const TeachersSurveyDashboardPage = () => {
   const [dateFrom, setDateFrom] = useState<string | null>(null);
   const [dateTo, setDateTo] = useState<string | null>(null);
   const [teachersSurveyData, setTeachersSurveyData] = useState<IQuestion | null>(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     get('/directors/courses/')
@@ -64,16 +65,19 @@ export const TeachersSurveyDashboardPage = () => {
           id: course.id,
           title: course.title,
         }))]);
+        setLoading(false);
       });
     fetchStudentsSurveyData();
   }, []);
 
   const fetchStudentsSurveyData = async () => {
+    setLoading(true);
     await get('/survey/teacher-results')
       .then(res => res.json())
       .then(res => res.data)
       .then((data: IQuestion) => {
         setTeachersSurveyData(data);
+        setLoading(false);
       });
   }
 
@@ -82,6 +86,7 @@ export const TeachersSurveyDashboardPage = () => {
   }, [courseId, dateFrom, dateTo]);
 
   const fetchStudentsSurveyDataFiltered = async () => {
+    setLoading(true);
     if (dateFrom && dateTo) {
       const tmpDateFrom = new Date(dateFrom);
       const tmpDateTo = new Date(dateTo);
@@ -115,6 +120,7 @@ export const TeachersSurveyDashboardPage = () => {
       .then(res => res.json())
       .then(res => res.data)
       .then((data: IQuestion | null) => {
+        setLoading(false);
         if (!data) {
           setTeachersSurveyData(null);
           return;
@@ -214,7 +220,7 @@ export const TeachersSurveyDashboardPage = () => {
             </div>
             <hr />
 
-            {answers.length > 0 && <>
+            {!loading && answers.length > 0 && <>
               {teachersSurveyData && answers.map((answer: IAnswerData) => (
                 <Card key={answer.question} style={{ width: '100%', paddingInline: '2rem', paddingBlock: '1rem', marginBlock: '1rem' }}>
                   <CardHeader tag='h4'>
@@ -241,7 +247,7 @@ export const TeachersSurveyDashboardPage = () => {
             </>
             }
 
-            {!teachersSurveyData && <>
+            {!loading && !teachersSurveyData && <>
               <h2>Sin resultados</h2>
               <span>No encontramos resultados para mostrarte</span>
               <div style={{

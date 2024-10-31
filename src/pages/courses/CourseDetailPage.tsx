@@ -181,12 +181,12 @@ export const CourseDetailPage: React.FC = () => {
             {user.role === 'STUDENT' ? (
               <>
                 <h3>Parece que aún no hay secciones en este curso.</h3>
-                <h4>Por favor intenta de nuevo más tarde</h4>
+                <h4>Por favor intentá de nuevo más tarde</h4>
               </>
             ) : (
               <>
                 <h3>Parece que aún no has creado ninguna sección en este curso.</h3>
-                <h4>Por favor crea una sección para comenzar a añadir contenido.</h4>
+                <h4>Por favor creá una sección para comenzar a añadir contenido.</h4>
               </>
             )}
           </div>

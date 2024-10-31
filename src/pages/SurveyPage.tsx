@@ -334,15 +334,13 @@ export const SurveyPage = () => {
                 </div>
               ))}
             </CardGroup>
-            <div style={{
-              position: 'fixed',
-              bottom: '20px',
-              right: '20px',
-              zIndex: 1000,
-            }}>
-              <button
-                className="btn-purple-1"
-                onClick={() => validateCompletedQuestions(questions) && sendSurvey(questions)}
+            <div className='d-flex flex-row justify-content-end' style={{ paddingRight: '20px' }}>
+              <button 
+                className="btn-purple-1" 
+                onClick={() => validateCompletedQuestions(questions) && sendSurvey(questions)} 
+                style={{
+                  marginRight: '20px', // Ajusta el margen derecho del botón
+                }}
               >
                 Finalizar encuesta
               </button>

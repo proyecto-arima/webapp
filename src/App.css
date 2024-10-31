@@ -96,6 +96,16 @@
   background-color: #e8ddf8;
 }
 
+.btn-purple-2:hover:disabled {
+  background-color: lightgray;
+  cursor: auto;
+}
+
+.btn-purple-2:disabled {
+  background-color: lightgray;
+  cursor: auto;
+}
+
 /* Sidebars */
 .sidebar {
   display: flex;
@@ -308,5 +318,3 @@
   color: #dc3545;
   animation: floatUp 1s ease forwards;
 }
-
-

@@ -46,7 +46,7 @@ const CourseRoutes: React.FC = () => {
         <Route path=":courseId/sections/:sectionId/content/:contentId/game" element={<Game/>} />
         <Route path=":courseId/sections/:sectionId/content/:contentId/audio" element={<GeneratedContentViewAudio/>} />
         <Route path=":courseId/sections/:sectionId/content/:contentId/review" element={<ContentSelectionForTeacher/>} />
-        <Route path=":courseId/sections/:sectionId/contents/:contentId/edit-title" element={<EditContentPage />} />
+        <Route path=":courseId/sections/:sectionId/contents/:contentId/edit" element={<EditContentPage />} />
         <Route path=":courseId/sections/:sectionId/content/:contentId/game/edit" element={<GameEditionPage/>} />
         <Route path=":courseId/sections/:sectionId/content/:contentId/audio/edit" element={<AudioEdition/>} />
       </Routes>

@@ -175,12 +175,13 @@ export const SectionCreationPage = () => {
     <PageWrapper title="Crear sección">
       <div style={{
         overflowY: 'auto',
+        height: '100%',
       }}>
         <p style={{ textAlign: 'left', marginBottom: '2rem', color: '#6b7280' }}>
           Acá podés crear una nueva sección en la plataforma. Cada sección tendrá diferentes contenidos agrupados por temas, franjas de tiempo, etc.
           Opcionalmente podés cargar una imagen de portada, sino, nosotros la creamos por vos. Una vez creada la sección, podrás agregarle contenidos en PDF.
         </p>
-        <h3>Detalles de la sección</h3>
+        <h5>Detalles de la sección</h5>
         <hr />
         <Input name="title" type="text" placeholder="Nombre" className="mb-3" onChange={handleFormChange('title')} />
         <Input name="description" type="textarea" placeholder="Descripción de la sección" className="mb-3" onChange={handleFormChange('description')} />
@@ -190,7 +191,7 @@ export const SectionCreationPage = () => {
           <Label for='visible'>Visible</Label>
         </div>
 
-        <h3>Imagen</h3>
+        <h5>Imagen</h5>
         <hr />
         <p style={{ textAlign: 'left', marginBottom: '2rem', color: '#6b7280' }}>
           Para generar una imagen automáticamente a partir del nombre y descripción de la sección, clickea en Generar Imagen y espera que la magia ocurra.
@@ -202,26 +203,55 @@ export const SectionCreationPage = () => {
         </div>
 
         {autoGenerateImage ? (
-          <div style={{ flex: '1', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-            {imageLoading ? (
-              <button style={{ backgroundColor: '#4d3a8e', color: 'white', padding: '1rem', borderRadius: '5px', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '1rem' }} disabled>
-                <FontAwesomeIcon icon={faWandMagicSparkles} spin />
-                Generando Imagen...
-              </button>
-            ) : (generatedImage ? (
-              <img src={generatedImage} alt="Generated" style={{ width: '200px', borderRadius: '0.5rem', objectFit: 'cover' }} />
-            ) : (
-              <button style={{ backgroundColor: '#4d3a8e', color: 'white', padding: '1rem', borderRadius: '5px', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '1rem' }} onClick={generateImage}>
-                <FontAwesomeIcon icon={faWandMagicSparkles} />
-                Generar Imagen
-              </button>
-            ))}
-          </div>
-        ) : (
-          <div>
-            <Input name="file" type="file" className="mb-3" onChange={handleFileChange} />
-          </div>
-        )}
+          <div style={{
+          flex: '1',
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+        }}>
+
+          {imageLoading ? <button style={{
+            backgroundColor: '#4d3a8e',
+            color: 'white',
+            padding: '1rem',
+            borderRadius: '5px',
+            cursor: 'pointer',
+            display: 'flex',
+            flexDirection: 'row',
+            alignItems: 'center',
+            gap: '1rem',
+          }}
+            disabled
+          >
+            <FontAwesomeIcon icon={faWandMagicSparkles} spin />
+            Generando Imagen...
+          </button> : (generatedImage ? <img src={generatedImage} alt="Generated" style={{
+            width: '200px',
+            borderRadius: '0.5rem',
+            objectFit: 'cover',
+            overflow: 'hidden',
+          }} /> : <button style={{
+            backgroundColor: '#4d3a8e',
+            color: 'white',
+            padding: '1rem',
+            borderRadius: '5px',
+            cursor: 'pointer',
+            display: 'flex',
+            flexDirection: 'row',
+            alignItems: 'center',
+            gap: '1rem',
+          }}
+            onClick={generateImage}
+          >
+            <FontAwesomeIcon icon={faWandMagicSparkles} />
+            Generar Imagen
+          </button>)}
+
+        </div>) : <div style={{
+          flex: '1',
+        }}>
+          <Input type="file" onChange={handleFileChange} className="mb-3" />
+        </div>}
 
         <div className='d-flex flex-row justify-content-end'>
           <button className="btn-purple-1" onClick={createSection}>

@@ -114,12 +114,19 @@ export default function SectionContentDashboardFormTeachers({ content, user, cou
               }}></div>
 
               <button className='btn-purple-2' style={{ fontSize: '1.7vmin' }} onClick={() => {
-                navigate(`/courses/${courseId}/sections/${sectionId}/contents/${c.id}/edit-title`);
-              }}>
+                navigate(`/courses/${courseId}/sections/${sectionId}/contents/${c.id}/edit`);
+              }}
+                disabled={c.status !== 'DONE'}
+              >
                 <FontAwesomeIcon icon={faEdit} />
               </button>
 
-              <button className='btn-purple-2' style={{ fontSize: '1.7vmin' }} onClick={() => handleDeleteContent(c.id)}>
+              <button 
+                className='btn-purple-2' 
+                style={{ fontSize: '1.7vmin' }} 
+                onClick={() => handleDeleteContent(c.id)}
+                disabled={c.status !== 'DONE'}
+              >
                 <FontAwesomeIcon icon={faTrash} />
               </button>
             </td>

@@ -51,7 +51,7 @@ export const CourseSearchPage = () => {
 
   const handleEnroll = async (courseId: string) => {
     const { value: matriculationCode } = await Swal.fire({
-      title: 'Ingresá el código de matriculación provisto por el docente',
+      title: 'Ingrese el código de matriculación provisto por el docente',
       input: 'text',
       inputLabel: 'Código de matriculación',
       confirmButtonText: 'Confirmar matriculación',

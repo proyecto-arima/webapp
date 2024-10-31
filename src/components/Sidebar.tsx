@@ -199,7 +199,10 @@ export default function Sidebar() {
               <img src={default_profile_pic} alt="profile" className='sidebar-profile-picture' />
             )
           )}
-          <span className='sidebar-section-title'>Perfil</span>
+          {user?.firstName && user?.lastName && (
+            <span className='sidebar-section-title'>{`${user.firstName} ${user.lastName}`}</span>
+          )}
+
           <NavLink to={'/me/profile'} end className={({ isActive }) => isActive ? 'sidebar-navlink-active' : 'sidebar-navlink-inactive'}>
             <NavItem className='sidebar-navlink-item'>
               <FontAwesomeIcon icon={faCircle} className="sidebar-dot" />

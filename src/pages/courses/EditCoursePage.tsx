@@ -220,7 +220,7 @@ export const EditCoursePage: React.FC = () => {
         <hr />
         <Input
           type="text"
-          name="name"
+          name="title"
           value={formData.title}
           placeholder="Nombre del curso"
           className="mb-3"

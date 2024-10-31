@@ -51,7 +51,7 @@ export const CourseSearchPage = () => {
 
   const handleEnroll = async (courseId: string) => {
     const { value: matriculationCode } = await Swal.fire({
-      title: 'Ingrese el código de matriculación provisto por el docente',
+      title: 'Ingresá el código de matriculación provisto por el docente',
       input: 'text',
       inputLabel: 'Código de matriculación',
       confirmButtonText: 'Confirmar matriculación',
@@ -95,7 +95,7 @@ export const CourseSearchPage = () => {
           }
         );
       } catch (error) {
-        Swal.fire('Error', 'Código de matriculación incorrecto. Valide con el docente a cargo.', 'error');
+        Swal.fire('Error', 'Código de matriculación incorrecto. Validá con el docente a cargo.', 'error');
       }
     }
   };
@@ -106,7 +106,7 @@ export const CourseSearchPage = () => {
           <Input 
             name="title" 
             type="text" 
-            placeholder="Ingrese parte del nombre del curso" 
+            placeholder="Ingresá parte del nombre del curso" 
             className="w-100" 
             onChange={(e) => setSearchCode(e.target.value)} 
             style={{ flex: 1, marginRight: '10px' }}

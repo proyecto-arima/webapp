@@ -61,7 +61,7 @@ export default function AudioVisualizer() {
     console.log("Audio loading: ", audioLoading);
   }, [audioLoading]);
 
-  return <PageWrapper title="Escucha con atención">
+  return <PageWrapper title="Escuchá con atención">
     <div style={{
       display: 'flex',
       flexDirection: 'column',

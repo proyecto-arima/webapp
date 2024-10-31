@@ -140,7 +140,7 @@ export default function SectionContentDashboardFormTeachers({ content, user, cou
         height: '50vh',
       }} />
       <h3>Parece que aún no has subido ningún contenido en esta sección.</h3>
-      <h4>Por favor sube un contenido para que pueda ser procesado por AdaptarIA</h4>
+      <h4>Por favor subí un contenido para que pueda ser procesado por AdaptarIA</h4>
     </div>
   ));
 }

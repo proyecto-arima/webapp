@@ -364,11 +364,11 @@ export const UserCreationMassivePage = () => {
                 <CardBody>
                   <ul>
                     <li key='0'>Es muy importante <strong>que los usuarios no existan previamente</strong> en el listado.</li>
-                    <li key='1'>Si alguno de los usuarios ya existe, <strong>no se podrán crear el resto de los usuarios</strong>.</li>
-                    <li key='2'>Recorda <strong>seleccionar el tipo de usuario</strong> que vas a cargar (docentes o estudiantes).</li>
+                    <li key='1'>Si alguno de los usuarios ya existe, <strong>no se podrá crear el resto.</strong>.</li>
+                    <li key='2'>Recordá <strong>seleccionar el tipo de usuario</strong> que vas a cargar (docentes o estudiantes).</li>
                     <li key='3'>El archivo debe ser un .csv que AdaptarIA tomará para mostrar la tabla de usuarios que se van a crear.</li>
-                    <li key='4'>En Google Spreadsheets, podes hacer clic en Archivo {'>'} Descargar {'>'} Valores separados por comas (.csv) para obtener el archivo en el formato correcto.</li>
-                    <li key='5'>En Microsoft Excel, podes hacer clic en Archivo {'>'} Guardar como {'>'} seleccionar CSV (delimitado por comas) (*.csv) para obtener el archivo en el formato correcto.</li>
+                    <li key='4'>En Google Spreadsheets, podés hacer clic en Archivo {'>'} Descargar {'>'} Valores separados por comas (.csv) para obtener el archivo en el formato correcto.</li>
+                    <li key='5'>En Microsoft Excel, podés hacer clic en Archivo {'>'} Guardar como {'>'} seleccionar CSV (delimitado por comas) (*.csv) para obtener el archivo en el formato correcto.</li>
                   </ul>
                 </CardBody>
               </div>

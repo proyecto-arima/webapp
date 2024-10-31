@@ -107,13 +107,7 @@ export const EditContentPage: React.FC = () => {
       editContent();
     }
 
-    
-
   };
-
-  if (loading) {
-    return <div>Cargando datos...</div>;
-  }
 
   return (
     <PageWrapper

@@ -192,10 +192,6 @@ export const EditSectionPage: React.FC = () => {
     });
   };
 
-  if (loading) {
-    return <div>Cargando datos...</div>;
-  }
-
   return (
     <PageWrapper
       title="Editar Sección"

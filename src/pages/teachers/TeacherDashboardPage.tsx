@@ -98,9 +98,9 @@ export const TeacherDashboardPage = () => {
       }
     >
       <div style={{
-        maxHeight: '400px',  // Limita la altura de la tabla
-        overflowY: 'auto',    // Activa el scroll vertical si es necesario
-      }}>
+          height: '100%',      // Usa toda la altura disponible en la Card
+          overflowY: 'auto',   // Activa el scroll vertical si el contenido excede la altura
+        }}>
         <Table style={{
           fontSize: 'small',
         }}>

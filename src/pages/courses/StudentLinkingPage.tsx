@@ -21,7 +21,6 @@ export const StudentLinkingPage = () => {
 
   const addStudent = async (student: any) => {
     await post(`/courses/${courseId}/students`, { studentEmails: [student.email] });
-    // Re-obtener el curso después de agregar
     await fetchCourse();
     setAvailableStudents((prevStudents: any) =>
       prevStudents.filter((s: any) => s.id !== student.id)
@@ -39,9 +38,7 @@ export const StudentLinkingPage = () => {
       'No',
       async () => {
         await del(`/courses/${courseId}/users/${userId}`);
-        // Agregar el estudiante de nuevo a la lista de disponibles
         setAvailableStudents((prevStudents: any) => [...prevStudents, studentToRemove]);
-        // Re-obtener el curso después de eliminar
         await fetchCourse();
         SwalUtils.successSwal(
           'Estudiante eliminado',
@@ -53,7 +50,6 @@ export const StudentLinkingPage = () => {
       }
     );
   };
-  
 
   useEffect(() => {
     fetchCourse();
@@ -63,7 +59,6 @@ export const StudentLinkingPage = () => {
       .then(setAvailableStudents);
   }, [courseId]);
 
-  // Filtrar estudiantes disponibles para eliminar los que ya están matriculados
   const filteredStudents = availableStudents.filter((student: any) =>
     !course?.students?.some((s: any) => s.userId === student.id)
   );
@@ -87,9 +82,10 @@ export const StudentLinkingPage = () => {
           padding: '20px',
           width: '100%',
           height: '100%',
+          overflowY: 'auto',  // Activa el scroll vertical para todo el contenido debajo del título
         }}
       >
-        <Card style={{ width: '100%', paddingInline: '2rem', paddingBlock: '1rem', height: '100%' }}>
+        <Card style={{ width: '100%', paddingInline: '2rem', paddingBlock: '1rem' }}>
           <h2>Estudiantes</h2>
           <hr />
           <p>Acá podés agregar estudiantes al curso <b>{course?.title}</b>. Los alumnos podrán auto-matricularse utilizando el código: <b>{course?.matriculationCode}</b></p>
@@ -116,7 +112,7 @@ export const StudentLinkingPage = () => {
 
             <h5 style={{ fontWeight: 'bold' }}>Listado</h5>
             <hr />
-            <Table>
+            <Table style={{ fontSize: 'small' }}>
               <thead>
                 <tr>
                   <th>Nombre</th>

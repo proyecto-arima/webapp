@@ -19,7 +19,6 @@ export const TeacherDashboardPage = () => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
 
- 
   useEffect(() => {
     const fetchTeachers = async () => {
       try {
@@ -98,34 +97,37 @@ export const TeacherDashboardPage = () => {
         </button>
       }
     >
-      
-      <Table style={{
-        overflow: 'auto',
-        fontSize: 'small',
+      <div style={{
+        maxHeight: '400px',  // Limita la altura de la tabla
+        overflowY: 'auto',    // Activa el scroll vertical si es necesario
       }}>
-            <thead>
-              <tr>
-                <th>Nombre</th>
-                <th>Apellido</th>
-                <th>Email</th>
-                <th>Editar Rol</th>
+        <Table style={{
+          fontSize: 'small',
+        }}>
+          <thead>
+            <tr>
+              <th>Nombre</th>
+              <th>Apellido</th>
+              <th>Email</th>
+              <th>Editar Rol</th>
+            </tr>
+          </thead>
+          <tbody>
+            {teachers?.map(teacher => (
+              <tr key={teacher.id}>
+                <td>{teacher.firstName}</td>
+                <td>{teacher.lastName}</td>
+                <td>{teacher.email}</td>
+                <td>
+                  <button className='btn-purple-2' onClick={() => handleEditRole(teacher)}>
+                    <FontAwesomeIcon icon={faEdit} />
+                  </button>
+                </td>
               </tr>
-            </thead>
-            <tbody>
-              {teachers?.map(teacher => (
-                <tr key={teacher.id}>
-                  <td>{teacher.firstName}</td>
-                  <td>{teacher.lastName}</td>
-                  <td>{teacher.email}</td>
-                  <td>
-                    <button className='btn-purple-2' onClick={() => handleEditRole(teacher)}>
-                      <FontAwesomeIcon icon={faEdit} />
-                    </button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </Table>
+            ))}
+          </tbody>
+        </Table>
+      </div>
     </PageWrapper>
   );
 };

@@ -48,7 +48,7 @@ export const InstitutesCreationPage = () => {
     if(!FormValidators.isPhoneNumber(formValues?.phone || '')) {
       SwalUtils.warningSwal(
         "El número de telefono ingresado es inválido.",
-        "Por favor, asegurate de que el número de teléfono ingresado sea correcto. Debe tener 10 dígitos.",
+        "Por favor, asegurate de que el número de teléfono ingresado sea correcto. Debe tener al menos 8 dígitos.",
         "Esta bien",
         () => { console.warn('Phone number not valid') },
       );

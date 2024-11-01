@@ -31,6 +31,7 @@ export const EditCoursePage: React.FC = () => {
   const [generatedImage, setGeneratedImage] = useState<string | null>(null);
   const [imageLoading, setImageLoading] = useState<boolean>(false);
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   useEffect(() => {
     if (courseId) {
@@ -103,6 +104,7 @@ export const EditCoursePage: React.FC = () => {
     if (courseId) {
       patch(`/courses/${courseId}`, updatedData).then(res => res.json()).then((data) => {
         if (data.success) {
+          dispatch(editCourses(updatedData));
           Swal.fire({
             icon: 'success',
             title: 'Curso actualizado',
@@ -171,7 +173,14 @@ export const EditCoursePage: React.FC = () => {
       return;
     }
 
-    confirmEdit();
+    
+    SwalUtils.infoSwal(
+      '¿Estás seguro de que quieres modificar este curso?',
+      'Esta acción modificará los datos del curso.',
+      'Sí',
+      'No',
+      confirmEdit
+    );
   };
 
   // Generate image

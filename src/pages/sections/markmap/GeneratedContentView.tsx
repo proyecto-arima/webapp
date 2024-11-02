@@ -78,7 +78,7 @@ export const GeneratedContentView = () => {
         <Progress animated value={100}
           style={{ width: '90%', marginBottom: '1rem' }}
         />
-        <h3>El contenido aún se está procesándose</h3>
+        <h3>El contenido aún está procesándose</h3>
         <h4>Por favor, volvé más tarde</h4>
       </div>
 

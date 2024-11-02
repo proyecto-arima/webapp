@@ -136,43 +136,6 @@ export const EditCoursePage: React.FC = () => {
       });
       return;
     }
-
-    // Expresión regular para permitir caracteres alfanuméricos, espacios y letras con tildes
-    const alphanumericWithAccentsRegex = /^[a-zA-ZáéíóúÁÉÍÓÚñÑ0-9\s;°]+$/;
-
-    const titleInvalid = !alphanumericWithAccentsRegex.test(formData.title);
-    const descriptionInvalid = (formData.description && !alphanumericWithAccentsRegex.test(formData.description)) || formData.description === '';
-
-    if (titleInvalid && descriptionInvalid) {
-      Swal.fire({
-        icon: 'error',
-        title: 'Error en los campos',
-        text: 'El título y la descripción solo pueden contener letras, números, espacios y tildes.',
-        confirmButtonText: 'Aceptar',
-      });
-      return;
-    }
-
-    if (titleInvalid) {
-      Swal.fire({
-        icon: 'error',
-        title: 'Error en el título',
-        text: 'El título solo puede contener letras, números y espacios.',
-        confirmButtonText: 'Aceptar',
-      });
-      return;
-    }
-
-    if (descriptionInvalid) {
-      Swal.fire({
-        icon: 'error',
-        title: 'Error en la descripción',
-        text: 'La descripción solo puede contener letras, números y espacios.',
-        confirmButtonText: 'Aceptar',
-      });
-      return;
-    }
-
     
     SwalUtils.infoSwal(
       '¿Estás seguro de que quieres modificar este curso?',

@@ -184,7 +184,7 @@ export const SectionCreationPage = () => {
         <h5>Detalles de la sección</h5>
         <hr />
         <Input name="title" type="text" placeholder="Nombre" className="mb-3" onChange={handleFormChange('title')} />
-        <Input name="description" type="textarea" placeholder="Descripción de la sección" className="mb-3" onChange={handleFormChange('description')} />
+        <Input name="description" type="text" placeholder="Descripción de la sección" className="mb-3" onChange={handleFormChange('description')} />
 
         <div className='d-flex flex-row mb-3 gap-3'>
           <Input name="visible" type='checkbox' id='visible' onClick={() => setFormValues({ ...formValues, visible: !formValues.visible })} checked={formValues.visible} />

@@ -246,7 +246,7 @@ export const CourseCreationPage = () => {
         <h5>Detalles del curso</h5>
         <hr />
         <Input name="title" type="text" placeholder="Nombre" className="mb-3" onChange={handleFormChange('title')} />
-        <Input name="description" type="textarea" placeholder="Descripción del curso" className="mb-3" onChange={handleFormChange('description')} />
+        <Input name="description" type="text" placeholder="Descripción del curso" className="mb-3" onChange={handleFormChange('description')} />
 
         <h5>Imagen</h5>
         <hr />

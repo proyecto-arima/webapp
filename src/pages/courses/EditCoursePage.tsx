@@ -237,7 +237,7 @@ export const EditCoursePage: React.FC = () => {
           required
         />
         <Input
-          type="textarea"
+          type="text"
           name="description"
           value={formData.description}
           placeholder="Descripción de la sección"

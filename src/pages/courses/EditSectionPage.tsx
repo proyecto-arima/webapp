@@ -126,42 +126,6 @@ export const EditSectionPage: React.FC = () => {
       return;
     }
 
-    // Expresión regular para permitir caracteres alfanuméricos, espacios y letras con tildes
-    const alphanumericWithAccentsRegex = /^[a-zA-ZáéíóúÁÉÍÓÚñÑ0-9\s;°.,]+$/;
-
-    const titleInvalid = !alphanumericWithAccentsRegex.test(formData.name);
-    const descriptionInvalid = (formData.description && !alphanumericWithAccentsRegex.test(formData.description)) || formData.description === '';
-
-    if (titleInvalid && descriptionInvalid) {
-      SwalUtils.errorSwal(
-        'Error en los campos',
-        'El título y la descripción solo pueden contener letras, números, espacios, tildes, comas y puntos.',
-        'Aceptar',
-        () => navigate(`/courses/${courseId}/sections/${sectionId}/edit`)
-      );
-      return;
-    }
-
-    if (titleInvalid) {
-      SwalUtils.errorSwal(
-        'Error en el título',
-        'El título y la descripción solo pueden contener letras, números, espacios, tildes, comas y puntos.',
-        'Aceptar',
-        () => navigate(`/courses/${courseId}/sections/${sectionId}/edit`)
-      );
-      return;
-    }
-
-    if (descriptionInvalid) {
-      SwalUtils.errorSwal(
-        'Error en la descripción',
-        'El título y la descripción solo pueden contener letras, números, espacios, tildes, comas y puntos.',
-        'Aceptar',
-        () => navigate(`/courses/${courseId}/sections/${sectionId}/edit`)
-      );
-      return;
-    }
-
     SwalUtils.infoSwal(
       '¿Estás seguro de que quieres modificar esta sección?',
       'Esta acción modificará los datos de la sección.',

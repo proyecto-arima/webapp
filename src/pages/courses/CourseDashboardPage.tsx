@@ -147,8 +147,8 @@ export const CourseDashboardPage = () => {
                   </>
                 ) : (
                   <>
-                    <h3>Parece que aún no has creado ningún curso.</h3>
-                    <h4>Por favor crea un curso para comenzar a añadir secciones y contenido.</h4>
+                    <h3>Todavía no creaste cursos en AdaptarIA.</h3>
+                    <h4>Por favor, creá un curso para empezar a añadir secciones y contenido.</h4>
                   </>
                 )}
               </div>

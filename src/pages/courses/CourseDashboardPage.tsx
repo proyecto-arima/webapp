@@ -33,7 +33,7 @@ export const CourseDashboardPage = () => {
     if (user.requiresSurvey) {
       SwalUtils.infoSwal(
         "Encuesta disponible",
-        "Hay una encuesta disponible para evaluar el contenido de la plataforma. ¿Deseas realizarla?",
+        "Hay una encuesta disponible para evaluar AdaptarIA. ¿Querés realizarla ahora?",
         "Si",
         "No",
         () => navigate("/me/survey"),

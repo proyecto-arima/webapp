@@ -194,8 +194,8 @@ export const SectionCreationPage = () => {
         <h5>Imagen</h5>
         <hr />
         <p style={{ textAlign: 'left', marginBottom: '2rem', color: '#6b7280' }}>
-          Para generar una imagen automáticamente a partir del nombre y descripción de la sección, clickea en Generar Imagen y espera que la magia ocurra.
-          También puedes subir un archivo con extensión .png, .jpeg o .jpg para elegir manualmente la imagen de la sección, si lo prefieres.
+          Para generar una imagen con IA a partir del nombre y descripción de la sección, hacé click en "Generar Imagen" y esperá que ocurra la magia.
+          Si querés subir un archivo (.png, .jpeg o .jpg) destildá la opción de "Generar imagen automáticamente" y seleccioná el archivo deseado.
         </p>
         <div className='d-flex flex-row mb-3 gap-3'>
           <Input type='checkbox' name='auto-generate' id='auto-generate' onClick={e => setAutoGenerateImage(!autoGenerateImage)} checked={autoGenerateImage} />

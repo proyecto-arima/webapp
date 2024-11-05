@@ -180,8 +180,8 @@ export const CourseDetailPage: React.FC = () => {
             <img src={empty} alt="No sections available" />
             {user.role === 'STUDENT' ? (
               <>
-                <h3>Parece que aún no hay secciones en este curso.</h3>
-                <h4>Por favor intentá de nuevo más tarde</h4>
+                <h3>Todavía no hay secciones en este curso.</h3>
+                <h4>Intentá más tarde o contactá a tu docente</h4>
               </>
             ) : (
               <>

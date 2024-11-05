@@ -17,7 +17,7 @@ export default function RecoverPasswordForm({ recoverPassword: recoverPassword, 
   return (
     <div>
       <div className="mb-3">
-        <Label htmlFor="email" className="form-label">Ingresa la dirección de correo que tenes asociada en la plataforma</Label>
+        <Label htmlFor="email" className="form-label">Ingresá la dirección de correo que tenés asociada en la plataforma</Label>
         <Input type="email" id="email" placeholder="Ingresá tu correo registrado" onChange={(e) => setEmail(e.target.value)} />
         {statusMessage &&
           <p

@@ -184,9 +184,9 @@ export const EditCoursePage: React.FC = () => {
           color: '#6b7280'
         }}>
           Acá podés editar el curso en la plataforma. <br />
-            Cada curso debe tener un nombre y una descripción que verán los alumnos al ingresar.
-            Opcionalmente podés cargar una imagen de portada, sino, nosotros la creamos por vos.<br />
-            Una vez editado el curso, podés seguirle agregando secciones con el contenido deseado, y además matricular alumnos al curso.
+          Cada curso debe tener un nombre y una descripción que verán los alumnos al ingresar.
+          Además, tenés la opción de modificar la imagen de portada o que AdaptarIA la cree para vos.<br />
+          Una vez editado el curso, podés seguirle agregando secciones con el contenido deseado, y además matricular alumnos al curso.
         </p>
         <h5>Detalles del curso</h5>
         <hr />
@@ -215,8 +215,8 @@ export const EditCoursePage: React.FC = () => {
           marginBottom: '2rem',
           color: '#6b7280'
         }}>
-          Para generar una imagen automáticamente a partir del nombre y descripción del curso, clickea en Generar Imagen y espera que la magia ocurra.<br />
-          También puedes subir un archivo con extensión .png, .jpeg o .jpg para elegir manualmente la imagen del curso, si lo prefieres.
+          Para generar una imagen con IA a partir del nombre y descripción del curso, hacé click en &quot;Generar Imagen&quot; y esperá que ocurra la magia.<br />
+          Si querés subir un archivo (.png, .jpeg o .jpg) destildá la opción de &quot;Generar imagen automáticamente&quot; y seleccioná el archivo deseado.
         </p>
 
         <div className='d-flex flex-row mb-3 gap-3'>

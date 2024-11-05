@@ -57,11 +57,32 @@ export const SectionCreationPage = () => {
     if (!formValues.title) {
       SwalUtils.errorSwal(
         'Error al crear la sección',
-        'Debes ingresar un nombre para la sección antes de continuar.',
+        'Debés ingresar un nombre para la sección antes de continuar.',
         'Aceptar',
         () => navigate(`/courses/${courseId}/new-section`)
       );
       return;
+    }
+
+    if(!formValues.image && !autoGenerateImage && !selectedFile) {
+      SwalUtils.errorSwal(
+        'Error al crear la sección',
+        'Debés adjuntar una imagen para la sección antes de continuar.',
+        'Aceptar',
+        () => navigate(`/courses/${courseId}/new-section`)
+      );
+      return;
+    }
+
+    // Verificación para la generación de imagen
+    if (autoGenerateImage && !generatedImage) {
+      SwalUtils.errorSwal(
+        'Imagen no generada',
+        'Tenés activada la opción de "Generar imagen automáticamente". Para continuar, presioná el botón de "Generar Imagen" o desactivá la opción y adjuntá una imagen para poder crear la sección.',
+        'Aceptar',
+        () => navigate(`/courses/${courseId}/new-section`)
+        );
+          return;
     }
 
     let imageUrl = generatedImage || formValues.image;
@@ -114,7 +135,7 @@ export const SectionCreationPage = () => {
       return Swal.fire({
         icon: 'error',
         title: 'Oops...',
-        text: 'Debes ingresar un nombre para la sección antes de generar la imagen.',
+        text: 'Debés ingresar un nombre para la sección antes de generar la imagen.',
       });
     }
 
@@ -122,7 +143,7 @@ export const SectionCreationPage = () => {
       return Swal.fire({
         icon: 'error',
         title: 'Oops...',
-        text: 'Debes ingresar una descripción para la sección antes de generar la imagen.',
+        text: 'Debés ingresar una descripción para la sección antes de generar la imagen.',
       });
     }
 
@@ -130,7 +151,7 @@ export const SectionCreationPage = () => {
 
     Swal.fire({
       title: 'Generar imagen con IA',
-      html: 'Tu imagen se generará utilizando IA a partir del nombre y descripción de la sección. Este proceso puede tardar unos segundos. Para continuar presione ok.',
+      html: 'Tu imagen se generará utilizando IA a partir del nombre y descripción de la sección. Este proceso puede tardar unos segundos. Para continuar presioná ok.',
       icon: 'info',
       showCancelButton: !imageLoading,
       confirmButtonText: 'Ok',

@@ -131,7 +131,7 @@ export const EditCoursePage: React.FC = () => {
       Swal.fire({
         icon: 'error',
         title: 'Error en el título',
-        text: 'El título no puede estar vacío. Por favor, ingresa un título para la sección.',
+        text: 'El título no puede estar vacío. Por favor, ingresá un título para el curso.',
         confirmButtonText: 'Aceptar',
       });
       return;
@@ -152,7 +152,7 @@ export const EditCoursePage: React.FC = () => {
       return Swal.fire({
         icon: 'error',
         title: 'Oops...',
-        text: 'Debes ingresar el nombre y la descripción de la sección antes de generar la imagen',
+        text: 'Debés ingresar el nombre y la descripción del curso antes de generar la imagen',
       });
     }
 

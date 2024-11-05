@@ -51,7 +51,7 @@ export const CourseDashboardPage = () => {
 
   const handleDeleteCourse = async (courseId: string) => {
     SwalUtils.infoSwal(
-      '¿Estás seguro de que quieres eliminar este curso?',
+      '¿Estás seguro de que querés eliminar este curso?',
       'Esta acción eliminará el curso y no podrá deshacerse.',
       'Sí',
       'No',

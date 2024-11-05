@@ -118,8 +118,8 @@ export const EditSectionPage: React.FC = () => {
 
     if (!formData.name?.trim()) {
       SwalUtils.errorSwal(
-        'Error en Editar la Sección',
-        'El título no puede estar vacío. Por favor, ingresa un título para la sección.',
+        'Error en editar la Sección',
+        'El título no puede estar vacío. Por favor, ingresá un título para la sección.',
         'Aceptar',
         () => navigate(`/courses/${courseId}/sections/${sectionId}/edit`)
       );
@@ -141,7 +141,7 @@ export const EditSectionPage: React.FC = () => {
       return Swal.fire({
         icon: 'error',
         title: 'Oops...',
-        text: 'Debes ingresar el nombre y la descripción de la sección antes de generar la imagen',
+        text: 'Debés ingresar el nombre y la descripción de la sección antes de generar la imagen',
       });
     }
 

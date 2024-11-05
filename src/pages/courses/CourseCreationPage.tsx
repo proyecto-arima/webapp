@@ -62,11 +62,32 @@ export const CourseCreationPage = () => {
     if (!formValues.title) {
       SwalUtils.errorSwal(
         'Error al crear el curso',
-        'Debes ingresar un nombre para el curso antes de continuar.',
+        'Debés ingresar un nombre para el curso antes de continuar.',
         'Aceptar',
         () => navigate(`/courses/create`)
       );
       return;
+    }
+
+    if(!formValues.image && !autoGenerateImage && !selectedFile) {
+      SwalUtils.errorSwal(
+        'Error al crear el curso',
+        'Debés adjuntar una imagen para el curso antes de continuar.',
+        'Aceptar',
+        () => navigate(`/courses/create`)
+      );
+      return;
+    }
+
+    // Verificación para la generación de imagen
+    if (autoGenerateImage && !generatedImage) {
+      SwalUtils.errorSwal(
+        'Imagen no generada',
+        'Tenés activada la opción de "Generar imagen automáticamente". Para continuar, presioná el botón de "Generar Imagen" o desactivá la opción y adjuntá una imagen para poder crear el curso.',
+        'Aceptar',
+        () => navigate(`/courses/create`)
+        );
+          return;
     }
 
     let imageUrl = generatedImage || formValues.image;
@@ -118,7 +139,7 @@ export const CourseCreationPage = () => {
       return Swal.fire({
         icon: 'error',
         title: 'Oops...',
-        text: 'Debes ingresar un nombre para el curso antes de generar la imagen',
+        text: 'Debés ingresar un nombre para el curso antes de generar la imagen',
       });
     }
 
@@ -126,7 +147,7 @@ export const CourseCreationPage = () => {
       return Swal.fire({
         icon: 'error',
         title: 'Oops...',
-        text: 'Debes ingresar una descripción para el curso antes de generar la imagen',
+        text: 'Debés ingresar una descripción para el curso antes de generar la imagen',
       });
     }
 

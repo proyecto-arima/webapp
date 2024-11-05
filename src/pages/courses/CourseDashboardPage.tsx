@@ -33,7 +33,7 @@ export const CourseDashboardPage = () => {
     if (user.requiresSurvey) {
       SwalUtils.infoSwal(
         "Encuesta disponible",
-        "Hay una encuesta disponible para evaluar el contenido de la plataforma. ¿Deseas realizarla?",
+        "Hay una encuesta disponible para evaluar AdaptarIA. ¿Querés realizarla ahora?",
         "Si",
         "No",
         () => navigate("/me/survey"),
@@ -51,7 +51,7 @@ export const CourseDashboardPage = () => {
 
   const handleDeleteCourse = async (courseId: string) => {
     SwalUtils.infoSwal(
-      '¿Estás seguro de que quieres eliminar este curso?',
+      '¿Estás seguro de que querés eliminar este curso?',
       'Esta acción eliminará el curso y no podrá deshacerse.',
       'Sí',
       'No',
@@ -142,13 +142,13 @@ export const CourseDashboardPage = () => {
                 <img src={empty} alt="No sections available" />
                 {user.role === 'STUDENT' ? (
                   <>
-                    <h3>Parece que aún no te has matriculado a ningún curso.</h3>
-                    <h4>Por favor matriculate a un curso para poder ver el contenido. </h4>
+                    <h3>Todavía no estás matriculado en cursos de AdaptarIA.</h3>
+                    <h4>Por favor, hablá con tus docentes o matriculate en tus cursos para poder empezar a usar la plataforma. </h4>
                   </>
                 ) : (
                   <>
-                    <h3>Parece que aún no has creado ningún curso.</h3>
-                    <h4>Por favor crea un curso para comenzar a añadir secciones y contenido.</h4>
+                    <h3>Todavía no creaste cursos en AdaptarIA.</h3>
+                    <h4>Por favor, creá un curso para empezar a añadir secciones y contenido.</h4>
                   </>
                 )}
               </div>

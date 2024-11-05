@@ -127,7 +127,7 @@ export const EditSectionPage: React.FC = () => {
     }
 
     SwalUtils.infoSwal(
-      '¿Estás seguro de que quieres modificar esta sección?',
+      '¿Estás seguro de que querés modificar esta sección?',
       'Esta acción modificará los datos de la sección.',
       'Sí',
       'No',

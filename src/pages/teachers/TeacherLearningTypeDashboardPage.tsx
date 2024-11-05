@@ -142,7 +142,7 @@ export const TeacherLearningTypeDashboardPage = () => {
             <div className="d-flex flex-row align-items-center w-100 gap-3 mb-3">
               <Select
                 options={courses.map(course => ({ value: course.id, label: course.title }))}
-                placeholder="Seleccionar curso"
+                placeholder="Buscar curso"
                 onChange={(selectedOption) => {
                   setCourseId(selectedOption ? selectedOption.value : '');
                 }}
@@ -150,7 +150,7 @@ export const TeacherLearningTypeDashboardPage = () => {
               />
               <Select
                 options={learningTypes}
-                placeholder="Seleccionar tipo de aprendizaje"
+                placeholder="Buscar tipo de aprendizaje"
                 onChange={(selectedOption) => {
                   setSelectedLearningType(selectedOption ? selectedOption.value : '');
                 }}

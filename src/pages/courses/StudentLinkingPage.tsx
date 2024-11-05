@@ -32,7 +32,7 @@ export const StudentLinkingPage = () => {
     const studentToRemove = course.students.find((student: any) => student.userId === userId);
   
     SwalUtils.infoSwal(
-      '¿Estás seguro de que quieres eliminar este estudiante?',
+      '¿Estás seguro de que querés eliminar este estudiante?',
       'Esta acción eliminará al estudiante del curso y no podrá deshacerse.',
       'Sí',
       'No',

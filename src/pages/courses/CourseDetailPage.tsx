@@ -70,7 +70,7 @@ export const CourseDetailPage: React.FC = () => {
 
   const handleDeleteSection = async (sectionId: string) => {
     SwalUtils.infoSwal(
-      '¿Estás seguro de que quieres eliminar esta sección?',
+      '¿Estás seguro de que querés eliminar esta sección?',
       'Esta acción eliminará la sección y no podrá deshacerse.',
       'Sí',
       'No',
@@ -180,13 +180,13 @@ export const CourseDetailPage: React.FC = () => {
             <img src={empty} alt="No sections available" />
             {user.role === 'STUDENT' ? (
               <>
-                <h3>Parece que aún no hay secciones en este curso.</h3>
-                <h4>Por favor intentá de nuevo más tarde</h4>
+                <h3>Todavía no hay secciones en este curso.</h3>
+                <h4>Intentá más tarde o contactá a tu docente</h4>
               </>
             ) : (
               <>
-                <h3>Parece que aún no has creado ninguna sección en este curso.</h3>
-                <h4>Por favor creá una sección para comenzar a añadir contenido.</h4>
+                <h3>Aún no creaste secciones en este curso.</h3>
+                <h4>Por favor, creá una sección para comenzar a cargar contenido.</h4>
               </>
             )}
           </div>

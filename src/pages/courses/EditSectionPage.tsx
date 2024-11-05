@@ -173,8 +173,9 @@ export const EditSectionPage: React.FC = () => {
           color: '#6b7280'
         }}>
           Acá podés editar la sección en la plataforma <br />
-          Cada sección tendrá diferentes contenidos agrupados por temas, franjas de tiempo, etc.
-          Opcionalmente podes cargar una imagen de portada, sino, nosotros la creamos por vos.<br />
+          Cada sección te permitirá agrupar los contenidos por tema, franja de tiempo, unidad, etc.
+          De forma opcional podés elegir una imagen o que AdaptarIA la cree por vos, igual que en el curso. <br />
+          Una vez modificada la sección, podrás seguir cargando contenidos.
         </p>
         <h5>Detalles de la sección</h5>
         <hr />
@@ -214,8 +215,8 @@ export const EditSectionPage: React.FC = () => {
           marginBottom: '2rem',
           color: '#6b7280'
         }}>
-          Para generar una imagen automáticamente a partir del nombre y descripción de la sección, clickea en Generar Imagen y espera que la magia ocurra.<br />
-          También puedes subir un archivo con extensión .png, .jpeg o .jpg para elegir manualmente la imagen de la sección, si lo prefieres.
+           Para generar una imagen con IA a partir del nombre y descripción del curso, hacé click en &quot;Generar Imagen&quot; y esperá que ocurra la magia.<br />
+           Si querés subir un archivo (.png, .jpeg o .jpg) destildá la opción de &quot;Generar imagen automáticamente&quot; y seleccioná el archivo deseado.
         </p>
 
         <div className='d-flex flex-row mb-3 gap-3'>

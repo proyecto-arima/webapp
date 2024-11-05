@@ -178,9 +178,9 @@ export const SectionCreationPage = () => {
         height: '100%',
       }}>
         <p style={{ textAlign: 'left', marginBottom: '2rem', color: '#6b7280' }}>
-          Acá podés crear una nueva sección en la plataforma. 
+          Acá podés crear una nueva sección en la plataforma. <br />
           Cada sección te permitirá agrupar los contenidos por tema, franja de tiempo, unidad, etc.
-          De forma opcional podés elegir una imagen o que AdaptarIA la cree por vos, igual que en el curso.
+          De forma opcional podés elegir una imagen o que AdaptarIA la cree por vos, igual que en el curso. <br />
           Una vez creada la sección, podrás empezar a cargarle contenidos.
         </p>
         <h5>Detalles de la sección</h5>

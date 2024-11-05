@@ -138,7 +138,7 @@ export const EditCoursePage: React.FC = () => {
     }
     
     SwalUtils.infoSwal(
-      '¿Estás seguro de que quieres modificar este curso?',
+      '¿Estás seguro de que querés modificar este curso?',
       'Esta acción modificará los datos del curso.',
       'Sí',
       'No',

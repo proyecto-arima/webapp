@@ -185,8 +185,8 @@ export const CourseDetailPage: React.FC = () => {
               </>
             ) : (
               <>
-                <h3>Parece que aún no has creado ninguna sección en este curso.</h3>
-                <h4>Por favor creá una sección para comenzar a añadir contenido.</h4>
+                <h3>Aún no creaste secciones en este curso.</h3>
+                <h4>Por favor, creá una sección para comenzar a cargar contenido.</h4>
               </>
             )}
           </div>

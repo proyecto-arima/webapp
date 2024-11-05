@@ -70,7 +70,7 @@ export const CourseDetailPage: React.FC = () => {
 
   const handleDeleteSection = async (sectionId: string) => {
     SwalUtils.infoSwal(
-      '¿Estás seguro de que quieres eliminar esta sección?',
+      '¿Estás seguro de que querés eliminar esta sección?',
       'Esta acción eliminará la sección y no podrá deshacerse.',
       'Sí',
       'No',

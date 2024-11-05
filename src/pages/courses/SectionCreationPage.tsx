@@ -178,8 +178,10 @@ export const SectionCreationPage = () => {
         height: '100%',
       }}>
         <p style={{ textAlign: 'left', marginBottom: '2rem', color: '#6b7280' }}>
-          Acá podés crear una nueva sección en la plataforma. Cada sección tendrá diferentes contenidos agrupados por temas, franjas de tiempo, etc.
-          Opcionalmente podés cargar una imagen de portada, sino, nosotros la creamos por vos. Una vez creada la sección, podrás agregarle contenidos en PDF.
+          Acá podés crear una nueva sección en la plataforma. 
+          Cada sección te permitirá agrupar los contenidos por tema, franja de tiempo, unidad, etc.
+          De forma opcional podés elegir una imagen o que AdaptarIA la cree por vos, igual que en el curso.
+          Una vez creada la sección, podrás empezar a cargarle contenidos.
         </p>
         <h5>Detalles de la sección</h5>
         <hr />
@@ -194,8 +196,8 @@ export const SectionCreationPage = () => {
         <h5>Imagen</h5>
         <hr />
         <p style={{ textAlign: 'left', marginBottom: '2rem', color: '#6b7280' }}>
-          Para generar una imagen con IA a partir del nombre y descripción de la sección, hacé click en "Generar Imagen" y esperá que ocurra la magia.
-          Si querés subir un archivo (.png, .jpeg o .jpg) destildá la opción de "Generar imagen automáticamente" y seleccioná el archivo deseado.
+          Para generar una imagen con IA a partir del nombre y descripción de la sección, hacé click en &quot;Generar Imagen&quot; y esperá que ocurra la magia.
+          Si querés subir un archivo (.png, .jpeg o .jpg) destildá la opción de &quot;Generar imagen automáticamente&quot; y seleccioná el archivo deseado.
         </p>
         <div className='d-flex flex-row mb-3 gap-3'>
           <Input type='checkbox' name='auto-generate' id='auto-generate' onClick={e => setAutoGenerateImage(!autoGenerateImage)} checked={autoGenerateImage} />

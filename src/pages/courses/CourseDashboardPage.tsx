@@ -142,8 +142,8 @@ export const CourseDashboardPage = () => {
                 <img src={empty} alt="No sections available" />
                 {user.role === 'STUDENT' ? (
                   <>
-                    <h3>Parece que aún no te has matriculado a ningún curso.</h3>
-                    <h4>Por favor matriculate a un curso para poder ver el contenido. </h4>
+                    <h3>Todavía no estás matriculado en cursos de AdaptarIA.</h3>
+                    <h4>Por favor, hablá con tus docentes o matriculate en tus cursos para poder empezar a usar la plataforma. </h4>
                   </>
                 ) : (
                   <>

@@ -35,6 +35,7 @@ export const TeacherLearningTypeDashboardPage = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    setLoading(true);
     get('/teachers/me/courses/')
       .then(res => res.json())
       .then(res => res.data)
@@ -47,6 +48,7 @@ export const TeacherLearningTypeDashboardPage = () => {
       });
 
     fetchStudents();
+    setLoading(false);
   }, []);
 
   const fetchStudents = async () => {
@@ -56,7 +58,6 @@ export const TeacherLearningTypeDashboardPage = () => {
       .then(res => res.data)
       .then((data: IStudent[]) => {
         setStudents(data);
-        setLoading(false);
       });
   };
 

@@ -45,7 +45,7 @@ export const CourseCreationPage = () => {
       if (!validFileTypes.includes(file.type)) {
         SwalUtils.errorSwal(
           'Formato de archivo inválido',
-          'Solo se permiten archivos con extensión .png, .jpeg o .jpg Por favor, selecciona un archivo válido.',
+          'Solo se permiten archivos con extensión .png, .jpeg o .jpg. Por favor, seleccioná un archivo válido.',
           'Aceptar',
           () => navigate(`/courses/create/`))
         e.target.value = "";
@@ -155,7 +155,7 @@ export const CourseCreationPage = () => {
 
     Swal.fire({
       title: 'Generar imagen con IA',
-      html: 'Tu imagen se generará utilizando IA a partir del nombre y descripción del curso. Este proceso puede tardar unos segundos. Para continuar presione ok.',
+      html: 'Tu imagen se generará utilizando IA a partir del nombre y descripción del curso. Este proceso puede tardar unos segundos. Para continuar presioná ok.',
       icon: 'info',
       showCancelButton: !imageLoading,
       confirmButtonText: 'Ok',

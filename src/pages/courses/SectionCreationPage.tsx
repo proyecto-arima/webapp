@@ -41,7 +41,7 @@ export const SectionCreationPage = () => {
       if (!validFileTypes.includes(file.type)) {
         SwalUtils.errorSwal(
           'Formato de archivo inválido',
-          'Solo se permiten archivos con extensión .png, .jpeg o .jpg Por favor, selecciona un archivo válido.',
+          'Solo se permiten archivos con extensión .png, .jpeg o .jpg. Por favor, seleccioná un archivo válido.',
           'Aceptar',
           () => navigate(`/courses/${courseId}/new-section`))
         e.target.value = "";
@@ -82,7 +82,7 @@ export const SectionCreationPage = () => {
         'Aceptar',
         () => navigate(`/courses/${courseId}/new-section`)
         );
-          return;
+      return;
     }
 
     let imageUrl = generatedImage || formValues.image;

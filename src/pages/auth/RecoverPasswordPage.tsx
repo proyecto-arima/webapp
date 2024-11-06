@@ -22,10 +22,10 @@ const RecoverPassword = () => {
 
     if (recoveryEmailResponse) {
       setStatusSended(true);
-      setMessage('Se envio el correo con las instrucciones para recuperar tu contraseña');
+      setMessage('Se envió el correo con las instrucciones para recuperar tu contraseña');
     } else {
       setStatusSended(false);
-      setMessage('Ocurrio un error inesperado. Por favor, intenta de nuevo más tarde');
+      setMessage('Ocurrió un error inesperado. Por favor, intentá de nuevo más tarde');
     }
     setTimeout(() => {
       setStatusSended(false);

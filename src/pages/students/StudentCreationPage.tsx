@@ -12,7 +12,7 @@ export const StudentCreationPage = () => {
         SwalUtils.successSwal(
           "¡Estudiante creado!",
           "El estudiante fue creado correctamente, en breve podrás verlo en la lista",
-          "Esta bien",
+          "Está bien",
           () => navigate('/students'),
           () => navigate('/students')
         )

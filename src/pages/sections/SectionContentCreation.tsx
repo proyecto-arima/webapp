@@ -22,7 +22,7 @@ export const SectionContentCreation = () => {
     if (!formValues.title) {
       SwalUtils.errorSwal(
         'Error en la creación de contenido',
-        'El título no puede estar vacío. Por favor, ingresa un título válido.',
+        'El título no puede estar vacío. Por favor, ingresá un título válido.',
         'Aceptar',
         () => navigate(`/courses/${courseId}/sections/${sectionId}/new`)
       );
@@ -32,7 +32,7 @@ export const SectionContentCreation = () => {
     if (!formValues.publicationType) {
       SwalUtils.errorSwal(
         'Error en la creación de contenido',
-        'Debes seleccionar un tipo de publicación. Por favor, elige una opción válida.',
+        'Debés seleccionar un tipo de publicación. Por favor, elegí una opción válida.',
         'Aceptar',
         () => navigate(`/courses/${courseId}/sections/${sectionId}/new`)
       );
@@ -42,7 +42,7 @@ export const SectionContentCreation = () => {
     if (formValues.publicationType === 'DEFERRED' && !formValues.publicationDate) {
       SwalUtils.errorSwal(
         'Error en la creación de contenido',
-        'Debes seleccionar una fecha de publicación para el tipo "Diferida".',
+        'Debés seleccionar una fecha de publicación para el tipo "Diferida".',
         'Aceptar',
         () => navigate(`/courses/${courseId}/sections/${sectionId}/new`)
       );
@@ -52,7 +52,7 @@ export const SectionContentCreation = () => {
     if (!formValues.file) {
       SwalUtils.errorSwal(
         'Error en la creación de contenido',
-        'Debes subir un archivo. Por favor, selecciona un archivo válido.',
+        'Debés subir un archivo. Por favor, seleccioná un archivo válido.',
         'Aceptar',
         () => navigate(`/courses/${courseId}/sections/${sectionId}/new`)
       );
@@ -84,7 +84,7 @@ export const SectionContentCreation = () => {
       if (fileExtension !== 'pdf') {
         SwalUtils.errorSwal(
           'Formato de archivo inválido',
-          'Solo se permiten archivos con extensión .pdf. Por favor, selecciona un archivo válido.',
+          'Solo se permiten archivos con extensión .pdf. Por favor, seleccioná un archivo válido.',
           'Aceptar',
           () => navigate(`/courses/${courseId}/sections/${sectionId}/new`)
         );

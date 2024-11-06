@@ -44,6 +44,7 @@ export const DirectorLearningTypeDashboardPage = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    setLoading(true);
     get('/directors/courses/')
       .then(res => res.json())
       .then(res => res.data)
@@ -57,6 +58,7 @@ export const DirectorLearningTypeDashboardPage = () => {
 
     fetchStudents();
     fetchTeachers(); // Llamar para obtener docentes
+    setLoading(false);
   }, []);
 
   const fetchStudents = async () => {
@@ -66,7 +68,6 @@ export const DirectorLearningTypeDashboardPage = () => {
       .then(res => res.data)
       .then((data: IStudent[]) => {
         setStudents(data);
-        setLoading(false);
       });
   };
 
@@ -81,7 +82,6 @@ export const DirectorLearningTypeDashboardPage = () => {
           lastName: teacherObject.user.lastName,
           email: teacherObject.user.email,
         })));
-        setLoading(false);
       });
   };
 

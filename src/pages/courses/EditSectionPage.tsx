@@ -68,7 +68,7 @@ export const EditSectionPage: React.FC = () => {
       if (!validFileTypes.includes(file.type)) {
         SwalUtils.errorSwal(
           'Formato de archivo inválido',
-          'Solo se permiten archivos con extensión .png, .jpeg o .jpg Por favor, selecciona un archivo válido.',
+          'Solo se permiten archivos con extensión .png, .jpeg o .jpg. Por favor, seleccioná un archivo válido.',
           'Aceptar',
           () => navigate(`/courses/${courseId}/sections/${sectionId}/edit`))
         e.target.value = "";
@@ -118,7 +118,7 @@ export const EditSectionPage: React.FC = () => {
 
     if (!formData.name?.trim()) {
       SwalUtils.errorSwal(
-        'Error en editar la Sección',
+        'Error en editar la sección',
         'El título no puede estar vacío. Por favor, ingresá un título para la sección.',
         'Aceptar',
         () => navigate(`/courses/${courseId}/sections/${sectionId}/edit`)

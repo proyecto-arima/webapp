@@ -136,7 +136,7 @@ export const SurveyPage = () => {
     if (!surveyCompleted) {
       SwalUtils.warningSwal(
         "Encuesta incompleta",
-        "Por favor, completa todas las preguntas antes de finalizar la encuesta.",
+        "Por favor, completá todas las preguntas antes de finalizar la encuesta.",
         "Lo haré",
         () => { console.warn('Survey not completed') },
       );

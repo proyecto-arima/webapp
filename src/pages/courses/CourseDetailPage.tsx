@@ -181,7 +181,7 @@ export const CourseDetailPage: React.FC = () => {
             {user.role === 'STUDENT' ? (
               <>
                 <h3>Todavía no hay secciones en este curso.</h3>
-                <h4>Intentá más tarde o contactá a tu docente</h4>
+                <h4>Intentá más tarde o contactá a tu docente.</h4>
               </>
             ) : (
               <>

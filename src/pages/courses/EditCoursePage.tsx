@@ -67,12 +67,12 @@ export const EditCoursePage: React.FC = () => {
       const validFileTypes = ['image/png', 'image/jpeg', 'image/jpg'];
 
       if (!validFileTypes.includes(file.type)) {
-        Swal.fire({
-          icon: 'error',
-          title: 'Error en el archivo',
-          text: 'El archivo seleccionado no es una imagen válida. Por favor, selecciona un archivo con extensión .png, .jpeg o .jpg',
-          confirmButtonText: 'Aceptar',
-        });
+        SwalUtils.errorSwal(
+          'Formato de archivo inválido',
+          'Solo se permiten archivos con extensión .png, .jpeg o .jpg. Por favor, seleccioná un archivo válido.',
+          'Aceptar',
+          () => navigate(`/courses/${courseId}/edit`))
+        e.target.value = "";
         return;
       }
 

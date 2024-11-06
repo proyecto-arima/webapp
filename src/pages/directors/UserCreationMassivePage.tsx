@@ -33,8 +33,8 @@ export const UserCreationMassivePage = () => {
     ) {
       SwalUtils.warningSwal(
         "Nombre o Apellido inválido para el usuario",
-        `Por favor, ingresa un nombre y apellido válido de al menos 3 caracteres alfabéticos para el usuario #${users.indexOf(user) + 1}`,
-        "Esta bien",
+        `Por favor, ingresá un nombre y apellido válido de al menos 3 caracteres alfabéticos para el usuario #${users.indexOf(user) + 1}`,
+        "Está bien",
         () => { console.warn('Name too short') },
       );
       return false;
@@ -44,7 +44,7 @@ export const UserCreationMassivePage = () => {
       SwalUtils.warningSwal(
         `Email inválido para el usuario "${user.firstName} ${user.lastName}"`,
         `Por favor, asegurate de que el correo ingresado sea válido para el usuario #${users.indexOf(user) + 1}`,
-        "Esta bien",
+        "Está bien",
         () => { console.warn('Email not valid') },
       );
       return false;
@@ -55,7 +55,7 @@ export const UserCreationMassivePage = () => {
       SwalUtils.warningSwal(
         `Documento inválido para el usuario "${user.firstName} ${user.lastName}"`,
         "Por favor, asegurate de que el documento ingresado sea un DNI válido.",
-        "Esta bien",
+        "Está bien",
         () => { console.warn('Document not valid') },
       );
       return false;
@@ -75,7 +75,7 @@ export const UserCreationMassivePage = () => {
     if (!endpoint) {
       SwalUtils.errorSwal(
         'Error al intentar crear los usuarios',
-        'Ocurrió un error al intentar crear los usuarios, por favor intenta más tarde',
+        'Ocurrió un error al intentar crear los usuarios, por favor intentá más tarde',
         undefined,
         () => { console.error('Error creating users') }
       );
@@ -112,7 +112,7 @@ export const UserCreationMassivePage = () => {
             console.error(error);
             SwalUtils.errorSwal(
               'Error al crear usuarios',
-              'Ocurrió un error al intentar crear los usuarios, por favor intenta más tarde',
+              'Ocurrió un error al intentar crear los usuarios, por favor intentá más tarde',
               undefined,
               () => { console.warn('Error creating users') }
             );
@@ -141,7 +141,7 @@ export const UserCreationMassivePage = () => {
             } else {
               SwalUtils.errorSwal(
                 'Error al crear usuarios',
-                'Ocurrió un error al intentar crear los usuarios, por favor intenta más tarde',
+                'Ocurrió un error al intentar crear los usuarios, por favor intentá más tarde',
                 undefined,
                 () => { console.warn('Error creating users') }
               );
@@ -152,7 +152,7 @@ export const UserCreationMassivePage = () => {
             console.error(err);
             SwalUtils.errorSwal(
               'Error interno',
-              'Ocurrió un error interno al intentar crear los usuarios, por favor intenta más tarde',
+              'Ocurrió un error interno al intentar crear los usuarios, por favor intentá más tarde',
               undefined,
               () => { console.warn('Error creating users') }
             );
@@ -185,7 +185,7 @@ export const UserCreationMassivePage = () => {
     if (!userType || userType === '') {
       SwalUtils.warningSwal(
         'Tipo de usuario no seleccionado',
-        'Debes seleccionar el tipo de usuario antes de cargar el archivo',
+        'Debés seleccionar el tipo de usuario antes de cargar el archivo',
         "Confirmar",
         () => { console.warn('No user type selected') }
       );
@@ -359,7 +359,7 @@ export const UserCreationMassivePage = () => {
             <>
               <div>
                 <CardTitle>
-                  <h3>Tene en cuenta que...</h3>
+                  <h3>Tené en cuenta que...</h3>
                 </CardTitle>
                 <CardBody>
                   <ul>

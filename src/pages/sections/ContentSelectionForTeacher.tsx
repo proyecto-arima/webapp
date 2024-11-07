@@ -52,12 +52,13 @@ export default function ContentSelectionForTeacher() {
 
   const { courseId, sectionId, contentId } = useParams<{ courseId: string, sectionId: string, contentId: string }>();
   const navigate = useNavigate();
-
+  const [loading, setLoading] = useState(true);
   const [content, setContent] = useState<IContent>();
 
   const getContent = () => {
     get(`/contents/${contentId}`).then(res => res.json()).then(res => res.data).then((data: IContent) => {
       setContent(data);
+      setLoading(false);
       return data;
     }).then((data: IContent) => {
       if (data.status !== 'DONE') {
@@ -129,7 +130,7 @@ export default function ContentSelectionForTeacher() {
   }, []);
 
   return (
-    <PageWrapper title="Gestión del contenido generado">
+    <PageWrapper title="Gestión del contenido generado" loading={loading} skeletonType="content-selection">
       <p style={{
         textAlign: 'left',
         marginBottom: '2rem',

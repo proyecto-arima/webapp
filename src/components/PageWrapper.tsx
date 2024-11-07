@@ -11,7 +11,7 @@ interface IPageWrapperProps {
   children: React.ReactNode;
   buttons?: React.ReactNode;
   loading?: boolean;
-  skeletonType?: 'card' | 'table';
+  skeletonType?: 'card' | 'table' | 'content-selection';
   columnsCount?: number;
 }
 
@@ -73,13 +73,25 @@ export default function PageWrapper(props: IPageWrapperProps) {
             marginBottom: 'auto',
           }}>
             <CardsSkeleton />
-          </div> : <div style={{
+          </div> : props.skeletonType === 'table' ? <div style={{
             width: '100%',
             height: '100%',
             overflowY: 'hidden',
           }}>
             <TableSkeleton columnsCount={props.columnsCount} />
-            </div>}
+          </div> : props.skeletonType === 'content-selection' ? <div style={{
+            width: '100%',
+            height: '100%',
+            overflowY: 'hidden',
+          }}>
+
+            <Placeholder as={'p'} animation="glow" className="d-flex flex-column gap-1">
+              <Placeholder xs={12} />
+              <Placeholder xs={12} />
+              <Placeholder xs={12} />
+              <TableSkeleton columnsCount={3} />
+            </Placeholder>
+          </div> : null}
         </div> : (props.loading && !showPageLoading ? <></> : props.children)}
       </Card>
     </div>

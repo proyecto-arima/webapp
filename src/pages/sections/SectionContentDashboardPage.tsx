@@ -27,6 +27,7 @@ export interface IContent {
   presignedUrl: string;
   status: string;
   reactions: { userId: string, isSatisfied: boolean }[];
+  visible: boolean;
 }
 
 export const SectionContentDashboard = () => {

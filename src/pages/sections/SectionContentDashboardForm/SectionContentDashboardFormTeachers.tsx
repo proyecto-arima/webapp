@@ -102,7 +102,7 @@ export default function SectionContentDashboardFormTeachers({ content, user, cou
                   textAlign: 'center',
                 }}
               >
-                {c.generated.some(g => g.approved === false ) ? <FontAwesomeIcon icon={faCheck} /> : <FontAwesomeIcon icon={faWarning} />}
+                {c.generated.some(g => g.approved === false ) ? <FontAwesomeIcon icon={faWarning} /> : <FontAwesomeIcon icon={faCheck} />}
               </td>
             <td style={{
               display: 'flex',

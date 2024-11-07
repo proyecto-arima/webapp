@@ -24,6 +24,8 @@ export default function SectionContentDashboardFormStudents({ content, user, cou
 
   const navigate = useNavigate();
 
+  const [reactions, setReactions] = useState(content.map(c => c.reactions));
+
   const urlByProfile = {
     'DIVERGENTE': 'map',
     'ASIMILADOR': 'summary',
@@ -72,6 +74,19 @@ export default function SectionContentDashboardFormStudents({ content, user, cou
             >Ver original</button>
             <button className="btn-purple-1"
               onClick={() => {
+                if(user.learningProfile === 'SIN_PERFIL'){
+                  return Swal.fire({
+                    icon: 'warning',
+                    title: 'No sabemos tu perfil de aprendizaje',
+                    text: 'No tienes un perfil de aprendizaje asignado. Por favor, realiza el test y regresa para ver el contenido',
+                    confirmButtonText: 'Ir al test',
+                    showCancelButton: false,
+                    showCloseButton: false,
+                    allowOutsideClick: false,
+                  }).then(() => {
+                    return navigate(`/me/learning-type/`);
+                  });
+                }
                 navigate(`/courses/${courseId}/sections/${sectionId}/content/${c.id}/${urlByProfile[user.learningProfile!]}`);
               }}
             >

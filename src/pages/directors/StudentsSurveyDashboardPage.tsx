@@ -57,6 +57,7 @@ export const StudentsSurveyDashboardPage = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    setLoading(true)
     get('/directors/courses/')
       .then(res => res.json())
       .then(res => res.data)
@@ -66,9 +67,9 @@ export const StudentsSurveyDashboardPage = () => {
           id: course.id,
           courseName: course.courseName,
         }))]);
-        setLoading(false);
       });
     fetchStudentsSurveyData();
+    setLoading(false);
   }, []);
 
   const fetchStudentsSurveyData = async () => {

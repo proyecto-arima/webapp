@@ -28,6 +28,7 @@ export interface IContent {
   status: string;
   reactions: { userId: string, isSatisfied: boolean }[];
   visible: boolean;
+  generated: any[];
 }
 
 export const SectionContentDashboard = () => {

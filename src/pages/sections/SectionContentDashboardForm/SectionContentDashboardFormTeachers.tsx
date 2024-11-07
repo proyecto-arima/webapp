@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Table } from "reactstrap";
-import { faEdit, faEye, faEyeSlash, faMagicWandSparkles, faTrash } from '@fortawesome/free-solid-svg-icons';
+import { faCheck, faCross, faEdit, faEye, faEyeSlash, faMagicWandSparkles, faTrash, faWarning } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import empty from '../../../assets/images/empty.svg';
 import { IContent } from "../SectionContentDashboardPage";
@@ -64,6 +64,7 @@ export default function SectionContentDashboardFormTeachers({ content, user, cou
           <th style={{ textAlign: 'center'}}>Reacciones positivas</th>
           <th style={{ textAlign: 'center'}}>Reacciones negativas</th>
           <th style={{ textAlign: 'center'}}>Visible</th>
+          <th style={{ textAlign: 'center'}}>Aprobado</th>
           <th></th>
         </tr>
       </thead>
@@ -93,7 +94,15 @@ export default function SectionContentDashboardFormTeachers({ content, user, cou
                   textAlign: 'center',
                 }}
               >
+                
                 {c.visible ? <FontAwesomeIcon icon={faEye}/> : <FontAwesomeIcon icon={faEyeSlash} />}
+              </td>
+              <td
+                style={{
+                  textAlign: 'center',
+                }}
+              >
+                {c.generated.some(g => g.approved === false ) ? <FontAwesomeIcon icon={faCheck} /> : <FontAwesomeIcon icon={faWarning} />}
               </td>
             <td style={{
               display: 'flex',

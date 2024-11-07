@@ -51,7 +51,7 @@ const SetPasswordPage = () => {
       setStatusSended(true);
       setMessage('Se actualizó la contraseña correctamente');
     } else {
-      setMessage('Ocurrió un error inesperado. Por favor, intenta de nuevo más tarde');
+      setMessage('Ocurrió un error inesperado. Por favor, intentá de nuevo más tarde');
       return;
     }
 

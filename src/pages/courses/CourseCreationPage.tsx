@@ -45,7 +45,7 @@ export const CourseCreationPage = () => {
       if (!validFileTypes.includes(file.type)) {
         SwalUtils.errorSwal(
           'Formato de archivo inválido',
-          'Solo se permiten archivos con extensión .png, .jpeg o .jpg Por favor, selecciona un archivo válido.',
+          'Solo se permiten archivos con extensión .png, .jpeg o .jpg. Por favor, seleccioná un archivo válido.',
           'Aceptar',
           () => navigate(`/courses/create/`))
         e.target.value = "";
@@ -62,47 +62,32 @@ export const CourseCreationPage = () => {
     if (!formValues.title) {
       SwalUtils.errorSwal(
         'Error al crear el curso',
-        'Debes ingresar un nombre para el curso antes de continuar.',
+        'Debés ingresar un nombre para el curso antes de continuar.',
         'Aceptar',
         () => navigate(`/courses/create`)
       );
       return;
     }
 
-    // Expresión regular para permitir caracteres alfanuméricos, espacios y letras con tildes
-    const alphanumericWithAccentsRegex = /^[a-zA-ZáéíóúÁÉÍÓÚñÑ0-9\s;°]+$/;
-
-    const titleInvalid = !alphanumericWithAccentsRegex.test(formValues.title);
-    const descriptionInvalid = formValues.description && !alphanumericWithAccentsRegex.test(formValues.description);
-
-    if (titleInvalid && descriptionInvalid) {
+    if(!formValues.image && !autoGenerateImage && !selectedFile) {
       SwalUtils.errorSwal(
-        'Error en los campos',
-        'El título y la descripción solo pueden contener letras, números, espacios y tildes.',
+        'Error al crear el curso',
+        'Debés adjuntar una imagen para el curso antes de continuar.',
         'Aceptar',
         () => navigate(`/courses/create`)
       );
       return;
     }
 
-    if (titleInvalid) {
+    // Verificación para la generación de imagen
+    if (autoGenerateImage && !generatedImage) {
       SwalUtils.errorSwal(
-        'Error en el título',
-        'El título solo puede contener letras, números, espacios y tildes.',
+        'Imagen no generada',
+        'Tenés activada la opción de "Generar imagen automáticamente". Para continuar, presioná el botón de "Generar Imagen" o desactivá la opción y adjuntá una imagen para poder crear el curso.',
         'Aceptar',
         () => navigate(`/courses/create`)
-      );
-      return;
-    }
-
-    if (descriptionInvalid) {
-      SwalUtils.errorSwal(
-        'Error en la descripción',
-        'La descripción solo puede contener letras, números, espacios y tildes.',
-        'Aceptar',
-        () => navigate(`/courses/create`)
-      );
-      return;
+        );
+          return;
     }
 
     let imageUrl = generatedImage || formValues.image;
@@ -154,7 +139,7 @@ export const CourseCreationPage = () => {
       return Swal.fire({
         icon: 'error',
         title: 'Oops...',
-        text: 'Debes ingresar un nombre para el curso antes de generar la imagen',
+        text: 'Debés ingresar un nombre para el curso antes de generar la imagen',
       });
     }
 
@@ -162,7 +147,7 @@ export const CourseCreationPage = () => {
       return Swal.fire({
         icon: 'error',
         title: 'Oops...',
-        text: 'Debes ingresar una descripción para el curso antes de generar la imagen',
+        text: 'Debés ingresar una descripción para el curso antes de generar la imagen',
       });
     }
 
@@ -170,7 +155,7 @@ export const CourseCreationPage = () => {
 
     Swal.fire({
       title: 'Generar imagen con IA',
-      html: 'Tu imagen se generará utilizando IA a partir del nombre y descripción del curso. Este proceso puede tardar unos segundos. Para continuar presione ok.',
+      html: 'Tu imagen se generará utilizando IA a partir del nombre y descripción del curso. Este proceso puede tardar unos segundos. Para continuar presioná ok.',
       icon: 'info',
       showCancelButton: !imageLoading,
       confirmButtonText: 'Ok',
@@ -239,14 +224,14 @@ export const CourseCreationPage = () => {
         }}>
           Acá podés crear un nuevo curso en la plataforma. <br />
           Cada curso debe tener un nombre y una descripción que verán los alumnos al ingresar.
-          Opcionalmente podés cargar una imagen de portada, sino, nosotros la creamos por vos.<br />
+          Además, tenés la opción de cargar una imagen de portada o que AdaptarIA la cree para vos.<br />
           Una vez creado el curso, podés agregarle secciones con el contenido deseado, y además matricular alumnos al curso.
-          Adicionalmente, se generará un código de automatriculación, para que los alumnos puedan matricularse automáticamente.
+          Adicionalmente, se generará un código de automatriculación para que puedas pasarlo a tus estudiantes y que se matriculen ellos mismos.
         </p>
         <h5>Detalles del curso</h5>
         <hr />
         <Input name="title" type="text" placeholder="Nombre" className="mb-3" onChange={handleFormChange('title')} />
-        <Input name="description" type="textarea" placeholder="Descripción del curso" className="mb-3" onChange={handleFormChange('description')} />
+        <Input name="description" type="text" placeholder="Descripción del curso" className="mb-3" onChange={handleFormChange('description')} />
 
         <h5>Imagen</h5>
         <hr />
@@ -255,8 +240,8 @@ export const CourseCreationPage = () => {
           marginBottom: '2rem',
           color: '#6b7280'
         }}>
-          Para generar una imagen automáticamente a partir del nombre y descripción del curso, clickea en Generar Imagen y espera que la magia ocurra.<br />
-          También puedes subir un archivo con extensión .png, .jpeg o .jpg para elegir manualmente la imagen del curso, si lo prefieres.
+          Para generar una imagen con IA a partir del nombre y descripción del curso, hacé click en &quot;Generar Imagen&quot; y esperá que ocurra la magia.<br />
+          Si querés subir un archivo (.png, .jpeg o .jpg) destildá la opción de &quot;Generar imagen automáticamente&quot; y seleccioná el archivo deseado.
         </p>
         <div className='d-flex flex-row mb-3 gap-3'>
           <Input type='checkbox' name='auto-generate' id='auto-generate' onClick={e => setAutoGenerateImage(!autoGenerateImage)} checked={autoGenerateImage} />

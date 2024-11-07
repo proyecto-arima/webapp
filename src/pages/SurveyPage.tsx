@@ -136,7 +136,7 @@ export const SurveyPage = () => {
     if (!surveyCompleted) {
       SwalUtils.warningSwal(
         "Encuesta incompleta",
-        "Por favor, completa todas las preguntas antes de finalizar la encuesta.",
+        "Por favor, completá todas las preguntas antes de finalizar la encuesta.",
         "Lo haré",
         () => { console.warn('Survey not completed') },
       );
@@ -333,10 +333,14 @@ export const SurveyPage = () => {
                   </Card>
                 </div>
               ))}
+
             </CardGroup>
-            <div style={{ marginLeft: '10px' }}>
-              <button className="btn-purple-1" onClick={() => validateCompletedQuestions(questions) && sendSurvey(questions)}>Finalizar encuesta</button>
+            <div style={{ alignSelf: 'flex-end', marginRight: '20px', marginBottom: '20px' }}>
+              <button className="btn-purple-1" onClick={() => validateCompletedQuestions(questions) && sendSurvey(questions)}>
+                Finalizar encuesta
+              </button>
             </div>
+            
           </>
         )}
       </div>

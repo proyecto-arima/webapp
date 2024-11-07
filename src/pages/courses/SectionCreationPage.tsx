@@ -41,7 +41,7 @@ export const SectionCreationPage = () => {
       if (!validFileTypes.includes(file.type)) {
         SwalUtils.errorSwal(
           'Formato de archivo inválido',
-          'Solo se permiten archivos con extensión .png, .jpeg o .jpg Por favor, selecciona un archivo válido.',
+          'Solo se permiten archivos con extensión .png, .jpeg o .jpg. Por favor, seleccioná un archivo válido.',
           'Aceptar',
           () => navigate(`/courses/${courseId}/new-section`))
         e.target.value = "";
@@ -57,10 +57,31 @@ export const SectionCreationPage = () => {
     if (!formValues.title) {
       SwalUtils.errorSwal(
         'Error al crear la sección',
-        'Debes ingresar un nombre para la sección antes de continuar.',
+        'Debés ingresar un nombre para la sección antes de continuar.',
         'Aceptar',
         () => navigate(`/courses/${courseId}/new-section`)
       );
+      return;
+    }
+
+    if(!formValues.image && !autoGenerateImage && !selectedFile) {
+      SwalUtils.errorSwal(
+        'Error al crear la sección',
+        'Debés adjuntar una imagen para la sección antes de continuar.',
+        'Aceptar',
+        () => navigate(`/courses/${courseId}/new-section`)
+      );
+      return;
+    }
+
+    // Verificación para la generación de imagen
+    if (autoGenerateImage && !generatedImage) {
+      SwalUtils.errorSwal(
+        'Imagen no generada',
+        'Tenés activada la opción de "Generar imagen automáticamente". Para continuar, presioná el botón de "Generar Imagen" o desactivá la opción y adjuntá una imagen para poder crear la sección.',
+        'Aceptar',
+        () => navigate(`/courses/${courseId}/new-section`)
+        );
       return;
     }
 
@@ -114,7 +135,7 @@ export const SectionCreationPage = () => {
       return Swal.fire({
         icon: 'error',
         title: 'Oops...',
-        text: 'Debes ingresar un nombre para la sección antes de generar la imagen.',
+        text: 'Debés ingresar un nombre para la sección antes de generar la imagen.',
       });
     }
 
@@ -122,7 +143,7 @@ export const SectionCreationPage = () => {
       return Swal.fire({
         icon: 'error',
         title: 'Oops...',
-        text: 'Debes ingresar una descripción para la sección antes de generar la imagen.',
+        text: 'Debés ingresar una descripción para la sección antes de generar la imagen.',
       });
     }
 
@@ -130,7 +151,7 @@ export const SectionCreationPage = () => {
 
     Swal.fire({
       title: 'Generar imagen con IA',
-      html: 'Tu imagen se generará utilizando IA a partir del nombre y descripción de la sección. Este proceso puede tardar unos segundos. Para continuar presione ok.',
+      html: 'Tu imagen se generará utilizando IA a partir del nombre y descripción de la sección. Este proceso puede tardar unos segundos. Para continuar presioná ok.',
       icon: 'info',
       showCancelButton: !imageLoading,
       confirmButtonText: 'Ok',
@@ -178,13 +199,15 @@ export const SectionCreationPage = () => {
         height: '100%',
       }}>
         <p style={{ textAlign: 'left', marginBottom: '2rem', color: '#6b7280' }}>
-          Acá podés crear una nueva sección en la plataforma. Cada sección tendrá diferentes contenidos agrupados por temas, franjas de tiempo, etc.
-          Opcionalmente podés cargar una imagen de portada, sino, nosotros la creamos por vos. Una vez creada la sección, podrás agregarle contenidos en PDF.
+          Acá podés crear una nueva sección en la plataforma. <br />
+          Cada sección te permitirá agrupar los contenidos por tema, franja de tiempo, unidad, etc.
+          De forma opcional podés elegir una imagen o que AdaptarIA la cree por vos, igual que en el curso. <br />
+          Una vez creada la sección, podrás empezar a cargarle contenidos.
         </p>
         <h5>Detalles de la sección</h5>
         <hr />
         <Input name="title" type="text" placeholder="Nombre" className="mb-3" onChange={handleFormChange('title')} />
-        <Input name="description" type="textarea" placeholder="Descripción de la sección" className="mb-3" onChange={handleFormChange('description')} />
+        <Input name="description" type="text" placeholder="Descripción de la sección" className="mb-3" onChange={handleFormChange('description')} />
 
         <div className='d-flex flex-row mb-3 gap-3'>
           <Input name="visible" type='checkbox' id='visible' onClick={() => setFormValues({ ...formValues, visible: !formValues.visible })} checked={formValues.visible} />
@@ -194,8 +217,8 @@ export const SectionCreationPage = () => {
         <h5>Imagen</h5>
         <hr />
         <p style={{ textAlign: 'left', marginBottom: '2rem', color: '#6b7280' }}>
-          Para generar una imagen automáticamente a partir del nombre y descripción de la sección, clickea en Generar Imagen y espera que la magia ocurra.
-          También puedes subir un archivo con extensión .png, .jpeg o .jpg para elegir manualmente la imagen de la sección, si lo prefieres.
+          Para generar una imagen con IA a partir del nombre y descripción de la sección, hacé click en &quot;Generar Imagen&quot; y esperá que ocurra la magia.
+          Si querés subir un archivo (.png, .jpeg o .jpg) destildá la opción de &quot;Generar imagen automáticamente&quot; y seleccioná el archivo deseado.
         </p>
         <div className='d-flex flex-row mb-3 gap-3'>
           <Input type='checkbox' name='auto-generate' id='auto-generate' onClick={e => setAutoGenerateImage(!autoGenerateImage)} checked={autoGenerateImage} />

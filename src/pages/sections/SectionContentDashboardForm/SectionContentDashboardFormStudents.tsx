@@ -90,8 +90,8 @@ export default function SectionContentDashboardFormStudents({ content, user, cou
       src={empty}
     ></img>
     <>
-      <h3>Parece que aún no hay contenido en esta sección.</h3>
-      <h4>Por favor intenta de nuevo más tarde</h4>
+      <h3>Todavía no hay contenidos en esta sección.</h3>
+      <h4>Intentá más tarde o contactá a tu docente.</h4>
     </>
   </div>)
 }

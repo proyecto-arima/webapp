@@ -220,7 +220,7 @@ export const StudentsSurveyDashboardPage = () => {
               <Select
                 options={courses.map(course => ({ value: course.id, label: course.courseName }))}
                 noOptionsMessage={() => 'No hay cursos disponibles'}
-                placeholder="Seleccionar curso"
+                placeholder="Buscar curso"
                 isClearable
                 isSearchable
                 onChange={(selectedOption) => {

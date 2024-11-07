@@ -32,8 +32,10 @@ export const TeacherLearningTypeDashboardPage = () => {
   const [selectedStudent, setSelectedStudent] = useState<IStudent | null>(null);
   const [students, setStudents] = useState<IStudent[]>([]);
   const [filteredStudents, setFilteredStudents] = useState<IStudent[]>([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    setLoading(true);
     get('/teachers/me/courses/')
       .then(res => res.json())
       .then(res => res.data)
@@ -46,9 +48,11 @@ export const TeacherLearningTypeDashboardPage = () => {
       });
 
     fetchStudents();
+    setLoading(false);
   }, []);
 
   const fetchStudents = async () => {
+    setLoading(true);
     await get('/students/learning-profile')
       .then(res => res.json())
       .then(res => res.data)
@@ -62,6 +66,7 @@ export const TeacherLearningTypeDashboardPage = () => {
   }, [courseId, selectedLearningType, selectedStudent]);
 
   const fetchFilteredStudents = async () => {
+    setLoading(true);
     let endpoint = '/students/learning-profile';
     const queryParams: string[] = [];
 
@@ -108,6 +113,7 @@ export const TeacherLearningTypeDashboardPage = () => {
         console.error("Error fetching students:", error);
         setFilteredStudents([]);
       });
+      setLoading(false);
   };
 
   return (
@@ -137,7 +143,7 @@ export const TeacherLearningTypeDashboardPage = () => {
             <div className="d-flex flex-row align-items-center w-100 gap-3 mb-3">
               <Select
                 options={courses.map(course => ({ value: course.id, label: course.title }))}
-                placeholder="Seleccionar curso"
+                placeholder="Buscar curso"
                 onChange={(selectedOption) => {
                   setCourseId(selectedOption ? selectedOption.value : '');
                 }}
@@ -145,7 +151,7 @@ export const TeacherLearningTypeDashboardPage = () => {
               />
               <Select
                 options={learningTypes}
-                placeholder="Seleccionar tipo de aprendizaje"
+                placeholder="Buscar tipo de aprendizaje"
                 onChange={(selectedOption) => {
                   setSelectedLearningType(selectedOption ? selectedOption.value : '');
                 }}
@@ -170,6 +176,11 @@ export const TeacherLearningTypeDashboardPage = () => {
 
             <hr />
 
+            {loading ? (
+              <div style={{ textAlign: 'center', padding: '20px' }}>
+                <strong>Cargando...</strong>
+              </div>
+            ) : (
             <Card>
               <CardHeader tag='h4'>
                 Resultados
@@ -204,6 +215,7 @@ export const TeacherLearningTypeDashboardPage = () => {
               </Table>
              )}
             </Card>
+            )}
           </div>
         </Card>
       </div>

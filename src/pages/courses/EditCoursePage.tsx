@@ -31,6 +31,7 @@ export const EditCoursePage: React.FC = () => {
   const [generatedImage, setGeneratedImage] = useState<string | null>(null);
   const [imageLoading, setImageLoading] = useState<boolean>(false);
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   useEffect(() => {
     if (courseId) {
@@ -66,12 +67,12 @@ export const EditCoursePage: React.FC = () => {
       const validFileTypes = ['image/png', 'image/jpeg', 'image/jpg'];
 
       if (!validFileTypes.includes(file.type)) {
-        Swal.fire({
-          icon: 'error',
-          title: 'Error en el archivo',
-          text: 'El archivo seleccionado no es una imagen válida. Por favor, selecciona un archivo con extensión .png, .jpeg o .jpg',
-          confirmButtonText: 'Aceptar',
-        });
+        SwalUtils.errorSwal(
+          'Formato de archivo inválido',
+          'Solo se permiten archivos con extensión .png, .jpeg o .jpg. Por favor, seleccioná un archivo válido.',
+          'Aceptar',
+          () => navigate(`/courses/${courseId}/edit`))
+        e.target.value = "";
         return;
       }
 
@@ -103,6 +104,7 @@ export const EditCoursePage: React.FC = () => {
     if (courseId) {
       patch(`/courses/${courseId}`, updatedData).then(res => res.json()).then((data) => {
         if (data.success) {
+          dispatch(editCourses(updatedData));
           Swal.fire({
             icon: 'success',
             title: 'Curso actualizado',
@@ -129,49 +131,19 @@ export const EditCoursePage: React.FC = () => {
       Swal.fire({
         icon: 'error',
         title: 'Error en el título',
-        text: 'El título no puede estar vacío. Por favor, ingresa un título para la sección.',
+        text: 'El título no puede estar vacío. Por favor, ingresá un título para el curso.',
         confirmButtonText: 'Aceptar',
       });
       return;
     }
-
-    // Expresión regular para permitir caracteres alfanuméricos, espacios y letras con tildes
-    const alphanumericWithAccentsRegex = /^[a-zA-ZáéíóúÁÉÍÓÚñÑ0-9\s;°]+$/;
-
-    const titleInvalid = !alphanumericWithAccentsRegex.test(formData.title);
-    const descriptionInvalid = (formData.description && !alphanumericWithAccentsRegex.test(formData.description)) || formData.description === '';
-
-    if (titleInvalid && descriptionInvalid) {
-      Swal.fire({
-        icon: 'error',
-        title: 'Error en los campos',
-        text: 'El título y la descripción solo pueden contener letras, números, espacios y tildes.',
-        confirmButtonText: 'Aceptar',
-      });
-      return;
-    }
-
-    if (titleInvalid) {
-      Swal.fire({
-        icon: 'error',
-        title: 'Error en el título',
-        text: 'El título solo puede contener letras, números y espacios.',
-        confirmButtonText: 'Aceptar',
-      });
-      return;
-    }
-
-    if (descriptionInvalid) {
-      Swal.fire({
-        icon: 'error',
-        title: 'Error en la descripción',
-        text: 'La descripción solo puede contener letras, números y espacios.',
-        confirmButtonText: 'Aceptar',
-      });
-      return;
-    }
-
-    confirmEdit();
+    
+    SwalUtils.infoSwal(
+      '¿Estás seguro de que querés modificar este curso?',
+      'Esta acción modificará los datos del curso.',
+      'Sí',
+      'No',
+      confirmEdit
+    );
   };
 
   // Generate image
@@ -180,7 +152,7 @@ export const EditCoursePage: React.FC = () => {
       return Swal.fire({
         icon: 'error',
         title: 'Oops...',
-        text: 'Debes ingresar el nombre y la descripción de la sección antes de generar la imagen',
+        text: 'Debés ingresar el nombre y la descripción del curso antes de generar la imagen',
       });
     }
 
@@ -212,15 +184,15 @@ export const EditCoursePage: React.FC = () => {
           color: '#6b7280'
         }}>
           Acá podés editar el curso en la plataforma. <br />
-            Cada curso debe tener un nombre y una descripción que verán los alumnos al ingresar.
-            Opcionalmente podés cargar una imagen de portada, sino, nosotros la creamos por vos.<br />
-            Una vez editado el curso, podés seguirle agregando secciones con el contenido deseado, y además matricular alumnos al curso.
+          Cada curso debe tener un nombre y una descripción que verán los alumnos al ingresar.
+          Además, tenés la opción de modificar la imagen de portada o que AdaptarIA la cree para vos.<br />
+          Una vez editado el curso, podés seguirle agregando secciones con el contenido deseado, y además matricular alumnos al curso.
         </p>
         <h5>Detalles del curso</h5>
         <hr />
         <Input
           type="text"
-          name="name"
+          name="title"
           value={formData.title}
           placeholder="Nombre del curso"
           className="mb-3"
@@ -228,7 +200,7 @@ export const EditCoursePage: React.FC = () => {
           required
         />
         <Input
-          type="textarea"
+          type="text"
           name="description"
           value={formData.description}
           placeholder="Descripción de la sección"
@@ -243,8 +215,8 @@ export const EditCoursePage: React.FC = () => {
           marginBottom: '2rem',
           color: '#6b7280'
         }}>
-          Para generar una imagen automáticamente a partir del nombre y descripción del curso, clickea en Generar Imagen y espera que la magia ocurra.<br />
-          También puedes subir un archivo con extensión .png, .jpeg o .jpg para elegir manualmente la imagen del curso, si lo prefieres.
+          Para generar una imagen con IA a partir del nombre y descripción del curso, hacé click en &quot;Generar Imagen&quot; y esperá que ocurra la magia.<br />
+          Si querés subir un archivo (.png, .jpeg o .jpg) destildá la opción de &quot;Generar imagen automáticamente&quot; y seleccioná el archivo deseado.
         </p>
 
         <div className='d-flex flex-row mb-3 gap-3'>

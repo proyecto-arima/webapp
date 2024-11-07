@@ -222,8 +222,8 @@ export default function ContentSelectionForTeacher() {
         <img src={ai_thinking} alt="placeholder" style={{
           width: '30rem',
         }} />
-        <h3>El contenido aún se encuentra procesándose</h3>
-        <h4>Por favor, vuelva más tarde</h4>
+        <h3>El contenido aún está procesándose</h3>
+        <h4>Por favor, volvé más tarde</h4>
       </div>}
     </PageWrapper>
   );

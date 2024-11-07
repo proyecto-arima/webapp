@@ -68,7 +68,7 @@ export const EditSectionPage: React.FC = () => {
       if (!validFileTypes.includes(file.type)) {
         SwalUtils.errorSwal(
           'Formato de archivo inválido',
-          'Solo se permiten archivos con extensión .png, .jpeg o .jpg Por favor, selecciona un archivo válido.',
+          'Solo se permiten archivos con extensión .png, .jpeg o .jpg. Por favor, seleccioná un archivo válido.',
           'Aceptar',
           () => navigate(`/courses/${courseId}/sections/${sectionId}/edit`))
         e.target.value = "";
@@ -118,44 +118,8 @@ export const EditSectionPage: React.FC = () => {
 
     if (!formData.name?.trim()) {
       SwalUtils.errorSwal(
-        'Error en Editar la Sección',
-        'El título no puede estar vacío. Por favor, ingresa un título para la sección.',
-        'Aceptar',
-        () => navigate(`/courses/${courseId}/sections/${sectionId}/edit`)
-      );
-      return;
-    }
-
-    // Expresión regular para permitir caracteres alfanuméricos, espacios y letras con tildes
-    const alphanumericWithAccentsRegex = /^[a-zA-ZáéíóúÁÉÍÓÚñÑ0-9\s;°]+$/;
-
-    const titleInvalid = !alphanumericWithAccentsRegex.test(formData.name);
-    const descriptionInvalid = (formData.description && !alphanumericWithAccentsRegex.test(formData.description)) || formData.description === '';
-
-    if (titleInvalid && descriptionInvalid) {
-      SwalUtils.errorSwal(
-        'Error en los campos',
-        'El título y la descripción solo pueden contener letras, números, espacios y tildes.',
-        'Aceptar',
-        () => navigate(`/courses/${courseId}/sections/${sectionId}/edit`)
-      );
-      return;
-    }
-
-    if (titleInvalid) {
-      SwalUtils.errorSwal(
-        'Error en el título',
-        'El título solo puede contener letras, números, espacios y tildes.',
-        'Aceptar',
-        () => navigate(`/courses/${courseId}/sections/${sectionId}/edit`)
-      );
-      return;
-    }
-
-    if (descriptionInvalid) {
-      SwalUtils.errorSwal(
-        'Error en la descripción',
-        'La descripción solo puede contener letras, números, espacios y tildes.',
+        'Error en editar la sección',
+        'El título no puede estar vacío. Por favor, ingresá un título para la sección.',
         'Aceptar',
         () => navigate(`/courses/${courseId}/sections/${sectionId}/edit`)
       );
@@ -163,7 +127,7 @@ export const EditSectionPage: React.FC = () => {
     }
 
     SwalUtils.infoSwal(
-      '¿Estás seguro de que quieres modificar esta sección?',
+      '¿Estás seguro de que querés modificar esta sección?',
       'Esta acción modificará los datos de la sección.',
       'Sí',
       'No',
@@ -177,7 +141,7 @@ export const EditSectionPage: React.FC = () => {
       return Swal.fire({
         icon: 'error',
         title: 'Oops...',
-        text: 'Debes ingresar el nombre y la descripción de la sección antes de generar la imagen',
+        text: 'Debés ingresar el nombre y la descripción de la sección antes de generar la imagen',
       });
     }
 
@@ -191,10 +155,6 @@ export const EditSectionPage: React.FC = () => {
       setGeneratedImage(res.data);
     });
   };
-
-  if (loading) {
-    return <div>Cargando datos...</div>;
-  }
 
   return (
     <PageWrapper
@@ -213,8 +173,9 @@ export const EditSectionPage: React.FC = () => {
           color: '#6b7280'
         }}>
           Acá podés editar la sección en la plataforma <br />
-          Cada sección tendrá diferentes contenidos agrupados por temas, franjas de tiempo, etc.
-          Opcionalmente podes cargar una imagen de portada, sino, nosotros la creamos por vos.<br />
+          Cada sección te permitirá agrupar los contenidos por tema, franja de tiempo, unidad, etc.
+          De forma opcional podés elegir una imagen o que AdaptarIA la cree por vos, igual que en el curso. <br />
+          Una vez modificada la sección, podrás seguir cargando contenidos.
         </p>
         <h5>Detalles de la sección</h5>
         <hr />
@@ -228,7 +189,7 @@ export const EditSectionPage: React.FC = () => {
           required
         />
         <Input
-          type="textarea"
+          type="text"
           name="description"
           value={formData.description}
           placeholder="Descripción de la sección"
@@ -254,8 +215,8 @@ export const EditSectionPage: React.FC = () => {
           marginBottom: '2rem',
           color: '#6b7280'
         }}>
-          Para generar una imagen automáticamente a partir del nombre y descripción de la sección, clickea en Generar Imagen y espera que la magia ocurra.<br />
-          También puedes subir un archivo con extensión .png, .jpeg o .jpg para elegir manualmente la imagen de la sección, si lo prefieres.
+           Para generar una imagen con IA a partir del nombre y descripción del curso, hacé click en &quot;Generar Imagen&quot; y esperá que ocurra la magia.<br />
+           Si querés subir un archivo (.png, .jpeg o .jpg) destildá la opción de &quot;Generar imagen automáticamente&quot; y seleccioná el archivo deseado.
         </p>
 
         <div className='d-flex flex-row mb-3 gap-3'>

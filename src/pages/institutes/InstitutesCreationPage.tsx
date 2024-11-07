@@ -29,7 +29,7 @@ export const InstitutesCreationPage = () => {
       SwalUtils.warningSwal(
         "El nombre de la institución es inválido.",
         "Por favor, asegurate de que el nombre sea el nombre completo de la institución.",
-        "Esta bien",
+        "Está bien",
         () => { console.warn('Name too short') },
       );
       return;
@@ -39,7 +39,7 @@ export const InstitutesCreationPage = () => {
       SwalUtils.warningSwal(
         "La dirección ingresada es inválida.",
         "Por favor, asegurate de que la dirección ingresada sea la dirección correcta de la institución.",
-        "Esta bien",
+        "Está bien",
         () => { console.warn('Address too short') },
       );
       return;
@@ -48,8 +48,8 @@ export const InstitutesCreationPage = () => {
     if(!FormValidators.isPhoneNumber(formValues?.phone || '')) {
       SwalUtils.warningSwal(
         "El número de telefono ingresado es inválido.",
-        "Por favor, asegurate de que el número de teléfono ingresado sea correcto.",
-        "Esta bien",
+        "Por favor, asegurate de que el número de teléfono ingresado sea correcto. Debe tener al menos 8 dígitos.",
+        "Está bien",
         () => { console.warn('Phone number not valid') },
       );
       return;
@@ -67,7 +67,7 @@ export const InstitutesCreationPage = () => {
       } else {
         SwalUtils.errorSwal(
           "Hubo un error al crear la institución ❗",
-          "Hubo un error interno al crear la institución. Por favor, intenta mas tarde",
+          "Hubo un error interno al crear la institución. Por favor, intentá mas tarde",
           undefined,
           () => { console.error(`Institute not created. Error: ${res.statusText}`) },
         );
@@ -76,7 +76,7 @@ export const InstitutesCreationPage = () => {
       .catch(err => {
         SwalUtils.errorSwal(
           "Hubo un error al crear la institución ❗",
-          "Hubo un error interno al crear la institución. Por favor, intenta mas tarde",
+          "Hubo un error interno al crear la institución. Por favor, intentá mas tarde",
           undefined,
           () => { console.error(`Institute not created. Error: ${err}`) },
         );

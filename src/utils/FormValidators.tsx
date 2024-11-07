@@ -47,7 +47,7 @@ interface PhoneValidator {
 };
 
 const phoneValidations: PhoneValidator = (phoneNumber) => ({
-  isNumber: /^\d{10}$/.test(phoneNumber)
+  isNumber: /^\d{8,}$/.test(phoneNumber)
 });
 
 const isPhoneNumber = (phoneNumber: string) => {

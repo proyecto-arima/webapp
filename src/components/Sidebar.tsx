@@ -213,7 +213,7 @@ export default function Sidebar() {
             <div className="w-100">
 
               <NavLink end
-                to={user.learningProfile ? '/me/learning-type/result' : '/me/learning-type'}
+                to={(user.learningProfile !== 'SIN_PERFIL' && user.learningProfile === undefined) ? '/me/learning-type/result' : '/me/learning-type'}
                 className={({ isActive }) => isActive ? 'sidebar-navlink-active' : 'sidebar-navlink-inactive'}
                 state={{ profile: user.learningProfile }}
               >

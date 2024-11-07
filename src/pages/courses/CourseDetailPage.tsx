@@ -14,6 +14,7 @@ import placeholder from '../../assets/images/placeholder.webp';
 import '../../assets/styles/CourseDetailPage.css';
 import PageWrapper from '../../components/PageWrapper';
 import { SwalUtils } from '../../utils/SwalUtils';
+import Swal from 'sweetalert2';
 
 interface ISection {
   id: string;
@@ -92,6 +93,26 @@ export const CourseDetailPage: React.FC = () => {
     navigate(`/courses/${courseId}/sections/${sectionId}/edit`);
   };
 
+  const goToSection = (sectionId: string) => {
+    if (user.role === 'TEACHER') {
+      return navigate(`/courses/${courseId}/sections/${sectionId}`);
+    }
+    if(user.learningProfile === 'SIN_PERFIL'){
+      return Swal.fire({
+        icon: 'warning',
+        title: 'No sabemos tu perfil de aprendizaje',
+        text: 'No tienes un perfil de aprendizaje asignado. Por favor, realiza el test y regresa para ver el contenido',
+        confirmButtonText: 'Ir al test',
+        showCancelButton: false,
+        showCloseButton: false,
+        allowOutsideClick: false,
+      }).then(() => {
+        return navigate(`/me/learning-type/`);
+      });
+    }
+    navigate(`/courses/${courseId}/sections/${sectionId}`);
+  };
+
   const visibleSections = sections.filter(
     section => user.role !== 'STUDENT' || section.visible
   );
@@ -159,7 +180,7 @@ export const CourseDetailPage: React.FC = () => {
                       <p className="card-text flex-grow-1 fs-6 fs-md-5">{section.description}</p>
                     </div>
                     <div className="card-footer d-flex flex-column flex-md-row justify-content-end align-items-center gap-3">
-                      <button className='btn-purple-1 w-100 w-md-auto' onClick={() => navigate(`/courses/${courseId}/sections/${section.id}`)}>Ver sección</button>
+                      <button className='btn-purple-1 w-100 w-md-auto' onClick={() => goToSection(section.id)}>Ver Sección</button>
                       {user.role === 'TEACHER' && (
                         <div className='d-flex gap-3 flex-column flex-md-row'>
                           <button className='btn-purple-2 w-100 w-md-auto' onClick={() => handleEditSection(section.id)}><FontAwesomeIcon icon={faEdit} /></button>

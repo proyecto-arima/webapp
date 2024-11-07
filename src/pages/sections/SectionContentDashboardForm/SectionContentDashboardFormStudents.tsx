@@ -10,7 +10,8 @@ import empty from '../../../assets/images/empty.svg';
 import { UserState } from "../../../redux/slices/user";
 import { post } from "../../../utils/network";
 import InlineReactions from "../../../components/InlineReactions";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import Swal from "sweetalert2";
 
 interface ISectionContentDashboardFormStudentsProps {
   content: IContent[];
@@ -23,13 +24,12 @@ export default function SectionContentDashboardFormStudents({ content, user, cou
 
   const navigate = useNavigate();
 
-  const [reactions, setReactions] = useState(content.map(c => c.reactions));
-
   const urlByProfile = {
     'DIVERGENTE': 'map',
     'ASIMILADOR': 'summary',
     'ACOMODADOR': 'audio',
-    'CONVERGENTE': 'game'
+    'CONVERGENTE': 'game',
+    'SIN_PERFIL': '',
   }
 
   return (content?.length ? <Table

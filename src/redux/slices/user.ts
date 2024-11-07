@@ -16,7 +16,7 @@ export interface UserState {
     id: string,
     name: string
   },
-  learningProfile?: 'DIVERGENTE' | 'ASIMILADOR' | 'ACOMODADOR' | 'CONVERGENTE',
+  learningProfile?: 'DIVERGENTE' | 'ASIMILADOR' | 'ACOMODADOR' | 'CONVERGENTE' | 'SIN_PERFIL',
   requiresSurvey?: boolean,
   profilePicture?: string,
 }

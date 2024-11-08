@@ -37,7 +37,7 @@ export default function SectionContentDashboardFormTeachers({ content, user, cou
 
   const handleDeleteContent = async (contentId: string) => {
     SwalUtils.infoSwal(
-      '¿Estás seguro de que quieres eliminar este contenido?',
+      '¿Estás seguro de que querés eliminar este contenido?',
       'Esta acción eliminará el contenido permanentemente y no podrá deshacerse.',
       'Sí',
       'No',

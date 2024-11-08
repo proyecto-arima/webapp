@@ -24,7 +24,7 @@ export const UserPersonalDataPage = () => {
       if (!validFileTypes.includes(file.type)) {
         SwalUtils.errorSwal(
           'Formato de archivo inválido',
-          'Solo se permiten archivos con extensión .png, .jpeg o .jpg. Selecciona un archivo válido.',
+          'Solo se permiten archivos con extensión .png, .jpeg o .jpg. Por favor, Seleccioná un archivo válido.',
           'Aceptar',
           () => navigate('/me/profile')
         );
@@ -57,7 +57,7 @@ export const UserPersonalDataPage = () => {
       } catch (error) {
         SwalUtils.errorSwal(
           'Error de carga',
-          'No se pudo cargar la imagen de perfil. Inténtalo de nuevo más tarde.',
+          'No se pudo cargar la imagen de perfil. Intentalo de nuevo más tarde.',
           'Aceptar',
           () => navigate('/me/profile')
         );
@@ -87,7 +87,7 @@ export const UserPersonalDataPage = () => {
     } catch (error) {
       SwalUtils.errorSwal(
         'Error de actualización',
-        'No se pudo actualizar la información del perfil. Inténtalo nuevamente.',
+        'No se pudo actualizar la información del perfil. Intentalo nuevamente.',
         'Aceptar',
         () => navigate('/me/profile')
       );

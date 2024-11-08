@@ -63,7 +63,7 @@ export const TeacherDashboardPage = () => {
       cancelButtonText: 'Cancelar',
       preConfirm: (role) => {
         if (!role) {
-          Swal.showValidationMessage('Debes seleccionar un rol');
+          Swal.showValidationMessage('Debés seleccionar un rol');
         }
       }
     });

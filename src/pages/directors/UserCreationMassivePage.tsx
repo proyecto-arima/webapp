@@ -85,7 +85,7 @@ export const UserCreationMassivePage = () => {
     SwalUtils.infoSwal(
       'Confimar creación de usuarios',
       '¿Estás seguro de que querés crear todos estos usuarios?',
-      "Si, estoy seguro",
+      "Sí, estoy seguro",
       "No, volver",
       async () => {
         post('/users/massive', users)
@@ -123,7 +123,7 @@ export const UserCreationMassivePage = () => {
             if (res.ok) {
               SwalUtils.successSwal(
                 'Usuarios creados',
-                `Los usuarios se han creado exitosamente. En breve podras verlos en la lista de ${userType === 'DOCENTE' ? 'Docentes' : userType === 'ESTUDIANTE' ? 'Estudiantes' : ''}`,
+                `Los usuarios se han creado exitosamente. En breve podrás verlos en la lista de ${userType === 'DOCENTE' ? 'Docentes' : userType === 'ESTUDIANTE' ? 'Estudiantes' : ''}`,
                 'Aceptar',
                 () => { console.info('Users created') },
                 () => { console.info('Users created') }
@@ -175,7 +175,7 @@ export const UserCreationMassivePage = () => {
     if (!csvFile) {
       SwalUtils.errorSwal(
         'Error al cargar el archivo',
-        'No se encontro ningún archivo, intenta mas tarde',
+        'No se encontró ningún archivo, intentá mas tarde',
         undefined,
         () => { console.warn('No file found') }
       );

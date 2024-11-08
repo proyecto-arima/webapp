@@ -175,7 +175,7 @@ export const SurveyPage = () => {
         } else {
           SwalUtils.errorSwal(
             "Error al enviar la encuesta",
-            "Hubo un error al enviar la encuesta. Por favor, intenta mas tarde",
+            "Hubo un error al enviar la encuesta. Por favor, intentá mas tarde",
             undefined,
             () => { console.error(`Survey not sent. Error status ${res.status}`) },
           );
@@ -184,7 +184,7 @@ export const SurveyPage = () => {
       .catch((error) => {
         SwalUtils.errorSwal(
           "Error al enviar la encuesta",
-          "Hubo un error al enviar la encuesta. Por favor, intenta mas tarde",
+          "Hubo un error al enviar la encuesta. Por favor, intentá mas tarde",
           undefined,
           () => { console.error(`Survey not sent. Error: ${error}`) },
         );

@@ -55,7 +55,7 @@ const UserCreationForm: React.FC<UserCreationFormProps> = ({ entityToCreate, act
         } else {
           SwalUtils.errorSwal(
             "Hubo un error al cargar las instituciones",
-            "Por favor, intenta mas tarde. Si crees que se trata de un error contactate con el administrador de AdaptarIA",
+            "Por favor, intentá mas tarde. Si creés que se trata de un error contactate con el administrador de AdaptarIA",
             "Esta bien",
             () => { console.error('HTTP ERROR') },
           );
@@ -69,7 +69,7 @@ const UserCreationForm: React.FC<UserCreationFormProps> = ({ entityToCreate, act
         } else {
           SwalUtils.errorSwal(
             "Hubo un error al cargar las instituciones",
-            "Por favor, intenta mas tarde. Si crees que se trata de un error contactate con el administrador de AdaptarIA",
+            "Por favor, intentá mas tarde. Si creés que se trata de un error contactate con el administrador de AdaptarIA",
             "Esta bien",
             () => { console.error('INTERNAL ERROR') },
           );
@@ -79,7 +79,7 @@ const UserCreationForm: React.FC<UserCreationFormProps> = ({ entityToCreate, act
       .catch((e) => {
         SwalUtils.errorSwal(
           "Hubo un error al cargar las instituciones",
-          "Por favor, intenta mas tarde. Si crees que se trata de un error contactate con el administrador de AdaptarIA",
+          "Por favor, intentá mas tarde. Si creés que se trata de un error contactate con el administrador de AdaptarIA",
           "Esta bien",
           () => { console.error('INTERNAL ERROR') },
         );
@@ -121,8 +121,8 @@ const UserCreationForm: React.FC<UserCreationFormProps> = ({ entityToCreate, act
       if (!formValues?.institute) {
         SwalUtils.warningSwal(
           "La institución no fue seleccionada",
-          "Por favor, selecciona una institución para el director",
-          "Esta bien",
+          "Por favor, seleccioná una institución para el director",
+          "Está bien",
           () => { console.warn('Institute not selected') },
         );
         return false;
@@ -135,8 +135,8 @@ const UserCreationForm: React.FC<UserCreationFormProps> = ({ entityToCreate, act
     ) {
       SwalUtils.warningSwal(
         "Nombre o Apellido inválido",
-        "Por favor, ingresa un nombre y apellido válido de al menos 3 caracteres.",
-        "Esta bien",
+        "Por favor, ingresá un nombre y apellido válido de al menos 3 caracteres.",
+        "Está bien",
         () => { console.warn('Name too short') },
       );
       return false;
@@ -146,7 +146,7 @@ const UserCreationForm: React.FC<UserCreationFormProps> = ({ entityToCreate, act
       SwalUtils.warningSwal(
         "El correo electrónico es inválido",
         "Por favor, asegurate de que el correo ingresado sea válido.",
-        "Esta bien",
+        "Está bien",
         () => { console.warn('Email not valid') },
       );
       return false;
@@ -157,7 +157,7 @@ const UserCreationForm: React.FC<UserCreationFormProps> = ({ entityToCreate, act
       SwalUtils.warningSwal(
         "El documento ingresado es inválido.",
         "Por favor, asegurate de que el documento ingresado sea un DNI válido.",
-        "Esta bien",
+        "Está bien",
         () => { console.warn('Document not valid') },
       );
       return false;
@@ -174,7 +174,7 @@ const UserCreationForm: React.FC<UserCreationFormProps> = ({ entityToCreate, act
         } else {
           SwalUtils.errorSwal(
             "Hubo un error interno al tratar de crear el usuario",
-            "Por favor, intenta mas tarde. Si crees que se trata de un error contactate con el administrador de AdaptarIA",
+            "Por favor, intentá mas tarde. Si creés que se trata de un error contactate con el administrador de AdaptarIA",
             "Esta bien",
             () => { console.error('HTTP ERROR') },
           );
@@ -189,8 +189,8 @@ const UserCreationForm: React.FC<UserCreationFormProps> = ({ entityToCreate, act
             `Hubo un error al crear al ${entityToCreate === 'TEACHER' ? 'docente' :
               entityToCreate === 'STUDENT' ? 'estudiante' : 'directivo'
             }`,
-            "Por favor, intenta mas tarde. Si crees que se trata de un error contactate con el administrador de AdaptarIA",
-            "Esta bien",
+            "Por favor, intentá mas tarde. Si creés que se trata de un error contactate con el administrador de AdaptarIA",
+            "Está bien",
             () => { console.error('INTERNAL ERROR') },
           );
           throw new Error('INTERNAL ERROR');
@@ -237,7 +237,7 @@ const UserCreationForm: React.FC<UserCreationFormProps> = ({ entityToCreate, act
             name="institute"
             onChange={(e) => setInstitute(e.target.value)}
           >
-            <option value="">Seleccione una institución</option>
+            <option value="">Seleccioná una institución</option>
             {institutes.map(institute => (
               <option key={institute.id} value={institute.id}>{institute.name}</option>
             ))}

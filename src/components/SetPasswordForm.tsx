@@ -20,7 +20,7 @@ export default function SetPasswordForm({ setPassword: handleSetNewPassword, sta
 			<div className="mb-3">
 				<Label htmlFor="password" className="form-label">Contraseña</Label>
 				<Input type="password" id="password" placeholder="*********" onChange={(e) => setNewPassword(e.target.value)} />
-				<Label htmlFor="password" className="form-label">Confirma la contraseña</Label>
+				<Label htmlFor="password" className="form-label">Confirmá la contraseña</Label>
 				<Input type="password" id="password" placeholder="*********" onChange={(e) => setNewPasswordConfirmation(e.target.value)} />
 				{statusMessage && <p className={statusSended ? "text-success" : "text-danger"}>{statusMessage}</p>}
 			</div>

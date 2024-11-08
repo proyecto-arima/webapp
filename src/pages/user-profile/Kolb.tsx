@@ -289,7 +289,7 @@ export default function DragDropAgreement({ answers, question, next, current, to
             Swal.fire({
               icon: 'error',
               title: '¡Error!',
-              text: 'Por favor, completa todas las columnas antes de continuar.'
+              text: 'Por favor, completá todas las columnas antes de continuar.'
             })
             return
           }

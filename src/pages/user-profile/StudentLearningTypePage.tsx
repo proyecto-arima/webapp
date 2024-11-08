@@ -6,10 +6,10 @@ import PageWrapper from '../../components/PageWrapper';
 
 const testPreviousComments = [
   "Ubicate en un lugar tranquilo con conexión a internet",
-  "Podes poner música de fondo",
+  "Podés poner música de fondo",
   "Te llevará entre 3 y 7 minutos realizar todo el test",
   "Al finalizar el resultado aparecerá en pantalla y quedará asociado a tu usuario",
-  "Es importante que lo respondas con sinceridad ya que el contenido de la plataforma se adaptará en función del resultado  obtenido"
+  "Es importante que lo respondas con sinceridad ya que el contenido de la plataforma se adaptará en función del resultado obtenido"
 ];
 
 export const StudentLearningTypePage = () => {

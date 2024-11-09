@@ -182,9 +182,9 @@ export default function DragDropAgreement({ answers, question, next, current, to
       <div>
         <p style={{
           textAlign: 'left',
-          marginBottom: '2rem',
+          marginBottom: '1rem',
           color: '#6b7280',
-          fontSize: 'small',
+          fontSize: '2vmin',
         }}>
           A continuación se presentan cuatro afirmaciones que deberás ordenar según consideres más o menos efectivo. <br />
           Cada afirmación debe ser ubicada en alguna de las cuatro posibles columnas y no puede haber más de una afirmación por columna. <br />
@@ -220,12 +220,16 @@ export default function DragDropAgreement({ answers, question, next, current, to
           <Card key={columnId} style={{
             flex: '1 1 0',
             width: '0',
-            height: '30vh'
+            height: '25vh',
           }}>
             <CardHeader>
               <CardTitle>{column.title}</CardTitle>
             </CardHeader>
-            <CardBody>
+            <CardBody
+              style={{
+                padding: '0',
+              }}
+            >
               <div
                 onDragOver={onDragOver}
                 onDrop={(e) => onDrop(e, columnId)}
@@ -241,7 +245,7 @@ export default function DragDropAgreement({ answers, question, next, current, to
                     className="p-2 bg-white rounded shadow cursor-move w-full text-center"
                     style={{
                       width: 'fit-content',
-                      fontSize: 'small'
+                      fontSize: '2vmin'
                     }}
                   >
                     {column.item.content}

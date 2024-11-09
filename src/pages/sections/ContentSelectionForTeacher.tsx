@@ -220,7 +220,7 @@ export default function ContentSelectionForTeacher() {
       </div> : <div style={{ flex: 1, display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'column', width: '100%' }}>
         {/* <img src={processing} alt="processing" height={600}/> */}
         <img src={ai_thinking} alt="placeholder" style={{
-          width: '30rem',
+          width: '30vh',
         }} />
         <h3>El contenido aún está procesándose</h3>
         <h4>Por favor, volvé más tarde</h4>

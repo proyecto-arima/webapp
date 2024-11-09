@@ -22,30 +22,30 @@ export interface DragDropAgreementProps {
 }
 
 const progressMessages = (current: number, total: number) => {
-  if(current === 0){
+  if (current === 0) {
     return 'Comenzando...'
   }
 
-  if(current < 5){
+  if (current < 5) {
     return "¡Vamos bien!"
   }
 
-  if(current === 5){
+  if (current === 5) {
     return "¡Ya hicimos la mitad! ¿Viste que no era tanto?"
   }
 
-  if(current < 9){
+  if (current < 9) {
     return 'Vas por buen camino... ¡Falta menos!'
   }
 
-  if(current < 11){
+  if (current < 11) {
     return '¡Ya casi terminamos!'
   }
 
-  if(current === 11){
+  if (current === 11) {
     return '¡Última pregunta!'
   }
-  
+
 }
 
 export default function DragDropAgreement({ answers, question, next, current, total }: DragDropAgreementProps) {
@@ -176,7 +176,8 @@ export default function DragDropAgreement({ answers, question, next, current, to
     <div style={{
       display: 'flex',
       flexDirection: 'column',
-      overflowY: 'auto'
+      overflowY: 'auto',
+      height: '100%',
     }}>
       <div>
         <p style={{
@@ -252,51 +253,56 @@ export default function DragDropAgreement({ answers, question, next, current, to
         ))}
 
       </div>
-      <div style={{
-        display: 'flex',
-        flex: '1',
-      }}></div>
 
-      <Progress animated className="my-3" value={Math.round(((current + 1) / total) * 100)}>{progressMessages(current, total)}</Progress>
-      <span
+      <div
         style={{
-          textAlign: 'center',
-          color: '#6b7280',
-          fontSize: 'small',
+          display: 'flex',
+          flexDirection: 'row',
+          width: '100%',
+          gap: '1rem',
+          overflowY: 'auto',
+          alignItems: 'center',
+          flex: '1',
         }}
       >
-        Pregunta {current + 1} de {total}
-      </span>
-
-
-      <div className='d-flex flex-row justify-content-end mt-5'>
-        <button className='btn-purple-1' onClick={() => {
-
-          // if(Object.values(columns).some(column => column?.item?.id === null)) {
-          //   alert('Por favor, completa todas las columnas antes de continuar.')
-          //   return
-          // }
-
-          // next([
-          //   columns['absolutelyNotAgree'].item?.id,
-          //   columns['notAgree'].item?.id,
-          //   columns['agree'].item?.id,
-          //   columns['totallyAgree'].item?.id,
-          // ])
-
-          const responses = Object.values(columns).reverse().map(column => column?.item?.id);
-          if (responses.some(response => response === undefined)) {
-            Swal.fire({
-              icon: 'error',
-              title: '¡Error!',
-              text: 'Por favor, completá todas las columnas antes de continuar.'
-            })
-            return
-          }
-          next(responses as number[]);
+        <div style={{
+          flex: '1',
+          display: 'flex',
+          flexDirection: 'column',
+          gap: '1rem',
+          overflowY: 'auto',
+          justifyContent: 'center',
+          
         }}>
-          Siguiente
-        </button>
+          <Progress animated className="my-3" value={Math.round(((current + 1) / total) * 100)}>{progressMessages(current, total)}</Progress>
+          <span
+            style={{
+              textAlign: 'center',
+              color: '#6b7280',
+              fontSize: 'small',
+            }}
+          >
+            Pregunta {current + 1} de {total}
+          </span>
+        </div>
+
+
+        <div className='d-flex flex-row'>
+          <button className='btn-purple-1' onClick={() => {
+            const responses = Object.values(columns).reverse().map(column => column?.item?.id);
+            if (responses.some(response => response === undefined)) {
+              Swal.fire({
+                icon: 'error',
+                title: '¡Error!',
+                text: 'Por favor, completá todas las columnas antes de continuar.'
+              })
+              return
+            }
+            next(responses as number[]);
+          }}>
+            Siguiente
+          </button>
+        </div>
       </div>
     </div>
   )

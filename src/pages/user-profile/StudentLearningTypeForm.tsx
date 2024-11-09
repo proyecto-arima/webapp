@@ -138,7 +138,8 @@ export const StudentLearningTypeForm = () => {
           justifyContent: 'space-between',
           width: '100%',
           gap: '1rem',
-          overflowY: 'auto'
+          overflowY: 'auto',
+          height: '100%',
           
         }}>
           <div style={{

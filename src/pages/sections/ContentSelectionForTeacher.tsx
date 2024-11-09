@@ -137,10 +137,10 @@ export default function ContentSelectionForTeacher() {
         color: '#6b7280',
         fontSize: '2vmin',
       }}>
-        Acá podés visualizar y gestionar el contenido generado por ADAPTARIA para tus estudiantes en los cuatro formatos propuestos para cada estilo de aprendizaje <br />
+        Acá podés visualizar y gestionar el contenido generado por AdaptarIA para tus estudiantes en los cuatro formatos propuestos para cada estilo de aprendizaje <br />
         Como docente, podés editar, aprobar o regenerar el contenido generado por nosotros.
         Seleccioná el contenido que querés visualizar o gestionar. <br />
-        Tus estudiantes, podrán ver el contenido que les fue asignado según el estilo de aprendizaje que hayan obtenido con el Test de Kolb
+        Tus estudiantes podrán ver el contenido que les fue asignado según el estilo de aprendizaje que hayan obtenido con el Test de Kolb.
       </p>
       {content?.status === 'DONE' ? <div
         style={{

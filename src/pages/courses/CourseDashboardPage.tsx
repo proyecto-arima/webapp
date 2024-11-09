@@ -34,7 +34,7 @@ export const CourseDashboardPage = () => {
       SwalUtils.infoSwal(
         "Encuesta disponible",
         "Hay una encuesta disponible para evaluar AdaptarIA. ¿Querés realizarla ahora?",
-        "Si",
+        "Sí",
         "No",
         () => navigate("/me/survey"),
       );
@@ -72,7 +72,7 @@ export const CourseDashboardPage = () => {
           // Mensaje de error en caso de que algo falle
           SwalUtils.errorSwal(
             'Error',
-            'Hubo un problema al eliminar el curso. Inténtalo de nuevo más tarde.',
+            'Hubo un problema al eliminar el curso. Intentalo de nuevo más tarde.',
             'Aceptar',
             () => navigate('/courses')
           );

@@ -78,7 +78,7 @@ export default function SectionContentDashboardFormStudents({ content, user, cou
                   return Swal.fire({
                     icon: 'warning',
                     title: 'No sabemos tu perfil de aprendizaje',
-                    text: 'No tienes un perfil de aprendizaje asignado. Por favor, realiza el test y regresa para ver el contenido',
+                    text: 'Todavía no tenés perfil de aprendizaje asignado. Por favor, realizá el test y regresa para ver el contenido adaptado',
                     confirmButtonText: 'Ir al test',
                     showCancelButton: false,
                     showCloseButton: false,

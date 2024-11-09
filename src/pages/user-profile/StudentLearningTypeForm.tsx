@@ -165,7 +165,7 @@ export const StudentLearningTypeForm = () => {
                     title: '¡Completaste el test de aprendizaje!',
                     text: '¿Querés conocer los resultados?',
                     icon: 'success',
-                    confirmButtonText: '¡Si!'
+                    confirmButtonText: '¡Sí!'
                   }).then((result) => {
                     navigate('/me/learning-type/result', { state: { profile }})
                   })

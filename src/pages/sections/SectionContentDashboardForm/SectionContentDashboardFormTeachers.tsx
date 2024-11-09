@@ -51,7 +51,7 @@ export default function SectionContentDashboardFormTeachers({ content, user, cou
     );
   };
 
-  return (localContent.length ? (
+  return (localContent?.length ? (
     <Table
       style={{
         fontSize: '1.8vmin',
@@ -80,14 +80,14 @@ export default function SectionContentDashboardFormTeachers({ content, user, cou
             <td style={{
               textAlign: 'center',
             }}>
-              {c.reactions.filter(r => r.isSatisfied).length}
+              {c.reactions.filter(r => r.isSatisfied)?.length}
               </td>
             <td
               style={{
                 textAlign: 'center',
               }}
             >
-              {c.reactions.filter(r => !r.isSatisfied).length}
+              {c.reactions.filter(r => !r.isSatisfied)?.length}
               </td>
               <td
                 style={{

@@ -25,7 +25,7 @@ export interface IContent {
 
 export const GeneratedContentView = () => {
 
-  const { contentId } = useParams<{ contentId: string }>();
+  const { courseId, sectionId, contentId } = useParams<{ courseId: string, sectionId: string, contentId: string }>();
   const [content, setContent] = useState<IGenerated>();
   const user = useSelector((state: RootState) => state.user);
 
@@ -53,7 +53,9 @@ export const GeneratedContentView = () => {
     });
   }
 
-  return <PageWrapper title="Lee con atención">
+  return <PageWrapper title="Lee con atención"
+    goBackUrl={`/courses/${courseId}/sections/${sectionId}/${user.role === 'TEACHER' ? `content/${contentId}/review` : ''}`}
+  >
     <div style={{
       display: 'flex',
       flexDirection: 'column',

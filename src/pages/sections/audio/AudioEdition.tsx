@@ -5,6 +5,7 @@ import { get, patch } from "../../../utils/network";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrash } from "@fortawesome/free-solid-svg-icons";
 import Swal from "sweetalert2";
+import PageWrapper from "../../../components/PageWrapper";
 
 interface IAudio {
   content?: { text: string, audioUrl: string }[]
@@ -14,7 +15,7 @@ interface IAudio {
 
 export default function AudioEdition() {
 
-  const { contentId } = useParams<{ courseId: string, sectionId: string, contentId: string }>();
+  const { contentId, sectionId, courseId } = useParams<{ contentId: string, sectionId: string, courseId: string }>();
   const [speech, setSpeech] = useState<IAudio>({});
   const navigate = useNavigate();
 
@@ -68,7 +69,7 @@ export default function AudioEdition() {
               text: 'Te avisaremos cuando esté listo',
               icon: 'success',
             }).then(() => {
-              navigate(`/courses/${contentId}/sections/${contentId}/content/${contentId}/review`);
+              navigate(`/courses/${courseId}/sections/${sectionId}/content/${contentId}/review`);
             });
           } else {
             Swal.fire({
@@ -83,30 +84,8 @@ export default function AudioEdition() {
   }
 
   return (
-    <div
-      style={{
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'flex-start',  /* Alinea el contenido al inicio, en lugar de al centro */
-        height: '100vh',
-        backgroundColor: '#f6effa',
-        width: '100vw',
-      }}
-    >
-      <div
-        style={{
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'flex-start', /* Alinea el contenido al principio */
-          padding: '20px',
-          width: '100%',
-          height: '100%',
-        }}
-      >
-        <Card style={{ width: '100%', paddingInline: '2rem', paddingBlock: '1rem', height: '100%' }}>
-          <h2>Configurar audio</h2>
-          <hr />
-          <div style={{
+    <PageWrapper title="Configurar audio" goBackUrl={`/courses/${courseId}/sections/${sectionId}/content/${contentId}/review`}>
+      <div style={{
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
@@ -189,8 +168,6 @@ export default function AudioEdition() {
             </div>
 
           </div>
-        </Card>
-      </div>
-    </div>
+    </PageWrapper>
   )
 }

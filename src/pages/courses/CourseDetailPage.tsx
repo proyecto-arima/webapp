@@ -98,6 +98,7 @@ export const CourseDetailPage: React.FC = () => {
 
   return (
     <PageWrapper title={course?.title ?? 'Cargando...'}
+      goBackUrl='/courses'
       loading={loading}
       skeletonType='card'
       buttons={

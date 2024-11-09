@@ -130,7 +130,9 @@ export default function ContentSelectionForTeacher() {
   }, []);
 
   return (
-    <PageWrapper title="Gestión del contenido generado" loading={loading} skeletonType="content-selection">
+    <PageWrapper title="Gestión del contenido generado" loading={loading} skeletonType="content-selection" 
+      goBackUrl={`/courses/${courseId}/sections/${sectionId}`}
+    >
       <p style={{
         textAlign: 'left',
         marginBottom: '2rem',

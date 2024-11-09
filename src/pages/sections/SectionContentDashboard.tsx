@@ -47,7 +47,9 @@ export const SectionContentDashboard = () => {
 
 
   return (
-    <PageWrapper title={section?.name || ''}
+    <PageWrapper 
+      title={section?.name || ''}
+      goBackUrl={`/courses/${courseId}`}
       buttons={
         user.role === 'TEACHER' &&
         <button onClick={handleNewContent} className="btn-purple-1">Subir contenido</button>

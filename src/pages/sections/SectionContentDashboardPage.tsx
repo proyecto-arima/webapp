@@ -55,6 +55,7 @@ export const SectionContentDashboard = () => {
 
   return <PageWrapper
     skeletonType="table"
+    goBackUrl={`/courses/${courseId}`}
     columnsCount={5}
     loading={loading}
     title={section?.name ?? 'Cargando...'}

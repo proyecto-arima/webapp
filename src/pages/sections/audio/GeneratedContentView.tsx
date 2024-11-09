@@ -25,7 +25,7 @@ export default function AudioVisualizer() {
   const user = useSelector((state: RootState) => state.user);
 
 
-  const { contentId } = useParams<{ contentId: string }>();
+  const { courseId, sectionId, contentId } = useParams<{ courseId: string, sectionId: string, contentId: string }>();
   const [content, setContent] = useState<IGenerated>();
 
   const [current, setCurrent] = useState(0);
@@ -61,7 +61,7 @@ export default function AudioVisualizer() {
     console.log("Audio loading: ", audioLoading);
   }, [audioLoading]);
 
-  return <PageWrapper title="Escuchá con atención">
+  return <PageWrapper title="Escuchá con atención" goBackUrl={`/courses/${courseId}/sections/${sectionId}`}>
     <div style={{
       display: 'flex',
       flexDirection: 'column',

@@ -27,7 +27,7 @@ export interface IContent {
 
 export const GeneratedContentView = () => {
 
-  const { contentId } = useParams<{ contentId: string }>();
+  const { courseId, sectionId, contentId } = useParams<{ courseId: string, sectionId: string, contentId: string }>();
   const [markmap, setMarkmap] = useState<IGenerated>();
   const user = useSelector((state: RootState) => state.user);
 
@@ -62,7 +62,9 @@ export const GeneratedContentView = () => {
   };
 
 
-  return <PageWrapper title="Mapa mental">
+  return <PageWrapper title="Mapa mental" 
+    goBackUrl={`/courses/${courseId}/sections/${sectionId}/${user.role === 'TEACHER' ? `content/${contentId}/review` : ''}`}
+  >
     <div style={{
       display: 'flex',
       flexDirection: 'column',

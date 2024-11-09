@@ -102,7 +102,9 @@ export default function Game() {
 
   const currenttextData = levels?.[currentLevel]?.questions?.[currenttext];
 
-  return <PageWrapper title="Vamos a jugar!">
+  return <PageWrapper title="Vamos a jugar!"
+    goBackUrl={`/courses/${courseId}/sections/${sectionId}`}
+  >
     <div style={{
       display: 'flex',
       flexDirection: 'column',

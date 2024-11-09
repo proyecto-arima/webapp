@@ -1,10 +1,11 @@
-import { faEdit, faTrash } from "@fortawesome/free-solid-svg-icons";
+import { faArrowLeft, faChevronLeft, faEdit, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Button, Card, CardBody, CardFooter, CardText, CardTitle, Col, Placeholder, Progress, Spinner, Table } from "reactstrap";
 import user from "../redux/slices/user";
 import CardsSkeleton from "./CardsSkeleton";
 import { useEffect, useState } from "react";
 import TableSkeleton from "./TableSkeleton";
+import { useNavigate } from "react-router-dom";
 
 interface IPageWrapperProps {
   title: string;
@@ -13,13 +14,16 @@ interface IPageWrapperProps {
   loading?: boolean;
   skeletonType?: 'card' | 'table' | 'content-selection';
   columnsCount?: number;
+  goBackUrl?: string;
 }
 
-export default function PageWrapper(props: IPageWrapperProps) {
+export default function PageWrapper({ ...props}: IPageWrapperProps) {
 
   const [showPageLoading, setShowPageLoading] = useState(false);
 
   const debounce = () => setTimeout(() => setShowPageLoading(true), 300);
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     debounce();
@@ -53,7 +57,17 @@ export default function PageWrapper(props: IPageWrapperProps) {
             alignItems: 'center',
             width: '100%',
           }}>
-          <h4>{props.title}</h4>
+          <div style={{
+            display: 'flex',
+            alignItems: 'center',
+            flexDirection: 'row',
+            justifyContent: 'center',
+          }}>
+            {props.goBackUrl && <FontAwesomeIcon icon={faChevronLeft} style={{ marginRight: '1rem', marginBottom:'8px', cursor:'pointer' }} onClick={
+              () => navigate(props.goBackUrl!) 
+            }/>}
+            <h4>{props.title}</h4>
+          </div>
           {props.buttons}
         </div>
         <hr />

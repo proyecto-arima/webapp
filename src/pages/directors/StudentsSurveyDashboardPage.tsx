@@ -57,7 +57,7 @@ export const StudentsSurveyDashboardPage = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    setLoading(true)
+    setLoading(true);
     get('/directors/courses/')
       .then(res => res.json())
       .then(res => res.data)
@@ -80,7 +80,7 @@ export const StudentsSurveyDashboardPage = () => {
       .then((data: IQuestion) => {
         setStudentsSurveyData(data);
       });
-  }
+  };
 
   useEffect(() => {
     fetchStudentsSurveyDataFiltered();
@@ -121,7 +121,6 @@ export const StudentsSurveyDashboardPage = () => {
       .then(res => res.json())
       .then(res => res.data)
       .then((data: IQuestion | null) => {
-        setLoading(false);
         if (!data) {
           setStudentsSurveyData(null);
           return;
@@ -172,6 +171,7 @@ export const StudentsSurveyDashboardPage = () => {
           ]
         );
       });
+    setLoading(false);
   }
 
   return <div
@@ -196,6 +196,7 @@ export const StudentsSurveyDashboardPage = () => {
     >
       <Card style={{ width: '100%', paddingInline: '2rem', paddingBlock: '1rem', height: '100%', overflow: 'scroll', }}>
         <div className="d-flex flex-column">
+
           <div>
             <div className="d-flex flex-row align-items-center w-50 gap-2 mb-3">
               <input
@@ -231,47 +232,57 @@ export const StudentsSurveyDashboardPage = () => {
             </div>
             <hr />
 
-            {!loading && answers.length > 0 && <>
-              {studentsSurveyData && answers.map((answer: IAnswerData) => (
-                <Card key={answer.question} style={{ width: '100%', paddingInline: '2rem', paddingBlock: '1rem', marginBlock: '1rem' }}>
-                  <CardHeader tag='h4'>
-                    {answer.question}
-                  </CardHeader>
-                  <Table>
-                    <thead>
-                      <tr>
-                        <th>Respuesta</th>
-                        <th>Porcentaje (%)</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {answer.answers.map((answer: IAnswer) => (
-                        <tr key={answer.id}>
-                          <th>{answer.option}</th>
-                          <th>{answer.value}</th>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </Table>
-                </Card>
-              ))}
-            </>
-            }
-
-            {!loading && !studentsSurveyData && <>
-              <h2>Sin resultados</h2>
-              <span>No encontramos resultados para mostrarte</span>
-              <div style={{
-                flex: '1',
-                display: 'flex',
-                justifyContent: 'center',
-                alignItems: 'center',
-              }}>
+            {loading ? (
+              <div style={{ textAlign: 'left', padding: '20px' }}>
+                <strong>Cargando...</strong>
               </div>
-              <div className='d-flex flex-row justify-content-end gap-3' />
-            </>
-            }
+            ) : (
+              <>
+                {answers.length > 0 && <>
+                  {studentsSurveyData && answers.map((answer: IAnswerData) => (
+                    <Card key={answer.question} style={{ width: '100%', paddingInline: '2rem', paddingBlock: '1rem', marginBlock: '1rem' }}>
+                      <CardHeader tag='h4'>
+                        {answer.question}
+                      </CardHeader>
+                      <Table>
+                        <thead>
+                          <tr>
+                            <th>Respuesta</th>
+                            <th>Porcentaje (%)</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {answer.answers.map((answer: IAnswer) => (
+                            <tr key={answer.id}>
+                              <th>{answer.option}</th>
+                              <th>{answer.value}</th>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </Table>
+                    </Card>
+                  ))}
+                </>
+                }
+
+                {!studentsSurveyData && <>
+                  <h2>Sin resultados</h2>
+                  <span>No encontramos resultados para mostrarte</span>
+                  <div style={{
+                    flex: '1',
+                    display: 'flex',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                  }}>
+                  </div>
+                  <div className='d-flex flex-row justify-content-end gap-3' />
+                </>
+                }
+              </>
+            )}
+
           </div>
+
         </div>
       </Card>
     </div>

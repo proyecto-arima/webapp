@@ -221,6 +221,7 @@ export const TeacherStudentsSurveyDashboardPage = () => {
       </div>
       <hr />
 
+      <div style={{ flex: 1, overflowY: 'auto', padding: '1rem' }}>         
       {loading ? (
         <div style={{ textAlign: 'left', padding: '20px' }}>
           <strong>Cargando...</strong>
@@ -272,6 +273,7 @@ export const TeacherStudentsSurveyDashboardPage = () => {
           }
         </div>
       )}
+    </div>
     </div>
   </PageWrapper>;
 };

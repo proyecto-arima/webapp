@@ -121,7 +121,7 @@ export const TeacherLearningTypeDashboardPage = () => {
         {loading ? (
           <TableSkeleton columnsCount={5} />
         ) : (
-          <Table striped>
+          <Table striped responsive>
             <thead>
               <tr>
                 <th>Nombre</th>

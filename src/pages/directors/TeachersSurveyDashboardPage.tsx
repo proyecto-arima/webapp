@@ -203,19 +203,6 @@ export const TeachersSurveyDashboardPage = () => {
             />
           </div>
 
-          <div className="d-flex flex-column w-100">
-            <label>Curso</label>
-            <Select
-              options={courses.map(course => ({ value: course.id, label: course.courseName }))}
-              noOptionsMessage={() => 'No hay cursos disponibles'}
-              placeholder="Seleccione un curso"
-              isClearable
-              isSearchable
-              onChange={(selectedOption) => {
-                setCourseId(selectedOption ? selectedOption.value : '');
-              }}
-            />
-          </div>
         </div>
         <hr />
 

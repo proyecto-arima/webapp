@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react";
-import { Card, CardHeader, Table } from "reactstrap";
+import { Table } from "reactstrap";
 import Select from 'react-select';
 
 import { get } from "../../utils/network";
 import { SwalUtils } from "../../utils/SwalUtils";
+import PageWrapper from "../../components/PageWrapper";
 
 const MAX_DATE: string = (new Date(Date.now() - (new Date()).getTimezoneOffset())).toISOString().slice(0, -1).split('T')[0].toString();
 
@@ -24,11 +25,11 @@ interface IAnswerData {
 }
 
 interface IQuestion {
-  question1: number[],
-  question2: number[],
-  question3: number[],
-  question4: number[],
-  question5: number[]
+  question1: number[];
+  question2: number[];
+  question3: number[];
+  question4: number[];
+  question5: number[];
 }
 
 const questionsOptions = [
@@ -126,165 +127,139 @@ export const StudentsSurveyDashboardPage = () => {
           return;
         }
         setStudentsSurveyData(data);
-        setAnswers(
-          [
-            {
-              question: studentsQuestions[0],
-              answers: questionsOptions.map((option, index) => ({
-                id: index,
-                option: questionsOptions[questionsOptions.length - 1 - index],
-                value: data.question1[questionsOptions.length - 1 - index].toString()
-              }))
-            },
-            {
-              question: studentsQuestions[1],
-              answers: questionsOptions.map((option, index) => ({
-                id: index,
-                option: questionsOptions[questionsOptions.length - 1 - index],
-                value: data.question2[questionsOptions.length - 1 - index].toString()
-              }))
-            },
-            {
-              question: studentsQuestions[2],
-              answers: questionsOptions.map((option, index) => ({
-                id: index,
-                option: questionsOptions[questionsOptions.length - 1 - index],
-                value: data.question3[questionsOptions.length - 1 - index].toString()
-              }))
-            },
-            {
-              question: studentsQuestions[3],
-              answers: questionsOptions.map((option, index) => ({
-                id: index,
-                option: questionsOptions[questionsOptions.length - 1 - index],
-                value: data.question4[questionsOptions.length - 1 - index].toString()
-              }))
-            },
-            {
-              question: studentsQuestions[4],
-              answers: questionsOptions.map((option, index) => ({
-                id: index,
-                option: questionsOptions[questionsOptions.length - 1 - index],
-                value: data.question5[questionsOptions.length - 1 - index].toString()
-              }))
-            },
-          ]
-        );
+        setAnswers([
+          {
+            question: studentsQuestions[0],
+            answers: questionsOptions.map((option, index) => ({
+              id: index,
+              option: questionsOptions[questionsOptions.length - 1 - index],
+              value: data.question1[questionsOptions.length - 1 - index].toString()
+            }))
+          },
+          {
+            question: studentsQuestions[1],
+            answers: questionsOptions.map((option, index) => ({
+              id: index,
+              option: questionsOptions[questionsOptions.length - 1 - index],
+              value: data.question2[questionsOptions.length - 1 - index].toString()
+            }))
+          },
+          {
+            question: studentsQuestions[2],
+            answers: questionsOptions.map((option, index) => ({
+              id: index,
+              option: questionsOptions[questionsOptions.length - 1 - index],
+              value: data.question3[questionsOptions.length - 1 - index].toString()
+            }))
+          },
+          {
+            question: studentsQuestions[3],
+            answers: questionsOptions.map((option, index) => ({
+              id: index,
+              option: questionsOptions[questionsOptions.length - 1 - index],
+              value: data.question4[questionsOptions.length - 1 - index].toString()
+            }))
+          },
+          {
+            question: studentsQuestions[4],
+            answers: questionsOptions.map((option, index) => ({
+              id: index,
+              option: questionsOptions[questionsOptions.length - 1 - index],
+              value: data.question5[questionsOptions.length - 1 - index].toString()
+            }))
+          },
+        ]);
       });
     setLoading(false);
-  }
+  };
 
-  return <div
-    style={{
-      display: 'flex',
-      justifyContent: 'center',
-      alignItems: 'flex-start',
-      height: '100vh',
-      backgroundColor: '#f6effa',
-      width: '100vw',
-    }}
-  >
-    <div
-      style={{
+  return (
+    <PageWrapper title="Encuestas de estudiantes">
+      <div style={{
         display: 'flex',
         flexDirection: 'column',
-        alignItems: 'flex-start',
-        padding: '20px',
-        width: '100%',
+        overflowY: 'auto',
         height: '100%',
-      }}
-    >
-      <Card style={{ width: '100%', paddingInline: '2rem', paddingBlock: '1rem', height: '100%', overflow: 'scroll', }}>
-        <div className="d-flex flex-column">
-
-          <div>
-            <div className="d-flex flex-row align-items-center w-50 gap-2 mb-3">
-              <input
-                type="date"
-                className="form-control"
-                placeholder="Fecha inicial"
-                max={MAX_DATE}
-                onChange={(e) => setDateFrom(e.target.value)}
-              />
-              <input
-                type="date"
-                className="form-control"
-                placeholder="Fecha final"
-                max={MAX_DATE}
-                onChange={(e) => setDateTo(e.target.value)}
-              />
-            </div>
-            <div style={{
-              justifyContent: 'space-between',
-              alignItems: 'center',
-              width: '50%',
-            }}>
-              <Select
-                options={courses.map(course => ({ value: course.id, label: course.courseName }))}
-                noOptionsMessage={() => 'No hay cursos disponibles'}
-                placeholder="Buscar curso"
-                isClearable
-                isSearchable
-                onChange={(selectedOption) => {
-                  setCourseId(selectedOption ? selectedOption.value : '');
-                }}
-              />
-            </div>
-            <hr />
-
-            {loading ? (
-              <div style={{ textAlign: 'left', padding: '20px' }}>
-                <strong>Cargando...</strong>
-              </div>
-            ) : (
-              <>
-                {answers.length > 0 && <>
-                  {studentsSurveyData && answers.map((answer: IAnswerData) => (
-                    <Card key={answer.question} style={{ width: '100%', paddingInline: '2rem', paddingBlock: '1rem', marginBlock: '1rem' }}>
-                      <CardHeader tag='h4'>
-                        {answer.question}
-                      </CardHeader>
-                      <Table>
-                        <thead>
-                          <tr>
-                            <th>Respuesta</th>
-                            <th>Porcentaje (%)</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          {answer.answers.map((answer: IAnswer) => (
-                            <tr key={answer.id}>
-                              <th>{answer.option}</th>
-                              <th>{answer.value}</th>
-                            </tr>
-                          ))}
-                        </tbody>
-                      </Table>
-                    </Card>
-                  ))}
-                </>
-                }
-
-                {!studentsSurveyData && <>
-                  <h2>Sin resultados</h2>
-                  <span>No encontramos resultados para mostrarte</span>
-                  <div style={{
-                    flex: '1',
-                    display: 'flex',
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                  }}>
-                  </div>
-                  <div className='d-flex flex-row justify-content-end gap-3' />
-                </>
-                }
-              </>
-            )}
-
+      }}>
+        {/* Filtros con position: sticky */}
+        <div className="d-flex flex-row align-items-center w-100 gap-2 mb-3" style={{ position: 'sticky', top: 0, backgroundColor: 'white', zIndex: 10 }}>
+          <div className="d-flex flex-column w-100">
+            <label>Fecha Desde</label>
+            <input
+              type="date"
+              className="form-control"
+              placeholder="Fecha inicial"
+              max={MAX_DATE}
+              onChange={(e) => setDateFrom(e.target.value)}
+            />
+          </div>
+          <div className="d-flex flex-column w-100">
+            <label>Fecha Hasta</label>
+            <input
+              type="date"
+              className="form-control"
+              placeholder="Fecha final"
+              max={MAX_DATE}
+              onChange={(e) => setDateTo(e.target.value)}
+            />
           </div>
 
+          <div className="d-flex flex-column w-100">
+            <label>Curso</label>
+            <Select
+              options={courses.map(course => ({ value: course.id, label: course.courseName }))}
+              noOptionsMessage={() => 'No hay cursos disponibles'}
+              placeholder="Seleccione un curso"
+              isClearable
+              isSearchable
+              onChange={(selectedOption) => {
+                setCourseId(selectedOption ? selectedOption.value : '');
+              }}
+            />
+          </div>
         </div>
-      </Card>
-    </div>
-  </div>
+        <hr />
+
+        {/* Resultados con scroll */}
+        <div style={{ flex: 1, overflowY: 'auto', padding: '1rem' }}>
+          {loading ? (
+            <div style={{ textAlign: 'left', padding: '20px' }}>
+              <strong>Cargando...</strong>
+            </div>
+          ) : (
+            <div style={{
+              display: 'flex',
+              flexDirection: 'column',
+              gap: '1rem',
+              padding: '1rem',
+            }}>
+              {answers.length > 0 && <>
+                {studentsSurveyData && answers.map((answer: IAnswerData) => (
+                  <div key={answer.question} style={{ width: '100%', border: '1px solid #ccc', padding: '1rem' }}>
+                    <h4>{answer.question}</h4>
+                    <Table striped>
+                      <thead>
+                        <tr>
+                          <th>Respuesta</th>
+                          <th>Porcentaje (%)</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {answer.answers.map((answer: IAnswer) => (
+                          <tr key={answer.id}>
+                            <td>{answer.option}</td>
+                            <td>{answer.value}</td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </Table>
+                  </div>
+                ))}
+              </>}
+            </div>
+          )}
+        </div>
+      </div>
+    </PageWrapper>
+  );
 };

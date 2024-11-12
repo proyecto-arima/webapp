@@ -10,7 +10,7 @@ const MAX_DATE: string = (new Date(Date.now() - (new Date()).getTimezoneOffset()
 
 interface ICourse {
   id: string;
-  title: string;
+  courseName: string;
 }
 
 interface IAnswer {
@@ -63,10 +63,10 @@ export const TeachersSurveyDashboardPage = () => {
       .then(res => res.json())
       .then(res => res.data)
       .then((data: ICourse[]) => {
-        const allCoursesOption = { id: '', title: 'Todos los cursos' };
+        const allCoursesOption = { id: '', courseName: 'Todos los cursos' };
         setCourses([allCoursesOption, ...data.map((course: ICourse) => ({
           id: course.id,
-          title: course.title,
+          courseName: course.courseName,
         }))]);
       });
     fetchStudentsSurveyData();
@@ -206,7 +206,7 @@ export const TeachersSurveyDashboardPage = () => {
           <div className="d-flex flex-column w-100">
             <label>Curso</label>
             <Select
-              options={courses.map(course => ({ value: course.id, label: course.title }))}
+              options={courses.map(course => ({ value: course.id, label: course.courseName }))}
               noOptionsMessage={() => 'No hay cursos disponibles'}
               placeholder="Seleccione un curso"
               isClearable

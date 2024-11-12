@@ -4,6 +4,7 @@ import Select from 'react-select';
 
 import { get } from "../../utils/network";
 import { SwalUtils } from "../../utils/SwalUtils";
+import PageWrapper from "../../components/PageWrapper";
 
 const MAX_DATE: string = (new Date(Date.now() - (new Date()).getTimezoneOffset())).toISOString().slice(0, -1).split('T')[0].toString();
 
@@ -68,8 +69,8 @@ export const TeacherStudentsSurveyDashboardPage = () => {
           title: course.title,
         }))]);
       });
-      fetchStudentsSurveyData();
-      setLoading(false);
+    fetchStudentsSurveyData();
+    setLoading(false);
   }, []);
 
   const fetchStudentsSurveyData = async () => {
@@ -91,7 +92,7 @@ export const TeacherStudentsSurveyDashboardPage = () => {
     if (dateFrom && dateTo) {
       const tmpDateFrom = new Date(dateFrom);
       const tmpDateTo = new Date(dateTo);
-  
+
       if (tmpDateTo < tmpDateFrom) {
         SwalUtils.warningSwal(
           "Rango de fechas inválido",
@@ -171,117 +172,106 @@ export const TeacherStudentsSurveyDashboardPage = () => {
           ]
         );
       });
-      setLoading(false);
+    setLoading(false);
   }
 
-  return <div
-    style={{
+  return <PageWrapper title="Encuestas de estudiantes">
+    <div style={{
       display: 'flex',
-      justifyContent: 'center',
-      alignItems: 'flex-start',
-      height: '100vh',
-      backgroundColor: '#f6effa',
-      width: '100vw',
-    }}
-  >
-    <div
-      style={{
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'flex-start',
-        padding: '20px',
-        width: '100%',
-        height: '100%',
-      }}
-    >
-      <Card style={{ width: '100%', paddingInline: '2rem', paddingBlock: '1rem', height: '100%', overflow: 'scroll', }}>
-        <div className="d-flex flex-column">
-          <div>
-            <div className="d-flex flex-row align-items-center w-50 gap-2 mb-3">
-              <input
-                type="date"
-                className="form-control"
-                placeholder="Fecha inicial"
-                max={MAX_DATE}
-                onChange={(e) => setDateFrom(e.target.value)}
-              />
-              <input
-                type="date"
-                className="form-control"
-                placeholder="Fecha final"
-                max={MAX_DATE}
-                onChange={(e) => setDateTo(e.target.value)}
-              />
-            </div>
-            <div style={{
-              justifyContent: 'space-between',
-              alignItems: 'center',
-              width: '50%',
-            }}>
-              <Select
-                options={courses.map(course => ({ value: course.id, label: course.title }))}
-                noOptionsMessage={() => 'No hay cursos disponibles'}
-                placeholder="Buscar curso"
-                isClearable
-                isSearchable
-                onChange={(selectedOption) => {
-                  setCourseId(selectedOption ? selectedOption.value : '');
-                }}
-              />
-            </div>
-            <hr />
+      flexDirection: 'column',
+      overflowY: 'auto',
+      height: '100%',
 
-            {loading ? (
-              <div style={{ textAlign: 'left', padding: '20px' }}>
-                <strong>Cargando...</strong>
-              </div>
-            ) : (
-              <>
-                {answers.length > 0 && <>
-                  {studentsSurveyData && answers.map((answer: IAnswerData) => (
-                    <Card key={answer.question} style={{ width: '100%', paddingInline: '2rem', paddingBlock: '1rem', marginBlock: '1rem' }}>
-                      <CardHeader tag='h4'>
-                        {answer.question}
-                      </CardHeader>
-                      <Table>
-                        <thead>
-                          <tr>
-                            <th>Respuesta</th>
-                            <th>Porcentaje (%)</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          {answer.answers.map((answer: IAnswer) => (
-                            <tr key={answer.id}>
-                              <th>{answer.option}</th>
-                              <th>{answer.value}</th>
-                            </tr>
-                          ))}
-                        </tbody>
-                      </Table>
-                    </Card>
-                  ))}
-                </>
-                }
-
-                {!studentsSurveyData && <>
-                  <h2>Sin resultados</h2>
-                  <span>No encontramos resultados para mostrarte</span>
-                  <div style={{
-                    flex: '1',
-                    display: 'flex',
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                  }}>
-                  </div>
-                  <div className='d-flex flex-row justify-content-end gap-3' />
-                </>
-                }
-              </>
-            )}
-          </div>
+    }}>
+      <div className="d-flex flex-row align-items-center w-100 gap-2 mb-3">
+        <div className="d-flex flex-column w-100">
+          <label>Fecha Desde</label>
+          <input
+            type="date"
+            className="form-control"
+            placeholder="Fecha inicial"
+            max={MAX_DATE}
+            onChange={(e) => setDateFrom(e.target.value)}
+          />
         </div>
-      </Card>
+        <div className="d-flex flex-column w-100">
+          <label>Fecha Hasta</label>
+          <input
+            type="date"
+            className="form-control"
+            placeholder="Fecha final"
+            max={MAX_DATE}
+            onChange={(e) => setDateTo(e.target.value)}
+          />
+        </div>
+
+        <div className="d-flex flex-column w-100">
+          <label>Curso</label>
+          <Select
+            options={courses.map(course => ({ value: course.id, label: course.title }))}
+            noOptionsMessage={() => 'No hay cursos disponibles'}
+            placeholder="Seleccione un curso"
+            isClearable
+            isSearchable
+            onChange={(selectedOption) => {
+              setCourseId(selectedOption ? selectedOption.value : '');
+            }}
+          />
+        </div>
+      </div>
+      <hr />
+
+      {loading ? (
+        <div style={{ textAlign: 'left', padding: '20px' }}>
+          <strong>Cargando...</strong>
+        </div>
+      ) : (
+        <div style={{
+          display: 'flex',
+          flexDirection: 'column',
+          gap: '1rem',
+          padding: '1rem',
+        }}>
+          {answers.length > 0 && <>
+            {studentsSurveyData && answers.map((answer: IAnswerData) => (
+              <div key={answer.question} style={{ width: '100%', border: '1px solid #ccc', padding: '1rem' }}>
+                <h4>{answer.question}</h4>
+                <Table striped>
+                  <thead>
+                    <tr>
+                      <th>Respuesta</th>
+                      <th>Porcentaje (%)</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {answer.answers.map((answer: IAnswer) => (
+                      <tr key={answer.id}>
+                        <th>{answer.option}</th>
+                        <th>{answer.value}</th>
+                      </tr>
+                    ))}
+                  </tbody>
+                </Table>
+              </div>
+            ))}
+          </>
+          }
+
+          {!studentsSurveyData && <>
+            <h4>Sin resultados</h4>
+            <span>No encontramos resultados para mostrarte</span>
+            <div style={{
+              flex: '1',
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}>
+            </div>
+            <div className='d-flex flex-row justify-content-end gap-3' />
+          </>
+          }
+        </div>
+      )}
     </div>
-  </div>
+  </PageWrapper>;
 };

@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import { Card, CardHeader, Table } from "reactstrap";
 import Select from 'react-select';
 import { get } from "../../utils/network";
+import PageWrapper from "../../components/PageWrapper";
+import TableSkeleton from "../../components/TableSkeleton";
 
 interface ICourse {
   id: string;
@@ -27,7 +29,7 @@ const learningTypes = [
 
 export const TeacherLearningTypeDashboardPage = () => {
   const [courses, setCourses] = useState<ICourse[]>([]);
-  const [courseId, setCourseId] = useState<string>(''); // Inicializar en ''
+  const [selectedCourse, setSelectedCourse] = useState<ICourse | null>({ id: '', title: 'Todos los cursos' });
   const [selectedLearningType, setSelectedLearningType] = useState<string>('');
   const [selectedStudent, setSelectedStudent] = useState<IStudent | null>(null);
   const [students, setStudents] = useState<IStudent[]>([]);
@@ -45,33 +47,26 @@ export const TeacherLearningTypeDashboardPage = () => {
           id: course.id,
           title: course.title,
         }))]);
-      });
-
-    fetchStudents();
-    setLoading(false);
+      }).then(() => fetchStudents()).then(() => setLoading(false));
   }, []);
 
-  const fetchStudents = async () => {
-    setLoading(true);
-    await get('/students/learning-profile')
+  const fetchStudents = () => get('/students/learning-profile')
       .then(res => res.json())
       .then(res => res.data)
-      .then((data: IStudent[]) => {
-        setStudents(data);
-      });
-  };
+      .then((data: IStudent[]) => setStudents(data));
+  
 
   useEffect(() => {
     fetchFilteredStudents();
-  }, [courseId, selectedLearningType, selectedStudent]);
+  }, [selectedCourse?.id, selectedLearningType, selectedStudent]);
 
-  const fetchFilteredStudents = async () => {
+  const fetchFilteredStudents = () => {
     setLoading(true);
     let endpoint = '/students/learning-profile';
     const queryParams: string[] = [];
 
-    if (courseId) {
-      queryParams.push(`courseId=${courseId}`);
+    if (selectedCourse?.id) {
+      queryParams.push(`courseId=${selectedCourse.id}`);
     }
 
     if (selectedLearningType) {
@@ -86,7 +81,7 @@ export const TeacherLearningTypeDashboardPage = () => {
       endpoint += `?${queryParams.join('&')}`;
     }
 
-    await get(endpoint)
+    get(endpoint)
       .then(res => res.json())
       .then(res => {
         const data = res.data;
@@ -109,116 +104,92 @@ export const TeacherLearningTypeDashboardPage = () => {
 
         setFilteredStudents(formattedStudents);
       })
+      .then(() => setLoading(false))
       .catch((error) => {
         console.error("Error fetching students:", error);
         setFilteredStudents([]);
+        setLoading(false);
       });
-      setLoading(false);
+    
   };
 
-  return (
-    <div
-      style={{
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'flex-start',
-        height: '100vh',
-        backgroundColor: '#f6effa',
-        width: '100vw',
-      }}
-    >
-      <div
-        style={{
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'flex-start',
-          padding: '20px',
-          width: '100%',
-          height: '100%',
-        }}
-      >
-        <Card style={{ width: '100%', paddingInline: '2rem', paddingBlock: '1rem', height: '100%', overflow: 'scroll' }}>
-          <div className="d-flex flex-column">
-            {/* Filtros en una fila */}
-            <div className="d-flex flex-row align-items-center w-100 gap-3 mb-3">
-              <Select
-                options={courses.map(course => ({ value: course.id, label: course.title }))}
-                placeholder="Buscar curso"
-                onChange={(selectedOption) => {
-                  setCourseId(selectedOption ? selectedOption.value : '');
-                }}
-                className="w-50" // Ajustar ancho del select
-              />
-              <Select
-                options={learningTypes}
-                placeholder="Buscar tipo de aprendizaje"
-                onChange={(selectedOption) => {
-                  setSelectedLearningType(selectedOption ? selectedOption.value : '');
-                }}
-                className="w-50" // Ajustar ancho del select
-              />
-            </div>
-
-            <div className="d-flex flex-row align-items-center w-100 gap-3 mb-3">
-              <Select
-                className="w-100"
-                placeholder="Buscar estudiante"
-                isClearable
-                isSearchable
-                options={students}
-                noOptionsMessage={() => "No hay estudiantes disponibles"}
-                value={selectedStudent}
-                getOptionLabel={(option) => `${option.firstName} ${option.lastName} - ${option.email}`}
-                getOptionValue={(option) => option.id}
-                onChange={(value) => setSelectedStudent(value || null)}
-              />
-            </div>
-
-            <hr />
-
-            {loading ? (
-              <div style={{ textAlign: 'center', padding: '20px' }}>
-                <strong>Cargando...</strong>
-              </div>
-            ) : (
-            <Card>
-              <CardHeader tag='h4'>
-                Resultados
-              </CardHeader>
-              {filteredStudents.length === 0 ? ( // Condición para mostrar el mensaje si no hay resultados
-                <div style={{
-                  textAlign: 'center',
-                  padding: '20px',
-                  color: '#888',
-                  fontSize: '1.2rem',
-                }}>
-                  <strong>No hay resultados para esa búsqueda</strong>
-                </div>
-              ) : (
-              <Table striped responsive>
-                <thead>
-                  <tr>
-                    <th className="text-center">Alumno</th>
-                    <th className="text-center">Email</th>
-                    <th className="text-center">Tipo de Aprendizaje</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {filteredStudents.map((student) => (
-                    <tr key={student.id}>
-                      <td className="text-center">{`${student.firstName} ${student.lastName}`}</td>
-                      <td className="text-center">{student.email}</td>
-                      <td className="text-center">{student.learningProfile}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </Table>
-             )}
-            </Card>
-            )}
-          </div>
-        </Card>
+  return (<PageWrapper title="Tipos de Aprendizaje">
+    <div className="d-flex flex-column">
+      {/* Filtros en una fila */}
+      <div className="d-flex flex-row align-items-center w-100 gap-3 mb-3">
+        <div className="d-flex flex-column w-100">
+          <label>Curso</label>
+          <Select
+            options={courses}
+            getOptionLabel={(option) => option.title}
+            getOptionValue={(option) => option.id}
+            placeholder="Buscar curso"
+            value={selectedCourse}
+            onChange={(selectedOption) => {
+              setSelectedCourse(selectedOption);
+            }}
+          />
+        </div>
+        <div className="d-flex flex-column w-100">
+          <label>Tipo de Aprendizaje</label>
+          <Select
+            options={learningTypes}
+            placeholder="Buscar tipo de aprendizaje"
+            value={learningTypes.find(option => option.value === selectedLearningType)}
+            onChange={(selectedOption) => {
+              setSelectedLearningType(selectedOption ? selectedOption.value : '');
+            }}
+            className="w-100" // Ajustar ancho del select
+          />
+        </div>
+        <div className="d-flex flex-column w-100">
+          <label>Estudiante</label>
+          <Select
+            className="w-100"
+            placeholder="Buscar estudiante"
+            isClearable
+            isSearchable
+            options={students}
+            noOptionsMessage={() => "No hay estudiantes disponibles"}
+            value={selectedStudent}
+            getOptionLabel={(option) => `${option.firstName} ${option.lastName} - ${option.email}`}
+            getOptionValue={(option) => option.id}
+            onChange={(value) => setSelectedStudent(value || null)}
+          />
+        </div>
       </div>
+
+      {loading ? ( <div style={{opacity: 0.5}}><TableSkeleton /></div> ) : (
+        <div>
+          {filteredStudents.length === 0 ? ( // Condición para mostrar el mensaje si no hay resultados
+            <div style={{
+              textAlign: 'center',
+            }}>
+              <strong>No hay resultados para esa búsqueda</strong>
+            </div>
+          ) : (
+            <Table striped responsive>
+              <thead>
+                <tr>
+                  <th className="text-center">Alumno</th>
+                  <th className="text-center">Email</th>
+                  <th className="text-center">Tipo de Aprendizaje</th>
+                </tr>
+              </thead>
+              <tbody>
+                {filteredStudents.map((student) => (
+                  <tr key={student.id}>
+                    <td className="text-center">{`${student.firstName} ${student.lastName}`}</td>
+                    <td className="text-center">{student.email}</td>
+                    <td className="text-center">{student.learningProfile}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </Table>
+          )}
+        </div>
+      )}
     </div>
+  </PageWrapper>
   );
 };

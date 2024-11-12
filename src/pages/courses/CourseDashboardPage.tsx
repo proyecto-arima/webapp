@@ -1,20 +1,19 @@
 import { useEffect } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { Card, CardBody, CardTitle, CardText, CardFooter } from 'reactstrap';
-import { useDispatch } from 'react-redux';
+import { CardText } from 'reactstrap';
 
+import { faEdit, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faTrash, faEdit } from '@fortawesome/free-solid-svg-icons';
 
 import { setCourses } from '../../redux/slices/courses';
 import { RootState } from '../../redux/store';
 import { SwalUtils } from '../../utils/SwalUtils';
 import { del } from '../../utils/network';
 
-import '../../assets/styles/CourseDashboardPage.css';
-import placeholder from '../../assets/images/placeholder.webp';
 import empty from '../../assets/images/empty.svg';
+import placeholder from '../../assets/images/placeholder.webp';
+import '../../assets/styles/CourseDashboardPage.css';
 import PageWrapper from '../../components/PageWrapper';
 
 export const CourseDashboardPage = () => {

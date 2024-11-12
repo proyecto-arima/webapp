@@ -14,6 +14,7 @@ interface IGenerated {
   type: string;
   content: { text: string, audioUrl: string }[];
   approved: boolean;
+  title: string;
 }
 
 export default function AudioVisualizer() {
@@ -73,6 +74,9 @@ export default function AudioVisualizer() {
     }}
       ref={containerRef}
     >
+      <div className="d-flex flex-row w-100 justify-content-center">
+      <h3>{content?.title}</h3>
+      </div>
       {(content?.content?.length ?? 0) > 0 && <>
         <div
           className="d-flex flex-row justify-content-end w-100"

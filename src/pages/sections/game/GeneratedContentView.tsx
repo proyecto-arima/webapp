@@ -33,6 +33,7 @@ export default function Game() {
   const [gameOver, setGameOver] = useState(false);
   const { courseId, sectionId, contentId } = useParams<{ courseId: string, sectionId: string, contentId: string }>();
   const navigate = useNavigate();
+  const [title, setTitle] = useState('');
 
   const user = useSelector((state: RootState) => state.user);
 
@@ -42,6 +43,7 @@ export default function Game() {
   useEffect(() => {
     get(`/contents/${contentId}/gamification`).then(response => response.json()).then((response) => {
       setLevels(JSON.parse(response.data.content));
+      setTitle(response.data.title);
       setLoading(false);
     });
   }, []);
@@ -104,6 +106,7 @@ export default function Game() {
 
   return <PageWrapper title="Vamos a jugar!"
     goBackUrl={`/courses/${courseId}/sections/${sectionId}`}
+    loading={loading}
   >
     <div style={{
       display: 'flex',
@@ -113,6 +116,7 @@ export default function Game() {
       height: '100%',
       gap: '1rem',
     }}>
+      <h3>{title}</h3>
       {!loading && <>
         <div
           style={{

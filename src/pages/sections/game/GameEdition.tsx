@@ -23,12 +23,14 @@ export default function GameEditionPage() {
 
   const [levels, setLevels] = useState<Level[]>([]);
   const [loading, setLoading] = useState(true);
+  const [title, setTitle] = useState('');
 
   const { courseId, sectionId, contentId } = useParams<{ courseId: string, sectionId: string, contentId: string }>();
 
   useEffect(() => {
     get(`/contents/${contentId}/gamification`).then(response => response.json()).then((response) => {
       setLevels(JSON.parse(response.data.content));
+      setTitle(response.data.title);
       setLoading(false);
     });
   }, []);
@@ -78,7 +80,7 @@ export default function GameEditionPage() {
 
   }
 
-  return <PageWrapper title="Configurar juego" goBackUrl={`/courses/${courseId}/sections/${sectionId}/content/${contentId}/review`}>
+  return <PageWrapper title="Configurar juego" goBackUrl={`/courses/${courseId}/sections/${sectionId}/content/${contentId}/review`} loading={loading}>
     <div style={{
       display: 'flex',
       flexDirection: 'column',
@@ -89,6 +91,7 @@ export default function GameEditionPage() {
       overflowY: 'scroll',
       scrollbarWidth: 'none',
     }}>
+      <h3>{title}</h3>
       {levels.map((level, levelIndex) => (
         <div key={'level' + levelIndex} style={{ width: '100%', paddingInline: '2rem', paddingBlock: '0.5rem' }}>
           <h3>Nivel {levelIndex + 1}</h3>

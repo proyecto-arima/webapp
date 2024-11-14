@@ -239,8 +239,8 @@ export const TeachersSurveyDashboardPage = () => {
               gap: '1rem',
               padding: '1rem',
             }}>
-              {answers.length > 0 && teachersSurveyData ? (
-                answers.map((answer: IAnswerData) => (
+              {answers.length > 0 && <> 
+                {teachersSurveyData && answers.map((answer: IAnswerData) => (
                   <div key={answer.question} style={{ width: '100%', border: '1px solid #ccc', padding: '1rem' }}>
                     <h4>{answer.question}</h4>
                     <Table striped>
@@ -260,13 +260,19 @@ export const TeachersSurveyDashboardPage = () => {
                       </tbody>
                     </Table>
                   </div>
-                ))
-              ) : (
-                <div>
+                  ))}
+              </>}
+              {!teachersSurveyData && <>
                   <h4>Sin resultados</h4>
                   <span>No encontramos resultados para mostrarte</span>
-                </div>
-              )}
+                  <div style={{
+                  flex: '1',
+                  display: 'flex',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                }} />
+                <div className='d-flex flex-row justify-content-end gap-3' />
+              </>}
             </div>
           )}
         </div>

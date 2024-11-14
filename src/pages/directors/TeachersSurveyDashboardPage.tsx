@@ -101,8 +101,10 @@ export const TeachersSurveyDashboardPage = () => {
           "Continuar",
           () => { console.warn('Invalid date range'); }
         );
+        setLoading(false);
+        return;
       }
-    };
+    }
 
     let endpoint = '/survey/teacher-results';
     const queryParams: string[] = [];
@@ -125,52 +127,53 @@ export const TeachersSurveyDashboardPage = () => {
       .then((data: IQuestion | null) => {
         if (!data) {
           setTeachersSurveyData(null);
-          return;
+        } else {
+          setTeachersSurveyData(data);
+          setAnswers([
+            {
+              question: teacherQuestions[0],
+              answers: questionsOptions.map((option, index) => ({
+                id: index,
+                option: questionsOptions[questionsOptions.length - 1 - index],
+                value: data.question1[questionsOptions.length - 1 - index].toString()
+              }))
+            },
+            {
+              question: teacherQuestions[1],
+              answers: questionsOptions.map((option, index) => ({
+                id: index,
+                option: questionsOptions[questionsOptions.length - 1 - index],
+                value: data.question2[questionsOptions.length - 1 - index].toString()
+              }))
+            },
+            {
+              question: teacherQuestions[2],
+              answers: questionsOptions.map((option, index) => ({
+                id: index,
+                option: questionsOptions[questionsOptions.length - 1 - index],
+                value: data.question3[questionsOptions.length - 1 - index].toString()
+              }))
+            },
+            {
+              question: teacherQuestions[3],
+              answers: questionsOptions.map((option, index) => ({
+                id: index,
+                option: questionsOptions[questionsOptions.length - 1 - index],
+                value: data.question4[questionsOptions.length - 1 - index].toString()
+              }))
+            },
+            {
+              question: teacherQuestions[4],
+              answers: questionsOptions.map((option, index) => ({
+                id: index,
+                option: questionsOptions[questionsOptions.length - 1 - index],
+                value: data.question5[questionsOptions.length - 1 - index].toString()
+              }))
+            },
+          ]);
         }
-        setTeachersSurveyData(data);
-        setAnswers([
-          {
-            question: teacherQuestions[0],
-            answers: questionsOptions.map((option, index) => ({
-              id: index,
-              option: questionsOptions[questionsOptions.length - 1 - index],
-              value: data.question1[questionsOptions.length - 1 - index].toString()
-            }))
-          },
-          {
-            question: teacherQuestions[1],
-            answers: questionsOptions.map((option, index) => ({
-              id: index,
-              option: questionsOptions[questionsOptions.length - 1 - index],
-              value: data.question2[questionsOptions.length - 1 - index].toString()
-            }))
-          },
-          {
-            question: teacherQuestions[2],
-            answers: questionsOptions.map((option, index) => ({
-              id: index,
-              option: questionsOptions[questionsOptions.length - 1 - index],
-              value: data.question3[questionsOptions.length - 1 - index].toString()
-            }))
-          },
-          {
-            question: teacherQuestions[3],
-            answers: questionsOptions.map((option, index) => ({
-              id: index,
-              option: questionsOptions[questionsOptions.length - 1 - index],
-              value: data.question4[questionsOptions.length - 1 - index].toString()
-            }))
-          },
-          {
-            question: teacherQuestions[4],
-            answers: questionsOptions.map((option, index) => ({
-              id: index,
-              option: questionsOptions[questionsOptions.length - 1 - index],
-              value: data.question5[questionsOptions.length - 1 - index].toString()
-            }))
-          },
-        ]);
-      }).then(() => setLoading(false));
+      })
+      .finally(() => setLoading(false));
   };
 
   return (
@@ -202,7 +205,6 @@ export const TeachersSurveyDashboardPage = () => {
               onChange={(e) => setDateTo(e.target.value)}
             />
           </div>
-
         </div>
         <hr />
 
@@ -220,26 +222,12 @@ export const TeachersSurveyDashboardPage = () => {
                       </tr>
                     </thead>
                     <tbody>
-                      <tr>
-                        <td><Placeholder xs={12} /></td>
-                        <td><Placeholder xs={12} /></td>
-                      </tr>
-                      <tr>
-                        <td><Placeholder xs={12} /></td>
-                        <td><Placeholder xs={12} /></td>
-                      </tr>
-                      <tr>
-                        <td><Placeholder xs={12} /></td>
-                        <td><Placeholder xs={12} /></td>
-                      </tr>
-                      <tr>
-                        <td><Placeholder xs={12} /></td>
-                        <td><Placeholder xs={12} /></td>
-                      </tr>
-                      <tr>
-                        <td><Placeholder xs={12} /></td>
-                        <td><Placeholder xs={12} /></td>
-                      </tr>
+                      {Array.from({ length: 5 }).map((_, idx) => (
+                        <tr key={idx}>
+                          <td><Placeholder xs={12} /></td>
+                          <td><Placeholder xs={12} /></td>
+                        </tr>
+                      ))}
                     </tbody>
                   </Table>
                 </div>
@@ -253,8 +241,8 @@ export const TeachersSurveyDashboardPage = () => {
               gap: '1rem',
               padding: '1rem',
             }}>
-              {answers.length > 0 && <>
-                {teachersSurveyData && answers.map((answer: IAnswerData) => (
+              {answers.length > 0 && teachersSurveyData ? (
+                answers.map((answer: IAnswerData) => (
                   <div key={answer.question} style={{ width: '100%', border: '1px solid #ccc', padding: '1rem' }}>
                     <h4>{answer.question}</h4>
                     <Table striped>
@@ -267,27 +255,20 @@ export const TeachersSurveyDashboardPage = () => {
                       <tbody>
                         {answer.answers.map((answer: IAnswer) => (
                           <tr key={answer.id}>
-                            <th>{answer.option}</th>
-                            <th>{answer.value}</th>
+                            <td>{answer.option}</td>
+                            <td>{answer.value}</td>
                           </tr>
                         ))}
                       </tbody>
                     </Table>
                   </div>
-                ))}
-              </>}
-
-              {!teachersSurveyData && <>
-                <h4>Sin resultados</h4>
-                <span>No encontramos resultados para mostrarte</span>
-                <div style={{
-                  flex: '1',
-                  display: 'flex',
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                }} />
-                <div className='d-flex flex-row justify-content-end gap-3' />
-              </>}
+                ))
+              ) : (
+                <div>
+                  <h4>Sin resultados</h4>
+                  <span>No encontramos resultados para mostrarte</span>
+                </div>
+              )}
             </div>
           )}
         </div>

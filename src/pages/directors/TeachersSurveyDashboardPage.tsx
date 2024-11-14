@@ -101,8 +101,6 @@ export const TeachersSurveyDashboardPage = () => {
           "Continuar",
           () => { console.warn('Invalid date range'); }
         );
-        setLoading(false);
-        return;
       }
     }
 
@@ -173,7 +171,7 @@ export const TeachersSurveyDashboardPage = () => {
           ]);
         }
       })
-      .finally(() => setLoading(false));
+      .then(() => setLoading(false));
   };
 
   return (

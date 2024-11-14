@@ -138,27 +138,31 @@ export const DirectorLearningTypeDashboardPage = () => {
         </div>
 
         <div className="d-flex flex-row align-items-center w-100 gap-2 mb-3">
-          <Select
-            className="w-100"
-            placeholder="Buscar estudiante"
-            isClearable
-            options={students.map(student => ({
-              value: student.id, label: `${student.firstName} ${student.lastName} - ${student.email}`
-            }))}
-            onChange={(value) => setSelectedStudent(value ? { id: value.value } as IStudent : null)}
-          />
-        </div>
+          <div className="d-flex flex-column w-50 gap-2 mb-3">
+            <label>Estudiante</label>
+            <Select
+              className="w-100"
+              placeholder="Seleccione un estudiante"
+              isClearable
+              options={students.map(student => ({
+                value: student.id, label: `${student.firstName} ${student.lastName} - ${student.email}`
+              }))}
+              onChange={(value) => setSelectedStudent(value ? { id: value.value } as IStudent : null)}
+            />
+          </div>
 
-        <div className="d-flex flex-row align-items-center w-100 gap-2 mb-3">
-          <Select
-            className="w-100"
-            placeholder="Buscar docente"
-            isClearable
-            options={teachers.map(teacher => ({
-              value: teacher.id, label: `${teacher.firstName} ${teacher.lastName} - ${teacher.email}`
-            }))}
-            onChange={(value) => setSelectedTeacher(value ? { id: value.value } as ITeacher : null)}
-          />
+          <div className="d-flex flex-column w-50 gap-2 mb-3">
+            <label>Docente</label>
+            <Select
+              className="w-100"
+              placeholder="Seleccione un docente"
+              isClearable
+              options={teachers.map(teacher => ({
+                value: teacher.id, label: `${teacher.firstName} ${teacher.lastName} - ${teacher.email}`
+              }))}
+              onChange={(value) => setSelectedTeacher(value ? { id: value.value } as ITeacher : null)}
+            />
+          </div>
         </div>
 
         {loading ? (

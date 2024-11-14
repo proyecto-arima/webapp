@@ -10,6 +10,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { post } from "../../utils/network";
 import { FormValidators } from "../../utils/FormValidators";
 import { SwalUtils } from "../../utils/SwalUtils";
+import PageWrapper from '../../components/PageWrapper';
 
 interface IUser {
   firstName: string;
@@ -104,7 +105,7 @@ export const UserCreationMassivePage = () => {
                   setUsers(users);
                   setUsers([]);
                   setUserType(null);
-                }, 
+                },
               );
             };
           })
@@ -323,103 +324,68 @@ export const UserCreationMassivePage = () => {
   };
 
   return (
-    <div
-      style={{
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'flex-start',
-        height: '100vh',
-        backgroundColor: '#f6effa',
-        width: '100vw',
-      }}
-    >
-      <div
-        style={{
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'flex-start',
-          padding: '20px',
-          width: '100%',
-          height: '100%',
-        }}
-      >
-        <Card style={{ width: '100%', paddingInline: '2rem', paddingBlock: '1rem', height: '100%', overflow: 'scroll' }}>
-          <div style={{
-            display: 'flex',
-            flexDirection: 'row',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-            width: '100%',
-          }}>
-            <h2>Creación masiva de usuarios</h2>
+    <PageWrapper title="Creación masiva de usuarios">
+      {users.length == 0 && (
+        <>
+          <div>
+            <h5>Tené en cuenta que...</h5>
+            <ul>
+              <li key='0'>Es muy importante <strong>que los usuarios no existan previamente</strong> en el listado.</li>
+              <li key='1'>Si alguno de los usuarios ya existe, <strong>no se podrá crear el resto.</strong>.</li>
+              <li key='2'>Recordá <strong>seleccionar el tipo de usuario</strong> que vas a cargar (docentes o estudiantes).</li>
+              <li key='3'>El archivo debe ser un .csv que AdaptarIA tomará para mostrar la tabla de usuarios que se van a crear.</li>
+              <li key='4'>En Google Spreadsheets, podés hacer clic en Archivo {'>'} Descargar {'>'} Valores separados por comas (.csv) para obtener el archivo en el formato correcto.</li>
+              <li key='5'>En Microsoft Excel, podés hacer clic en Archivo {'>'} Guardar como {'>'} seleccionar CSV (delimitado por comas) (*.csv) para obtener el archivo en el formato correcto.</li>
+            </ul>
           </div>
 
+          <div style={{ width: '30%', marginBottom: '1rem' }}>
+          <label>Tipo de Usuario</label>
+            <Select
+              value={userType ? { value: userType, label: userType === 'DOCENTE' ? 'Docente' : 'Estudiante' } : null}
+              options={["Estudiante", "Docente"].map((option) => ({ value: option.toUpperCase(), label: option }))}
+              placeholder="Seleccionar tipo de usuario"
+              isDisabled={users.length > 0}
+              isSearchable={false}
+              onChange={(selectedOption) => {
+                setUserType(selectedOption ? selectedOption.value : '');
+              }}
+            />
+          </div>
+
+          <label>Archivo CSV</label>
+          <Input
+            type='file'
+            name='csv-file'
+            accept='.csv'
+            onChange={(e) => {
+              generateTbodyFromCSV(e);
+              e.target.value = '';
+            }}
+          />
           <hr />
-          {users.length == 0 && (
-            <>
-              <div>
-                <CardTitle>
-                  <h3>Tené en cuenta que...</h3>
-                </CardTitle>
-                <CardBody>
-                  <ul>
-                    <li key='0'>Es muy importante <strong>que los usuarios no existan previamente</strong> en el listado.</li>
-                    <li key='1'>Si alguno de los usuarios ya existe, <strong>no se podrá crear el resto.</strong>.</li>
-                    <li key='2'>Recordá <strong>seleccionar el tipo de usuario</strong> que vas a cargar (docentes o estudiantes).</li>
-                    <li key='3'>El archivo debe ser un .csv que AdaptarIA tomará para mostrar la tabla de usuarios que se van a crear.</li>
-                    <li key='4'>En Google Spreadsheets, podés hacer clic en Archivo {'>'} Descargar {'>'} Valores separados por comas (.csv) para obtener el archivo en el formato correcto.</li>
-                    <li key='5'>En Microsoft Excel, podés hacer clic en Archivo {'>'} Guardar como {'>'} seleccionar CSV (delimitado por comas) (*.csv) para obtener el archivo en el formato correcto.</li>
-                  </ul>
-                </CardBody>
-              </div>
+        </>
+      )}
 
-              <div style={{ width: '30%', marginBottom: '1rem' }}>
-                <Select
-                  value={userType ? { value: userType, label: userType === 'DOCENTE' ? 'Docente' : 'Estudiante' } : null}
-                  options={["Estudiante", "Docente"].map((option) => ({ value: option.toUpperCase(), label: option }))}
-                  placeholder="Seleccionar tipo de usuario"
-                  isDisabled={users.length > 0}
-                  isSearchable={false}
-                  onChange={(selectedOption) => {
-                    setUserType(selectedOption ? selectedOption.value : '');
-                  }}
-                />
-              </div>
+      {renderUsersToCreate()}
 
-              <Input
-                type='file'
-                name='csv-file'
-                accept='.csv'
-                onChange={(e) => {
-                  generateTbodyFromCSV(e);
-                  e.target.value = '';
-                }}
-              />
-              <hr />
-            </>
-          )}
-
-          {renderUsersToCreate()}
-
-          {users.length > 0 && userType != '' && (<>
-            <p>
-              Total de {userType === 'DOCENTE' ? 'docentes' : userType === 'ESTUDIANTE' ? 'estudiantes' : ''} a crear: <strong>{users.length}</strong>
-            </p>
-            <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: '10px' }}>
-              <button style={{ marginRight: '10px' }} className="btn-purple-2" onClick={() => {
-                setUsers([]);
-                setUserType(null);
-              }}>
-                Cancelar
-              </button>
-              <button className="btn-purple-1" onClick={() => confirmationOfCreation()}>
-                Crear {userType === 'DOCENTE' ? 'docentes' : userType === 'ESTUDIANTE' ? 'estudiantes' : ''}
-              </button>
-            </div>
-          </>
-          )}
-        </Card>
-      </div>
-    </div>
+      {users.length > 0 && userType != '' && (<>
+        <p>
+          Total de {userType === 'DOCENTE' ? 'docentes' : userType === 'ESTUDIANTE' ? 'estudiantes' : ''} a crear: <strong>{users.length}</strong>
+        </p>
+        <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: '10px' }}>
+          <button style={{ marginRight: '10px' }} className="btn-purple-2" onClick={() => {
+            setUsers([]);
+            setUserType(null);
+          }}>
+            Cancelar
+          </button>
+          <button className="btn-purple-1" onClick={() => confirmationOfCreation()}>
+            Crear {userType === 'DOCENTE' ? 'docentes' : userType === 'ESTUDIANTE' ? 'estudiantes' : ''}
+          </button>
+        </div>
+      </>
+      )}
+    </PageWrapper>
   );
 };

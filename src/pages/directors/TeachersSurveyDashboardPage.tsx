@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Table } from "reactstrap";
+import { Placeholder, Table } from "reactstrap";
 import Select from 'react-select';
 
 import { get } from "../../utils/network";
@@ -58,30 +58,31 @@ export const TeachersSurveyDashboardPage = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    setLoading(true);
-    get('/directors/courses/')
-      .then(res => res.json())
-      .then(res => res.data)
-      .then((data: ICourse[]) => {
-        const allCoursesOption = { id: '', courseName: 'Todos los cursos' };
-        setCourses([allCoursesOption, ...data.map((course: ICourse) => ({
-          id: course.id,
-          courseName: course.courseName,
-        }))]);
-      });
-    fetchStudentsSurveyData();
-    setLoading(false);
+    Promise.all([
+      getCourses(),
+      fetchStudentsSurveyData()
+    ]).then(() => setLoading(false));
   }, []);
 
-  const fetchStudentsSurveyData = async () => {
-    setLoading(true);
-    await get('/survey/teacher-results')
+  const fetchStudentsSurveyData = () => {
+    get('/survey/teacher-results')
       .then(res => res.json())
       .then(res => res.data)
       .then((data: IQuestion) => {
         setTeachersSurveyData(data);
       });
   };
+
+  const getCourses = () => get('/directors/courses/')
+    .then(res => res.json())
+    .then(res => res.data)
+    .then((data: ICourse[]) => {
+      const allCoursesOption = { id: '', courseName: 'Todos los cursos' };
+      setCourses([allCoursesOption, ...data.map((course: ICourse) => ({
+        id: course.id,
+        courseName: course.courseName,
+      }))]);
+    });
 
   useEffect(() => {
     fetchStudentsSurveyDataFiltered();
@@ -118,7 +119,7 @@ export const TeachersSurveyDashboardPage = () => {
       endpoint += `?${queryParams.join('&')}`;
     }
 
-    await get(endpoint)
+    get(endpoint)
       .then(res => res.json())
       .then(res => res.data)
       .then((data: IQuestion | null) => {
@@ -169,8 +170,7 @@ export const TeachersSurveyDashboardPage = () => {
             }))
           },
         ]);
-      });
-    setLoading(false);
+      }).then(() => setLoading(false));
   };
 
   return (
@@ -206,22 +206,12 @@ export const TeachersSurveyDashboardPage = () => {
         </div>
         <hr />
 
-        <div style={{ flex: 1, overflowY: 'auto', padding: '1rem' }}>      
-        {loading ? (
-          <div style={{ textAlign: 'left', padding: '20px' }}>
-            <strong>Cargando...</strong>
-          </div>
-        ) : (
-          <div style={{
-            display: 'flex',
-            flexDirection: 'column',
-            gap: '1rem',
-            padding: '1rem',
-          }}>
-            {answers.length > 0 && <>
-              {teachersSurveyData && answers.map((answer: IAnswerData) => (
-                <div key={answer.question} style={{ width: '100%', border: '1px solid #ccc', padding: '1rem' }}>
-                  <h4>{answer.question}</h4>
+        <div style={{ flex: 1, overflowY: 'auto', padding: '1rem' }}>
+          {loading ? (
+            Array.from({ length: 5 }).map((_, index) => (
+              <Placeholder as={'p'} animation="glow" className="d-flex flex-column gap-1" key={index}>
+                <div style={{ width: '100%', border: '1px solid #ccc', padding: '1rem', opacity: 0.5 }}>
+                  <Placeholder xs={4} />
                   <Table striped>
                     <thead>
                       <tr>
@@ -230,31 +220,76 @@ export const TeachersSurveyDashboardPage = () => {
                       </tr>
                     </thead>
                     <tbody>
-                      {answer.answers.map((answer: IAnswer) => (
-                        <tr key={answer.id}>
-                          <th>{answer.option}</th>
-                          <th>{answer.value}</th>
-                        </tr>
-                      ))}
+                      <tr>
+                        <td><Placeholder xs={12} /></td>
+                        <td><Placeholder xs={12} /></td>
+                      </tr>
+                      <tr>
+                        <td><Placeholder xs={12} /></td>
+                        <td><Placeholder xs={12} /></td>
+                      </tr>
+                      <tr>
+                        <td><Placeholder xs={12} /></td>
+                        <td><Placeholder xs={12} /></td>
+                      </tr>
+                      <tr>
+                        <td><Placeholder xs={12} /></td>
+                        <td><Placeholder xs={12} /></td>
+                      </tr>
+                      <tr>
+                        <td><Placeholder xs={12} /></td>
+                        <td><Placeholder xs={12} /></td>
+                      </tr>
                     </tbody>
                   </Table>
                 </div>
-              ))}
-            </>}
+              </Placeholder>
+            ))
 
-            {!teachersSurveyData && <>
-              <h4>Sin resultados</h4>
-              <span>No encontramos resultados para mostrarte</span>
-              <div style={{
-                flex: '1',
-                display: 'flex',
-                justifyContent: 'center',
-                alignItems: 'center',
-              }} />
-              <div className='d-flex flex-row justify-content-end gap-3' />
-            </>}
-          </div>
-        )}
+          ) : (
+            <div style={{
+              display: 'flex',
+              flexDirection: 'column',
+              gap: '1rem',
+              padding: '1rem',
+            }}>
+              {answers.length > 0 && <>
+                {teachersSurveyData && answers.map((answer: IAnswerData) => (
+                  <div key={answer.question} style={{ width: '100%', border: '1px solid #ccc', padding: '1rem' }}>
+                    <h4>{answer.question}</h4>
+                    <Table striped>
+                      <thead>
+                        <tr>
+                          <th>Respuesta</th>
+                          <th>Porcentaje (%)</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {answer.answers.map((answer: IAnswer) => (
+                          <tr key={answer.id}>
+                            <th>{answer.option}</th>
+                            <th>{answer.value}</th>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </Table>
+                  </div>
+                ))}
+              </>}
+
+              {!teachersSurveyData && <>
+                <h4>Sin resultados</h4>
+                <span>No encontramos resultados para mostrarte</span>
+                <div style={{
+                  flex: '1',
+                  display: 'flex',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                }} />
+                <div className='d-flex flex-row justify-content-end gap-3' />
+              </>}
+            </div>
+          )}
         </div>
       </div>
     </PageWrapper>

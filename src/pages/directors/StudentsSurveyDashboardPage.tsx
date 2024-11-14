@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Table } from "reactstrap";
+import { Placeholder, Table } from "reactstrap";
 import Select from 'react-select';
 
 import { get } from "../../utils/network";
@@ -58,30 +58,29 @@ export const StudentsSurveyDashboardPage = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    setLoading(true);
-    get('/directors/courses/')
-      .then(res => res.json())
-      .then(res => res.data)
-      .then((data: ICourse[]) => {
-        const allCoursesOption = { id: '', courseName: 'Todos los cursos' };
-        setCourses([allCoursesOption, ...data.map((course: ICourse) => ({
-          id: course.id,
-          courseName: course.courseName,
-        }))]);
-      });
-    fetchStudentsSurveyData();
-    setLoading(false);
+    Promise.all([
+      fetchCourses(),
+      fetchStudentsSurveyData(),
+    ]).then(() => setLoading(false));
   }, []);
 
-  const fetchStudentsSurveyData = async () => {
-    setLoading(true);
-    await get('/survey/student-results')
-      .then(res => res.json())
-      .then(res => res.data)
-      .then((data: IQuestion) => {
-        setStudentsSurveyData(data);
-      });
-  };
+  const fetchStudentsSurveyData = () => get('/survey/student-results')
+  .then(res => res.json())
+  .then(res => res.data)
+  .then((data: IQuestion) => {
+    setStudentsSurveyData(data);
+  });
+
+  const fetchCourses = () => get('/directors/courses/')
+    .then(res => res.json())
+    .then(res => res.data)
+    .then((data: ICourse[]) => {
+      const allCoursesOption = { id: '', courseName: 'Todos los cursos' };
+      setCourses([allCoursesOption, ...data.map((course: ICourse) => ({
+        id: course.id,
+        courseName: course.courseName,
+      }))]);
+    });
 
   useEffect(() => {
     fetchStudentsSurveyDataFiltered();
@@ -118,7 +117,7 @@ export const StudentsSurveyDashboardPage = () => {
       endpoint += `?${queryParams.join('&')}`;
     }
 
-    await get(endpoint)
+    get(endpoint)
       .then(res => res.json())
       .then(res => res.data)
       .then((data: IQuestion | null) => {
@@ -169,8 +168,8 @@ export const StudentsSurveyDashboardPage = () => {
             }))
           },
         ]);
-      });
-    setLoading(false);
+      }).then(() => setLoading(false));
+    
   };
 
   return (
@@ -223,9 +222,43 @@ export const StudentsSurveyDashboardPage = () => {
         {/* Resultados con scroll */}
         <div style={{ flex: 1, overflowY: 'auto', padding: '1rem' }}>
           {loading ? (
-            <div style={{ textAlign: 'left', padding: '20px' }}>
-              <strong>Cargando...</strong>
-            </div>
+            Array.from({ length: 5 }).map((_, index) => (
+              <Placeholder as={'p'} animation="glow" className="d-flex flex-column gap-1" key={index}>
+                <div style={{ width: '100%', border: '1px solid #ccc', padding: '1rem', opacity: 0.5 }}>
+                  <Placeholder xs={4} />
+                  <Table striped>
+                    <thead>
+                      <tr>
+                        <th>Respuesta</th>
+                        <th>Porcentaje (%)</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td><Placeholder xs={12} /></td>
+                        <td><Placeholder xs={12} /></td>
+                      </tr>
+                      <tr>
+                        <td><Placeholder xs={12} /></td>
+                        <td><Placeholder xs={12} /></td>
+                      </tr>
+                      <tr>
+                        <td><Placeholder xs={12} /></td>
+                        <td><Placeholder xs={12} /></td>
+                      </tr>
+                      <tr>
+                        <td><Placeholder xs={12} /></td>
+                        <td><Placeholder xs={12} /></td>
+                      </tr>
+                      <tr>
+                        <td><Placeholder xs={12} /></td>
+                        <td><Placeholder xs={12} /></td>
+                      </tr>
+                    </tbody>
+                  </Table>
+                </div>
+              </Placeholder>
+            ))
           ) : (
             <div style={{
               display: 'flex',
@@ -255,6 +288,17 @@ export const StudentsSurveyDashboardPage = () => {
                     </Table>
                   </div>
                 ))}
+              </>}
+              {!studentsSurveyData && <>
+                <h4>Sin resultados</h4>
+                <span>No encontramos resultados para mostrarte</span>
+                <div style={{
+                  flex: '1',
+                  display: 'flex',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                }} />
+                <div className='d-flex flex-row justify-content-end gap-3' />
               </>}
             </div>
           )}

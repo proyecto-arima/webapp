@@ -8,6 +8,7 @@ import { useNavigate } from 'react-router-dom';
 import { SwalUtils } from '../../utils/SwalUtils';
 import { addCourse, setCourses } from '../../redux/slices/courses';
 import PageWrapper from '../../components/PageWrapper';
+import TableSkeleton from '../../components/TableSkeleton';
 
 interface ICourse {
   id: string;
@@ -22,9 +23,10 @@ export const CourseSearchPage = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const studentEmail = useSelector((state: RootState) => state.user.email);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetchCoursesToMatriculate();
+    fetchCoursesToMatriculate().then(() => setLoading(false));
   
     const interval = setInterval(() => {
       fetchCoursesToMatriculate();
@@ -119,7 +121,7 @@ export const CourseSearchPage = () => {
           <h5 style={{ fontWeight: 'bold' }}>Cursos disponibles</h5>
             <hr />
             
-            {filteredCourses.length > 0 ? (
+            {loading ? <div style={{ opacity: '0.5'}}><TableSkeleton columnsCount={1}/></div> : filteredCourses.length > 0 ? (
               <Table>
                 <tbody>
                   {filteredCourses.map((course) => (

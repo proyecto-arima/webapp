@@ -218,8 +218,8 @@ export const TeachersSurveyDashboardPage = () => {
                     <tbody>
                       {it.answers.map((answer) => (
                         <tr key={`${it.question}-${ix}`}>
-                          <th>{answer.option}</th>
-                          <th>{answer.value}</th>
+                          <td>{answer.option}</td>
+                          <td>{answer.value}</td>
                         </tr>
                       ))}
                     </tbody>

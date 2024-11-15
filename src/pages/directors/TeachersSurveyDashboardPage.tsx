@@ -70,7 +70,7 @@ export const TeachersSurveyDashboardPage = () => {
   }
 
   const fetchStudentsSurveyData = () => {
-    get('/survey/teacher-results')
+    return get('/survey/teacher-results')
       .then(res => res.json())
       .then(res => res.data)
       .then((data: IQuestion) => {
@@ -79,6 +79,7 @@ export const TeachersSurveyDashboardPage = () => {
   };
 
   useEffect(() => {
+    if(!teachersSurveyData) return;
     fetchStudentsSurveyDataFiltered();
   }, [dateFrom, dateTo]);
 
@@ -228,8 +229,9 @@ export const TeachersSurveyDashboardPage = () => {
               
 
               {!teachersSurveyData && <>
+              {`lol: ${loading}`}
                 <h4>Sin resultados</h4>
-                <span>No encontramos resultados para mostrarte</span>
+                <span>No encontramos resultados para mostrartee</span>
                 <div style={{
                   flex: '1',
                   display: 'flex',

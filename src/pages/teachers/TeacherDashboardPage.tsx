@@ -50,12 +50,8 @@ export const TeacherDashboardPage = () => {
       input: 'select',
       inputOptions: {
         STUDENT: 'Estudiante',
-        TEACHER: 'Docente',
+        //TEACHER: 'Docente',
         DIRECTOR: 'Director',	
-      },
-      customClass: {
-        confirmButton: 'btn-purple-1',
-        cancelButton: 'btn-purple-2'
       },
       inputPlaceholder: 'Seleccionar nuevo rol',
       showCancelButton: true,

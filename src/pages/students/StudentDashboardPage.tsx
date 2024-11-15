@@ -27,12 +27,8 @@ export const StudentDashboardPage = () => {
       title: 'Modificar rol de usuario',
       input: 'select',
       inputOptions: {
-        STUDENT: 'Estudiante',
+        //STUDENT: 'Estudiante',
         TEACHER: 'Docente',
-      },
-      customClass: {
-        confirmButton: 'btn-purple-1',
-        cancelButton: 'btn-purple-2'
       },
       inputPlaceholder: 'Seleccionar nuevo rol',
       showCancelButton: true,

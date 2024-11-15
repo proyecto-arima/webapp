@@ -55,7 +55,6 @@ export const CourseSearchPage = () => {
     const { value: matriculationCode } = await Swal.fire({
       title: 'Ingresá el código de matriculación provisto por el docente',
       input: 'text',
-      inputLabel: 'Código de matriculación',
       confirmButtonText: 'Confirmar matriculación',
       cancelButtonText: 'Cancelar',
       showCancelButton: true,

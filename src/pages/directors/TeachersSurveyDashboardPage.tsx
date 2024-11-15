@@ -229,7 +229,6 @@ export const TeachersSurveyDashboardPage = () => {
               
 
               {!teachersSurveyData && <>
-              {`lol: ${loading}`}
                 <h4>Sin resultados</h4>
                 <span>No encontramos resultados para mostrartee</span>
                 <div style={{

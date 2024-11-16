@@ -6,6 +6,10 @@ import { faEdit } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Swal from 'sweetalert2';
 import PageWrapper from "../../components/PageWrapper";
+import Select from "react-select";
+import withReactContent from "sweetalert2-react-content";
+
+const MySwal = withReactContent(Swal);
 
 interface ITeacher {
   id: string;
@@ -45,43 +49,75 @@ export const TeacherDashboardPage = () => {
   }, []);
 
   const handleEditRole = async (teacher: ITeacher) => {
-    const { value: newRole } = await Swal.fire({
-      title: 'Modificar rol de usuario',
-      input: 'select',
-      inputOptions: {
-        STUDENT: 'Estudiante',
-        //TEACHER: 'Docente',
-        DIRECTOR: 'Director',	
-      },
-      inputPlaceholder: 'Seleccionar nuevo rol',
+    let selectedRole = "";
+  
+    const SelectComponent = () => {
+      const options = [
+        { value: "STUDENT", label: "Estudiante" },
+        { value: "DIRECTOR", label: "Director" },
+      ];
+  
+      return (
+        <div>
+          <Select
+            options={options}
+            placeholder="Seleccionar nuevo rol"
+            isSearchable={false}
+            onChange={(selectedOption) => {
+              selectedRole = selectedOption?.value || "";
+            }}
+            styles={{
+              menuPortal: (base) => ({ ...base, zIndex: 9999 }), // Asegura que se muestre encima de todo
+              menu: (base) => ({
+                ...base,
+                zIndex: 9999,
+                position: "absolute", // Despliega el menú sobre otros elementos
+              }),
+              menuList: (base) => ({
+                ...base,
+                maxHeight: "none", // Muestra todas las opciones
+              }),
+            }}
+            menuPortalTarget={document.body} // Muestra el menú fuera del contenedor
+          />
+        </div>
+      );
+    };
+  
+    const { isConfirmed } = await MySwal.fire({
+      title: "Modificar rol de usuario",
+      html: <SelectComponent />,
       showCancelButton: true,
-      confirmButtonText: 'Actualizar',
-      cancelButtonText: 'Cancelar',
-      preConfirm: (role) => {
-        if (!role) {
-          Swal.showValidationMessage('Debés seleccionar un rol');
+      confirmButtonText: "Actualizar",
+      cancelButtonText: "Cancelar",
+      preConfirm: () => {
+        if (!selectedRole) {
+          Swal.fire("Error", "Debés seleccionar un rol", "error");
         }
-      }
+        return selectedRole; // Devuelve el valor seleccionado
+      },
     });
-
-    if (newRole) {
+  
+    if (isConfirmed && selectedRole) {
       try {
-        await patch(`/users/${teacher.id}/role`, { newRole });
-
-        if (newRole === "STUDENT" || newRole === "DIRECTOR") {
-          setTeachers(prev => prev.filter(t => t.id !== teacher.id));
+        await patch(`/users/${teacher.id}/role`, { newRole: selectedRole });
+  
+        if (selectedRole === "STUDENT" || selectedRole === "DIRECTOR") {
+          setTeachers((prev) => prev.filter((t) => t.id !== teacher.id));
         } else {
-          setTeachers(prev => prev.map(t => t.id === teacher.id ? { ...t, role: newRole } : t));
+          setTeachers((prev) =>
+            prev.map((t) => (t.id === teacher.id ? { ...t, role: selectedRole } : t))
+          );
         }
-
-        Swal.fire('Éxito', 'Rol actualizado correctamente', 'success');
+  
+        Swal.fire("Éxito", "Rol actualizado correctamente", "success");
       } catch (error) {
-        console.error('Error updating role:', error);
-        Swal.fire('Error', 'Hubo un error al actualizar el rol', 'error');
+        console.error("Error updating role:", error);
+        Swal.fire("Error", "Hubo un error al actualizar el rol", "error");
       }
     }
   };
-
+  
   return (
     <PageWrapper title="Docentes"
       loading={loading}

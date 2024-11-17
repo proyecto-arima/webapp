@@ -367,10 +367,13 @@ export const UserCreationMassivePage = () => {
         </>
       )}
 
-      {renderUsersToCreate()}
+      <div style={{ overflow: 'auto', maxHeight: '80vh' }}>
+        {renderUsersToCreate()}
+      </div>
+
 
       {users.length > 0 && userType != '' && (<>
-        <p>
+        <p style={{ marginTop: '10px' }}>
           Total de {userType === 'DOCENTE' ? 'docentes' : userType === 'ESTUDIANTE' ? 'estudiantes' : ''} a crear: <strong>{users.length}</strong>
         </p>
         <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: '10px' }}>

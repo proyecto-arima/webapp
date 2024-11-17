@@ -124,26 +124,26 @@ export const TeacherLearningTypeDashboardPage = () => {
           <Table striped responsive>
             <thead>
               <tr>
-                <th>Nombre</th>
-                <th>Apellido</th>
-                <th>Email</th>
-                <th>Tipo de Aprendizaje</th>
+                <th className="text-center">Alumno</th>
+                <th className="text-center">Email</th>
+                <th className="text-center">Tipo de Aprendizaje</th>
               </tr>
             </thead>
             <tbody>
-              {filteredStudents.length > 0 ? (
-                filteredStudents.map((student: IStudent) => (
+              {filteredStudents.length === 0 ? (
+                <tr>
+                  <td colSpan={3} className="text-center">
+                    <strong>No hay resultados para esa búsqueda</strong>
+                  </td>
+                </tr>
+              ) : (
+                filteredStudents.map((student) => (
                   <tr key={student.id}>
-                    <td>{student.firstName}</td>
-                    <td>{student.lastName}</td>
-                    <td>{student.email}</td>
-                    <td>{student.learningProfile === "SIN_PERFIL" ? "SIN PERFIL" : student.learningProfile}</td>
+                    <td className="text-center">{`${student.firstName} ${student.lastName}`}</td>
+                    <td className="text-center">{student.email}</td>
+                    <td className="text-center">{student.learningProfile === "SIN_PERFIL" ? "SIN PERFIL" : student.learningProfile}</td>
                   </tr>
                 ))
-              ) : (
-                <tr>
-                  <td colSpan={4} style={{ textAlign: 'center' }}>No se encontraron estudiantes</td>
-                </tr>
               )}
             </tbody>
           </Table>

@@ -137,7 +137,9 @@ export const CourseDashboardPage = () => {
                 </div>
               </div>
             ) : (
-              <div className='d-flex flex-column justify-content-center align-items-center'>
+              <div className='d-flex flex-column justify-content-center align-items-center' style={{
+                textAlign: 'center',
+              }}>
                 <img src={empty} alt="No sections available" />
                 {user.role === 'STUDENT' ? (
                   <>

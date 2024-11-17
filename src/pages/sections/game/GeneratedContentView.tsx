@@ -126,9 +126,9 @@ export default function Game() {
             alignItems: 'flex-end',
           }}
         >
-          <AnimatedStar fillProgress={currentLevel === 0 ? currenttext / 3 : 1} size={'15vh'} id='star1' shouldShowConfeti={false} />
+          <AnimatedStar fillProgress={currentLevel === 0 ? currenttext / 3 : 1} size={'15vh'} id='star1' shouldShowConfeti />
           <AnimatedStar fillProgress={currentLevel === 2 ? (gameOver ? 1 : currenttext / 3) : 0} size={'20vh'} id='star2' shouldShowConfeti />
-          <AnimatedStar fillProgress={currentLevel === 1 ? currenttext / 3 : currentLevel === 0 ? 0 : 1} size={'15vh'} id='star3' shouldShowConfeti={false} />
+          <AnimatedStar fillProgress={currentLevel === 1 ? currenttext / 3 : currentLevel === 0 ? 0 : 1} size={'15vh'} id='star3' shouldShowConfeti />
         </div>
         <Card style={{ width: '90%', fontSize: '2vmin' }}>
           <CardBody>

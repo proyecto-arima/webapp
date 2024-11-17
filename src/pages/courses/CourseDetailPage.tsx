@@ -56,7 +56,7 @@ export const CourseDetailPage: React.FC = () => {
 
   // Fetch sections details
   const fetchSections = () => {
-    get(`/courses/${courseId}/sections`)
+    return get(`/courses/${courseId}/sections`)
       .then(res => res.json())
       .then(res => res.data)
       .then((data: ISection[]) => {

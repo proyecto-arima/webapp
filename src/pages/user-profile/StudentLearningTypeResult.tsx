@@ -24,7 +24,7 @@ const result: { [key: string]: { description: string; image: string; finalConten
       "actividades en las que puedan pensar y reflexionar sobre distintas posibilidades, así como también las asociadas " +
       "con el arte y temas humanos. Se destacan también por generar ideas nuevas y encontrar relaciones entre distintas cosas y situaciones.",
     image: divergente,
-    finalContent: "mapas conceptuales",
+    finalContent: "mapas mentales",
   },
   'CONVERGENTE': {
     description:

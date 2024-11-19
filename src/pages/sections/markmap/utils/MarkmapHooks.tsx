@@ -84,7 +84,7 @@ export default function MarkmapHooks({ text, editable, onChange }: MarkmapHooksP
       <Card className="w-100 p-3" style={{
         display: editable ? 'flex' : 'none',
       }}>
-        <h3>Definición del Mapa Conceptual</h3>
+        <h3>Definición del Mapa Mental</h3>
         <hr />
         <textarea
           className="w-100 generated-content"
@@ -106,7 +106,7 @@ export default function MarkmapHooks({ text, editable, onChange }: MarkmapHooksP
         />
       </Card>
       {editable ? <Card className="flex-1 flex-grow-1 w-100 h-100 p-3">
-          <h3>Mapa Conceptual</h3>
+          <h3>Mapa Mental</h3>
           <hr />
           {buildMarkmap()}
       </Card> : <div className='flex-1 flex-grow-1 w-100 h-100 p-3'>{buildMarkmap()}</div>}

@@ -134,7 +134,7 @@ export const TeacherDashboardPage = () => {
           overflowY: 'auto',   // Activa el scroll vertical si el contenido excede la altura
         }}>
         <Table style={{
-          fontSize: 'small',
+          fontSize: 'medium',
         }}>
           <thead>
             <tr>

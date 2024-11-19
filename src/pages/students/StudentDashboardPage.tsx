@@ -109,7 +109,7 @@ export const StudentDashboardPage = () => {
       skeletonType="table"
       columnsCount={4}
     >
-      <div style={{ overflow: "auto", fontSize: "small" }}>
+      <div style={{ overflow: "auto", fontSize: "medium" }}>
         <Table>
           <thead>
             <tr>
